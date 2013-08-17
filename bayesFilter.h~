@@ -1,0 +1,20 @@
+#ifndef BAYES_FILTER_H
+#define BAYES_FILTER_H
+
+#include <vector>
+
+class bayesFilter {
+  
+ public:
+
+  //variables
+  std::vector< std::vector<double> > stateList_;
+  std::vector<double> logProbList_;
+
+  //functions
+  void transitionUpdateLog(std::vector<double> action);
+  void transitionUpdateLog(std::vector<double>& logProbList, std::vector<double> action);
+
+
+}; 
+#endif //BAYES_FILTER_H
