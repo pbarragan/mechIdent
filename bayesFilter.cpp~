@@ -14,8 +14,6 @@ void bayesFilter::filterSetup(std::vector<double>& stateList, std::vector<double
   srand((unsigned)time(NULL));
   stateList_=stateList;
   logProbList_=logProbList;
-  filterModels models;
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +23,6 @@ void bayesFilter::filterSetup(std::vector<double>& stateList, std::vector<double
 //overload this function
 void bayesFilter::transitionUpdateLog(std::vector<double> action){
   transitionUpdateLog(logProbList_, action);
-  //printProbList();
 }
 
 //overload this function
@@ -52,7 +49,7 @@ void bayesFilter::transitionUpdateLog(std::vector<double>& logProbList, std::vec
 		
 		for (size_t j=0; j<stateList_.size(); j++) {
 		  //this loop is for x_k
-		  tempStateLogProbList[j] = models.logProbState(stateList_[j],nextState);
+		  tempStateLogProbList[j] = filterModels::logProbState(stateList_[j],nextState);
 		  //std::cout << "probState: " << tempStateProbList[j] << std::endl;
 		}
 		tempStateLogProbList = logUtils::normalizeVectorInLogSpace(tempStateLogProbList); //normalize the distribution before you scale and add it.
@@ -76,8 +73,6 @@ void bayesFilter::transitionUpdateLog(std::vector<double>& logProbList, std::vec
 //overload this function
 void bayesFilter::observationUpdateLog(std::vector<double> obs){
   observationUpdateLog(logProbList_,obs);
-  std::cout << "what is up" << std::endl;
-  //printProbList();
 }
 
 //overload this function
