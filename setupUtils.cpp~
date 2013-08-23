@@ -1,0 +1,43 @@
+//Setup Utilities
+
+#include "stateStruct.h"
+
+////////////////////////////////////////////////////////////////////////////////
+//                               Aux Section                                  //
+////////////////////////////////////////////////////////////////////////////////
+
+//create the value list to set up states
+std::vector< std::vector<double> > basicBayes::createValueList(double dimRanges[][2], double dimNums[], int dims){
+	//there might be a shorter way 
+	std::vector< std::vector<double> > valueList;
+	for (size_t i=0; i<dims; i++) {
+	  double delta = (dimRanges[i][1]-dimRanges[i][0])/(dimNums[i]-1); //-1 because of the spacing
+	  std::vector<double> tempVect;
+	  for (size_t j=0; j<dimNums[i]; j++) {
+	    tempVect.push_back(dimRanges[i][0]+delta*j);
+	  }
+	  valueList.push_back(tempVect);
+	}
+	return valueList;
+}
+
+
+//the recursive function
+std::vector< std::vector<double> > basicBayes::recurseList(std::vector< std::vector<double> > totalList, std::vector<double> oldSeq, int level, std::vector< std::vector<double> > valueList){
+	//bottomLevel = valueList.size();
+	if (level>valueList.size()-1) {
+		totalList.push_back(oldSeq);
+	}
+	else {
+		for (size_t i=0; i<valueList[level].size(); i++) {
+			oldSeq.push_back(valueList[level][i]);
+			totalList = recurseList(totalList,oldSeq,level+1,valueList);
+			oldSeq.pop_back();
+		}
+	}
+	return totalList;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//                             End Aux Section                                //
+////////////////////////////////////////////////////////////////////////////////
