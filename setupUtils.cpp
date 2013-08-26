@@ -1,6 +1,7 @@
 //Setup Utilities
 
 #include "stateStruct.h"
+#include "logUtils.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //                              Model Section                                 //
@@ -178,7 +179,6 @@ std::vector<stateStruct> setupModel4(){
 //                             End Model Section                              //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 ////////////////////////////////////////////////////////////////////////////////
 //                              Setup Section                                 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -196,10 +196,10 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList){
   std::vector<stateStruct> stateList4 = setupModel4;
 
   stateList = stateList0;
-  stateList.insert( stateList.end(), stateList1.begin(), stateList1.end());
-  stateList.insert( stateList.end(), stateList2.begin(), stateList2.end());
-  stateList.insert( stateList.end(), stateList3.begin(), stateList3.end());
-  stateList.insert( stateList.end(), stateList4.begin(), stateList4.end());
+  stateList.insert(stateList.end(), stateList1.begin(), stateList1.end());
+  stateList.insert(stateList.end(), stateList2.begin(), stateList2.end());
+  stateList.insert(stateList.end(), stateList3.begin(), stateList3.end());
+  stateList.insert(stateList.end(), stateList4.begin(), stateList4.end());
 
 }
 
@@ -232,13 +232,38 @@ void setupUtils::setupUniformPrior(std::vector<double>& stateList,std::vector<do
   }
 
   //3. Assing the probability to the right instances
+  std::vector<double> expProbList; //exponatiated probabilities
   for (size_t i=0; i<stateList.size(); i++){
     for (size_t j=0; j<foundStateTypes.size(); j++){
       if (stateList[i].model == foundStateTypes[j].model && stateList[i].params == foundStateTypes[j].params){
-	probList[i] = probAmounts[j];
+	expProbList.push_back(probAmounts[j]);
       }	      
     }
   }
+
+  //4. Convert probabilities to log form
+  for (size_t i = 0; i<expProbList.size(); i++){
+    probList.push_back(logUtils::safe_log(expProbList[i]));
+  }
+
+}
+
+//Create the list of actions
+void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
+  
+  //Dimension Ranges for Actions
+  std::vector< std::vector<double> > dRA (2, std::vector<double> (2,0.0));
+  dRA[0][0] = -0.1;
+  dRA[0][1] = 0.1;
+  dRA[1][0] = -0.1;
+  dRA[1][1] = 0.1;
+  //Dimension Numbers for Actions
+  std::vector<int> dNA (paramNum, 0);
+  dNA[0] = 3;
+  dNA[1] = 3;
+
+  //setup for Actions
+  actionList = dimsToList(dRA,dNA);
 
 }
 

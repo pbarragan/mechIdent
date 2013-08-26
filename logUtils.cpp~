@@ -1,14 +1,11 @@
 #include <iostream>
 #include <fstream>
-#include "Eigen/Dense"
-#include <vector>
 #include <algorithm>
 #include <math.h>
 #include <limits>
 #include "logUtils.h"
 
 using Eigen::MatrixXd;
-
 
 Eigen::Map<Eigen::MatrixXd> logUtils::convertVect(std::vector<double>& vect)
 {
@@ -79,7 +76,6 @@ std::vector<double> logUtils::expLogProbs(std::vector<double> logProbs){
 //This function is overloaded
 //Ver 1: pass in vectors
 double logUtils::evaluteLogMVG(std::vector<double>& sampleVecVect, std::vector<double>& meanVecVect, std::vector<double>& covMatVect){
-	//this funciton is problem specific
 	//Convert
 	Eigen::Map<Eigen::MatrixXd> sampleVec = convertVect(sampleVecVect);
 	Eigen::Map<Eigen::MatrixXd> meanVec = convertVect(meanVecVect);
@@ -88,19 +84,15 @@ double logUtils::evaluteLogMVG(std::vector<double>& sampleVecVect, std::vector<d
 	Eigen::MatrixXd error = (sampleVec - meanVec);
 	Eigen::Matrix<double,1,1> secondHalf = (error.transpose()*covMat.inverse()*error);
 	double secondHalfDBL = secondHalf(0); //this is a hack
-//return (1.0/(pow(2.0*M_PI,meanVec.rows()/2.0)*pow(covMat.determinant(),0.5)))*exp(-0.5*secondHalf(0,0));
 	return -0.5*(meanVec.rows()*safe_log(2*M_PI)+safe_log(covMat.determinant())+secondHalfDBL);
 }
 
 //This function is overloaded
 //Ver 2: pass in matrices
-double logUtils::evaluteLogMVG(Eigen::Map<Eigen::MatrixXd> sampleVec, Eigen::Map<Eigen::MatrixXd> meanVec, Eigen::Map<Eigen::MatrixXd> covMat){
-	//this funciton is problem specific
-	
+double logUtils::evaluteLogMVG(Eigen::Map<Eigen::MatrixXd> sampleVec, Eigen::Map<Eigen::MatrixXd> meanVec, Eigen::Map<Eigen::MatrixXd> covMat){	
 	Eigen::MatrixXd error = (sampleVec - meanVec);
 	Eigen::Matrix<double,1,1> secondHalf = (error.transpose()*covMat.inverse()*error);
 	double secondHalfDBL = secondHalf(0); //this is a hack
-	//return (1.0/(pow(2.0*M_PI,meanVec.rows()/2.0)*pow(covMat.determinant(),0.5)))*exp(-0.5*secondHalf(0,0));
 	return -0.5*(meanVec.rows()*safe_log(2*M_PI)+safe_log(covMat.determinant())+secondHalfDBL);
 }
 
