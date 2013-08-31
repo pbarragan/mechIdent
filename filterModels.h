@@ -2,10 +2,11 @@
 #define FILTER_MODELS_H
 
 #include <vector>
+#include "stateStruct.h"
 
 namespace filterModels {
-  double logProbState(std::vector<double> sampleState, std::vector<double> meanState);
-  double logProbObs(std::vector<double> obs, std::vector<double> state);
+  double logProbState(stateStruct sampleState, stateStruct meanState);
+  double logProbObs(std::vector<double> obs, stateStruct state);
 
 }
   

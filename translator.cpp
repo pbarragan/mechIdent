@@ -39,26 +39,31 @@ Mechanism* translator::createMechanism(int choice){
   return mechPtr;
 }
 
-std::vector<double> translator::stateTransition(std::vector<double> state, std::vector<double> action){
-  Mechanism* mechPtr = createMechanism((int) state[0]);
-  std::vector<double> nextState = mechPtr->simulate(state,action);
+stateStruct translator::stateTransition(stateStruct& state, std::vector<double>& action){
+  Mechanism* mechPtr = createMechanism(state.model);
+  stateStruct nextState = mechPtr->initAndSim(state,action);
   delete mechPtr;
   return nextState;
 }
 
-std::vector<double> translator::translateStateToO(std::vector<double> state){
-  Mechanism* mechPtr = createMechanism((int) state[0]);
-  std::vector<double> stateInO =mechPtr->StoO(state);
+std::vector<double> translator::translateStToObs(stateStruct& state){
+  Mechanism* mechPtr = createMechanism(state.model);
+  std::vector<double> stateInObs = mechPtr->stToObs(state);
+  delete mechPtr;
+  return stateInObs;
+}
+
+std::vector<double> translator::translateStToRbt(stateStruct& state){
+  Mechanism* mechPtr = createMechanism(state.model);
+  std::vector<double> stateInRbt = mechPtr->stToRbt(state);
   delete mechPtr;
   return stateInO;
 }
 
-std::vector<double> translator::translateObsToO(std::vector<double> obs){
-  //this doesn't need to happen like this
-  Mechanism* mechPtr;
-  mechPtr = new MechObs();
-  std::vector<double> obsInO =mechPtr->ObstoO(obs);
+std::vector<double> translator::translateSensToObs(std::vector<double>& obs){
+  Mechanism* mechPtr = new MechObs();
+  std::vector<double> sensInObs = mechPtr->sensToObs(obs);
   delete mechPtr;
-  return obsInO;
+  return sensInObs;
 }
 
