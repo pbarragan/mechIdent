@@ -5,11 +5,14 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include <iostream>
+
 ////////////////////////////////////////////////////////////////////////////////
 //                             Redefined Section                              //
 ////////////////////////////////////////////////////////////////////////////////
 
-virtual void Mechanism::initialize(stateStruct& startState){
+// virtual 
+void Mechanism::initialize(stateStruct& startState){
   // Set necessary parameters from startState before initializing physics 
   setStartWithState(startState); // Virtual function: not defined in this file
   
@@ -43,18 +46,20 @@ virtual void Mechanism::initialize(stateStruct& startState){
   pGains_.setValue(5.0f,50.0f,5.0f);
   dGains_.setValue(2.0f,2.0f,2.0f);
 
-  //change friction
+  // change friction
   gndRB_->setFriction(0.1);
   //-------END INITIALIZE REMAINING PARAMETERS SECTION-------//
 
 }
 
-virtual void Mechanism::exitPhysics(){
-  //cleanup in the reverse order of creation/initialization
-  //remove the rigidbodies from the dynamics world and delete them
-  int i;
-  for (i=dynamicsWorld_->getNumCollisionObjects()-1; i>=0 ;i--)
-    {
+// virtual 
+void Mechanism::exitPhysics(){
+  // cleanup in the reverse order of creation/initialization
+  // remove the rigidbodies from the dynamics world and delete them
+  // check if the dynamics world exists
+  if (dynamicsWorld_){
+    int i;
+    for (i=dynamicsWorld_->getNumCollisionObjects()-1; i>=0 ;i--){
       btCollisionObject* obj = dynamicsWorld_->getCollisionObjectArray()[i];
       btRigidBody* body = btRigidBody::upcast(obj);
       if (body && body->getMotionState())
@@ -64,11 +69,12 @@ virtual void Mechanism::exitPhysics(){
       dynamicsWorld_->removeCollisionObject( obj );
       delete obj;
     }
-  
-  //delete collision shapes
+  }
+  // delete collision shapes
   delete gndCS_;
   delete rbtCS_;
   
+  // delete world
   delete dynamicsWorld_;
   delete solver_;
   delete collisionConfiguration_;
@@ -104,10 +110,14 @@ stateStruct Mechanism::simulate(std::vector<double>& action){
   // set the necessary parameters from the startState
   setGoalWithAction(action); // Virtual function: not defined in this file
   // run iterations of the simulation to generate a new state
-  for(size_t i = 0; i<1000;i++){
-    stepWorld();
+  // make sure dynamic world exists - allows fixed case - kind of a hack
+  if (dynamicsWorld_){
+    for(size_t i = 0; i<1000;i++){
+      stepWorld();
+    }
   }
   // return the state of the world after the iterations
+  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
   return returnStateOfWorld(); // Virtual function: not defined in this file
 }
 
@@ -116,7 +126,8 @@ stateStruct Mechanism::initAndSim(stateStruct& startState,std::vector<double>& a
   return simulate(action);
 }
 
-virtual Mechanism::~Mechanism(){
+// virtual 
+Mechanism::~Mechanism(){
   Mechanism::exitPhysics();
 }
 

@@ -1,5 +1,5 @@
-#ifndef MECH_FREE_H
-#define MECH_FREE_H
+#ifndef MECH_REV_H
+#define MECH_REV_H
 
 #include <vector>
 #include <btBulletDynamicsCommon.h>
@@ -7,7 +7,7 @@
 #include "../stateStruct.h"
 #include "mechanism.h"
 
-class MechFree : public Mechanism {
+class MechRev : public Mechanism {
 
  public:
   // variables
@@ -15,11 +15,22 @@ class MechFree : public Mechanism {
   // world
 
 
+  // initialization parameters in sim
+  btVector3 startPoseLink0_;
+  btVector3 startPoseFxd_;
+  double x_p_;
+  double y_p_;
+  double r_;
+  btQuaternion startQuatLink0_;
+
   // objects
   btCollisionShape* link0CS_;
   btRigidBody* link0RB_;
+  btCollisionShape* fxdCS_;
+  btRigidBody* fxdRB_;
 
   // constraints
+  btHingeConstraint* fxdLink0HC_; //this is the pivot constraint
   btHingeConstraint* link0RbtHC_; //this is the constraint where the robot holds
 
   // controller
@@ -40,8 +51,8 @@ class MechFree : public Mechanism {
 
   // functions
   // Constructor and Destructor
- MechFree() : link0CS_(NULL),link0RB_(NULL),link0RbtHC_(NULL) { };
-  virtual ~MechFree();
+ MechRev() : link0CS_(NULL),link0RB_(NULL),link0RbtHC_(NULL),fxdCS_(NULL),fxdRB_(NULL),fxdLink0HC_(NULL) { };
+  virtual ~MechRev();
 
   // Specific to subclass
 
@@ -57,4 +68,4 @@ class MechFree : public Mechanism {
   virtual std::vector<double> stToRbt(stateStruct& state);
 };
   
-#endif // MECH_FREE_H
+#endif // MECH_REV_H

@@ -1,6 +1,6 @@
 // MechFree sub class
 
-#include "mechFree.h"
+#include "mechRev.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -10,11 +10,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // virtual
-void MechFree::initialize(stateStruct& startState){
+void MechRev::initialize(stateStruct& startState){
   // Initialize standard physics for Mechanism
   Mechanism::initialize(startState);
 
-  // Initialize additional physics for MechFree
+  // Initialize additional physics for MechRev
   // REMEMBER TO SET pose_ to startPose_ and run Mechanism::updatePose()??
 
   //----------------OBJECT CREATION SECTION-------------------//
@@ -89,7 +89,7 @@ void MechFree::initialize(stateStruct& startState){
 }
 
 // virtual
-void MechFree::exitPhysics(){
+void MechRev::exitPhysics(){
   // cleanup in the reverse order of creation/initialization
   // remove additional things created in this subclass
   delete link0RbtHC_;
@@ -105,18 +105,18 @@ void MechFree::exitPhysics(){
 ////////////////////////////////////////////////////////////////////////////////
 
 // virtual
-MechFree::~MechFree(){
+MechRev::~MechRev(){
   exitPhysics();
   // This should then call Mechanism::~Mechanism() automatically
 }
 
 // Not Defined in super (base) class
 // virtual
-void MechFree::setStartWithState(stateStruct& startState){
+void MechRev::setStartWithState(stateStruct& startState){
   // State looks like:
-  // Model: 0
-  // Params:
-  // Vars: x,y in rbt space
+  // Model: 2
+  // Params: x_pivot,y_pivot in rbt space, r
+  // Vars: theta in rbt space
   
   // Create an x,y,z vector in rbt
   std::vector<double> tempVarsRbt = startState.vars;
@@ -128,7 +128,7 @@ void MechFree::setStartWithState(stateStruct& startState){
 }
 
 // virtual
-void MechFree::setGoalWithAction(std::vector<double>& action){
+void MechRev::setGoalWithAction(std::vector<double>& action){
   // Action looks like:
   // x,y in rbt space
 
@@ -142,7 +142,7 @@ void MechFree::setGoalWithAction(std::vector<double>& action){
 }
 
 // virtual
-stateStruct MechFree::returnStateOfWorld(){
+stateStruct MechRev::returnStateOfWorld(){
   // State looks like:
   // Model: 0
   // Params:
@@ -157,7 +157,7 @@ stateStruct MechFree::returnStateOfWorld(){
 }
 
 // virtual
-std::vector<double> MechFree::stToObs(stateStruct& state){
+std::vector<double> MechRev::stToObs(stateStruct& state){
   // State looks like:
   // Model: 0
   // Params:
@@ -169,7 +169,7 @@ std::vector<double> MechFree::stToObs(stateStruct& state){
 }
 
 // virtual
-std::vector<double> MechFree::stToRbt(stateStruct& state){
+std::vector<double> MechRev::stToRbt(stateStruct& state){
   // State looks like:
   // Model: 0
   // Params:

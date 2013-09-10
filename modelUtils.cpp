@@ -45,24 +45,19 @@ std::vector<double> modelUtils::calcModelParamProbLog(std::vector<stateStruct>& 
 //Returns the model-param probabilities when given a list of probabilities in log space
 std::vector<double> modelUtils::calcModelParamProbLog(std::vector<stateStruct>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs){
 
-  //just a little test
-  //std::vector<double> probList = logUtils::expLogProbs(logProbList);
-
-  //return calcModelProb(probList);
-
-  //1. Find different instances and collect their probabilities
-  //A state type is a model-parameter pair
-  std::vector< std::vector<double> > sumHoldVect (modelParamPairs.size(),0); //hold list of log probabilities for the log-sum-exp
+  // 1. Find different instances and collect their probabilities
+  // A state type is a model-parameter pair
+  std::vector< std::vector<double> > sumHoldVect (modelParamPairs.size(),std::vector<double> ()); // hold list of log probabilities for the log-sum-exp
   for (size_t i=0; i<stateList.size(); i++){
     for (size_t j=0; j<modelParamPairs.size(); j++){
       if (stateList[i].model == modelParamPairs[j].model && stateList[i].params == modelParamPairs[j].params){
 	sumHoldVect[j].push_back(probList[i]);
-	break; //the break assumes we didn't somehow add the same pair twice to the found list
+	break; // the break assumes we didn't somehow add the same pair twice to the found list
       }
     }
   }
 
-  //2. Log-sum-exp the lists created to get the actual probabilities for the different types
+  // 2. Log-sum-exp the lists created to get the log probabilities for the different types and then exponentiate.
   std::vector<double> sumHold (sumHoldVect.size(),0.0);
 
   for (size_t j=0; j<sumHoldVect.size(); j++){
@@ -72,12 +67,13 @@ std::vector<double> modelUtils::calcModelParamProbLog(std::vector<stateStruct>& 
   return sumHold;
 }
 
-//Calculate model probabilities from a set of probabilities in normal probability space
+// Not used
+// Calculate model probabilities from a set of probabilities in normal probability space
 std::vector<double> modelUtils::calcModelProb(std::vector<stateStruct>& stateList, std::vector<double>& probList){
   
   std::vector<double> sumHold (5,0.0);  
   for (size_t i=0; i<stateList.size(); i++){
-    sumHold[(int) stateList[i][0]] += probList[i];
+    sumHold[stateList[i].model] += probList[i];
   }  
   return sumHold;  
 }

@@ -76,6 +76,7 @@ std::vector<double> logUtils::expLogProbs(std::vector<double> logProbs){
 //This function is overloaded
 //Ver 1: pass in vectors
 double logUtils::evaluteLogMVG(std::vector<double>& sampleVecVect, std::vector<double>& meanVecVect, std::vector<double>& covMatVect){
+
 	//Convert
 	Eigen::Map<Eigen::MatrixXd> sampleVec = convertVect(sampleVecVect);
 	Eigen::Map<Eigen::MatrixXd> meanVec = convertVect(meanVecVect);

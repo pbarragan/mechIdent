@@ -1,0 +1,196 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include "sasUtils.h"
+
+//this is super specific to the exact state representation I am using as of 7/11/2013 (free surpee day)
+
+////////////////////////////////////////////////////////////////////////////////
+//                              Setup Section                                 //
+////////////////////////////////////////////////////////////////////////////////
+
+sasUtils::mapPairVVV basicBayes::populateSAS(std::vector< std::vector<double> > states, std::vector< std::vector<double> > actions){
+  std::cout << "Populating the SAS map from scratch" << std::endl;
+  sasUtils::mapPairVVV sasHolder;
+  double total = states.size()*actions.size();
+  int statesSize = states.size();
+  for (size_t i=0;i<actions.size();i++){
+    for (size_t j=0;j<states.size();j++){
+      sasUtils::insertIntoSAS(sasHolder,states[j],actions[i],basicBayes::stateTransition(states[j],actions[i]));
+      if((i*statesSize+j) % 50 == 0) std::cout << "Percent: " << (i*statesSize+j)/total*100 << std::endl;
+    }
+  }
+  std::cout << "Repopulated the earth. No. Big. Deal." << std::endl;
+  sasListExists_ = true;
+  return sasHolder;
+}
+
+void basicBayes::setupSAS(){
+  overwriteCSV_ = true;
+  useCSV_ = false;
+
+  if (useCSV_){
+    std::string fileName = "files/sasSave.csv";
+    if (sasUtils::readSASfromCSV(sasList_,fileName)){
+      std::cout << "Got the saved SAS data! Score!" << std::endl;
+      //YOU NEED TO DO THIS:
+      //1) Create a function that populates the SAS if it isn't
+      //2) make a check to see if the SAS is a match using isMatch
+      //3) if it isn't a match, populate, or if you couldn't read, populate
+      //4) check on what happens if you overwrite a file
+      if (sasUtils::isMatch(sasList_,stateList,actionList_)){
+	std::cout << "Don't worry, Son, we have a match." << std::endl;
+      }
+      else{
+	//No match. fix it.
+	sasList_ = populateSAS(stateList,actionList_);
+	if (overwriteCSV_){
+	  if (sasUtils::writeSAStoCSV(sasList_,fileName)){
+	    std::cout << "Saved SAS data! Gnarboots!" << std::endl;
+	  }
+	  else std::cout << "Failed to save the SAS data. lame." << std::endl;
+	}
+      }
+    }
+    else{
+      sasList_ = populateSAS(stateList,actionList_);
+      if (overwriteCSV_){
+	if (sasUtils::writeSAStoCSV(sasList_,fileName)){
+	  std::cout << "Saved SAS data! Gnarboots!" << std::endl;
+	}
+	else std::cout << "Failed to save the SAS data. lame." << std::endl;
+      }
+    }
+  }
+  else{
+    sasList_ = populateSAS(stateList,actionList_);
+  }
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//                           End Setup Section                                //
+////////////////////////////////////////////////////////////////////////////////
+
+bool sasUtils::isMatch(mapPairVVV& sas, std::vector< std::vector<double> > states, std::vector< std::vector<double> > actions){
+  //make sure the number of state action pairs is the same as the number of map elements 
+  if (sas.size() == states.size()*actions.size()){
+    //check every state action pair to make sure that they exist
+    for (size_t i=0;i<actions.size();i++){
+      for (size_t j=0;j<states.size();j++){
+	if(sas.count(pairVV (states[j],actions[i]))==0){
+	  return false;
+	}
+      }
+    }
+    return true;
+  }
+  else return false;
+}
+
+
+void sasUtils::insertIntoSAS(mapPairSVS& sas,stateStruct prevState,std::vector<double> action,stateStruct nextState){
+  sas.insert(pairPairSVS (pairSV (prevState,action),nextState));
+}
+
+std::vector<double> sasUtils::getFromSAS(mapPairSVS& sas,stateStruct prevState, std::vector<double> action){
+  //this is only going to work if the SAS map was populated properly
+  //such that you will never ask for a pair that isn't in the map.
+  //If that happens, it will just create an pair with an empty vector
+  //as a value and will not return and error. Maybe we should fix that.
+  //return sas[pairVV (prevState,action)];
+  
+  // This is an attempt to fix this problem
+  // map::at does not create a new element if one doesn't exist.
+  // it will throw an out_of_range exception
+  return sas.at(pairSV (prevState,action));
+}
+
+bool sasUtils::readSASfromCSV(mapPairVVV& sas,std::string fileName){
+  //temporary holder for the sas map
+  mapPairVVV sasHolder;
+
+  std::ifstream data(fileName.c_str());
+  //these loops are under the specific assumption that the file is written with:
+  //1) 8 numbers per line, separated by commas.
+  //2) Each line is written in order of prevState, action, nextState
+  //3) prevState is three numbers
+  //4) action is two numbers
+  //5) nextState is three numbers
+  if (data.is_open()){
+
+    std::string line;
+    while(std::getline(data,line))
+      {
+
+	//initialize everyting you need for the inner loop
+	std::stringstream  lineStream(line);
+	std::string        cell;
+	size_t count = 0;
+	std::vector<double> tmpPrevState;
+	std::vector<double> tmpAction;
+	std::vector<double> tmpNextState;
+
+
+
+	while(std::getline(lineStream,cell,','))
+	  {
+	    // You have a cell
+	    std::stringstream cellStream(cell);
+	    double result;
+	    cellStream >> result;
+	    if (count<3){
+	      tmpPrevState.push_back(result);
+	    }
+	    else if (count>= 3 && count<=4){
+	      tmpAction.push_back(result);
+	    }
+	    else if (count>4){
+	      tmpNextState.push_back(result);
+	    }
+	    count++; //you have to keep a count of where you are
+	  }
+	
+	insertIntoSAS(sasHolder,tmpPrevState,tmpAction,tmpNextState);
+
+      }
+    sas = sasHolder;
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+bool sasUtils::writeSAStoCSV(mapPairSVS& sas,std::string fileName){
+  //try to write to csv
+  std::ofstream outFile(fileName.c_str());
+  
+  if (outFile.is_open()){
+    for (mapPairSVS_it mapIt = sas.begin(); mapIt !=sas.end(); mapIt++){
+      // Pull out the pieces of this key-vaule pair in the map
+      stateStruct tmpPrevState = mapIt->first.first;
+      std::vector<double> tmpAction = mapIt->first.second;
+      stateStruct tmpNextState = mapIt->second;
+      
+      // Write the pieces of the previous state
+      outFile
+      for (size_t i=0;i<tmpPrevState.size();i++){
+	outFile << tmpPrevState[i] << ",";
+      }
+      for (size_t i=0;i<tmpAction.size();i++){
+	outFile << tmpAction[i] << ",";
+      }
+      for (size_t i=0;i<tmpNextState.size()-1;i++){
+	outFile << tmpNextState[i] << ",";
+      }
+      outFile << tmpNextState.back() << "\n";
+    }
+    outFile.close();
+    return true;
+  }
+  else{
+    std::cout << "Unable to open output SAS file" << std::endl;
+    return false;
+  }
+}

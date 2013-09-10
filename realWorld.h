@@ -5,6 +5,7 @@
 #include "stateStruct.h"
 #include "bayesFilter.h"
 #include "mechanisms/mechanism.h"
+#include "sasUtils.h"
 
 class RealWorld {
 
@@ -12,15 +13,21 @@ class RealWorld {
   //variables
   BayesFilter filter_;
   Mechanism* mechPtr_; // the mechanism for the simulation if Robot is not used
+
   std::vector<stateStruct> modelParamPairs_;
   std::vector< std::vector<double> > actionList_;
+  sasUtils::mapPairSVS sasList_;
+
   std::vector<double> action_; // current action
-  std::vector<double> stateInRbt_; // current state in robot space
-  bool useRobot_; // if true, use the robot
+  std::vector<double> poseInRbt_; // current state in robot space
   int step_; // the step that the world is on
+
+  bool useSAS_; // if true, use the SAS list
+  bool useRobot_; // if true, use the robot
 
   //functions
   RealWorld();
+  ~RealWorld();
   void initMechFree();
   void updateFilter(std::vector<double> action,std::vector<double> obs);
   void nextAction();
@@ -31,6 +38,6 @@ class RealWorld {
   void runWorld(int numSteps);
   double randomDouble();
   void printModelParamProbs(std::vector<double> mpProbsLog);
-}
+};
   
 #endif //REAL_WORLD_H

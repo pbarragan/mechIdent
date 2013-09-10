@@ -12,9 +12,10 @@ double filterModels::logProbState(stateStruct sampleState, stateStruct meanState
   //sampleState is the sample vector. meanState is the mean vector. This just drops a gaussian at the meanState with a constant covariance from the class.	
   if (meanState.model==sampleState.model){
     //translate to the observation space which should be a vector directly comparable with another
-    std::vector<double> sampleStateInO = translator::translateStateToO(sampleState);
-    std::vector<double> meanStateInO = translator::translateStateToO(meanState);
-    return logUtils::evaluteLogMVG(sampleStateInO,meanStateInO,transCovMat);
+    std::vector<double> sampleStateInObs = translator::translateStToObs(sampleState);
+    std::vector<double> meanStateInObs = translator::translateStToObs(meanState);
+
+    return logUtils::evaluteLogMVG(sampleStateInObs,meanStateInObs,transCovMat);
   }
   else {
     //return 0.0 in log space
@@ -29,8 +30,9 @@ double filterModels::logProbObs(std::vector<double> obs, stateStruct state){
   obsCovMat.assign(obsArray, obsArray + sizeof(obsArray)/sizeof(double));
 
   //obs is the sample vector. state is the mean vector. This just drops a gaussian at the state with a constant covariance from the class.
-  //translate to the observation space which should be a vector directly comparable with another
-  std::vector<double> obsInO = translator::translateObsToO(obs);
-  std::vector<double> meanStateInO = translator::translateStateToO(state);
-  return logUtils::evaluteLogMVG(obsInO,meanStateInO,obsCovMat);
+  //Obs is already translated to the observation space which should be a vector directly comparable with another
+  //std::vector<double> obsInO = translator::translateObsToO(obs);
+  std::vector<double> obsInObs = obs;
+  std::vector<double> meanStateInObs = translator::translateStToObs(state);
+  return logUtils::evaluteLogMVG(obsInObs,meanStateInObs,obsCovMat);
 }

@@ -1,5 +1,5 @@
-#ifndef MECH_FREE_H
-#define MECH_FREE_H
+#ifndef MECH_FIXED_H
+#define MECH_FIXED_H
 
 #include <vector>
 #include <btBulletDynamicsCommon.h>
@@ -7,7 +7,7 @@
 #include "../stateStruct.h"
 #include "mechanism.h"
 
-class MechFree : public Mechanism {
+class MechFixed : public Mechanism {
 
  public:
   // variables
@@ -16,11 +16,10 @@ class MechFree : public Mechanism {
 
 
   // objects
-  btCollisionShape* link0CS_;
-  btRigidBody* link0RB_;
+
 
   // constraints
-  btHingeConstraint* link0RbtHC_; //this is the constraint where the robot holds
+
 
   // controller
 
@@ -40,8 +39,7 @@ class MechFree : public Mechanism {
 
   // functions
   // Constructor and Destructor
- MechFree() : link0CS_(NULL),link0RB_(NULL),link0RbtHC_(NULL) { };
-  virtual ~MechFree();
+  virtual ~MechFixed();
 
   // Specific to subclass
 
@@ -57,4 +55,4 @@ class MechFree : public Mechanism {
   virtual std::vector<double> stToRbt(stateStruct& state);
 };
   
-#endif // MECH_FREE_H
+#endif // MECH_FIXED_H

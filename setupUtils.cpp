@@ -1,5 +1,5 @@
 //Setup Utilities
-
+#include "setupUtils.h"
 #include "stateStruct.h"
 #include "logUtils.h"
 
@@ -13,29 +13,23 @@
 std::vector<stateStruct> setupUtils::setupModel0(std::vector<stateStruct>& modelParamPairs){  
   //Model 0 is the free model
   int modelNum = 0;
-  int paramNum = 2; //how many parameters
-  int varNum = 2; //how many variables
+  int paramNum = 0; //how many parameters
+  int varNum = 2; //how many variables: x,y
 
   //Dimension Ranges for Params
-  std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = 0.0;
-  dRP[0][1] = 1.0;
-  dRP[1][0] = 0.0;
-  dRP[1][1] = 1.0;
+  std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0)); // empty size 0 vector  
   //Dimension Numbers for Params
-  std::vector<int> dNP (paramNum, 0);
-  dNP[0] = 2;
-  dNP[1] = 2;
+  std::vector<int> dNP (paramNum, 0); // empty size 0 vector
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -0.1;
-  dRV[0][1] = 0.1;
-  dRV[1][0] = -0.1;
-  dRV[1][1] = 0.1;
+  dRV[0][0] = -0.2;
+  dRV[0][1] = 0.2;
+  dRV[1][0] = -0.2;
+  dRV[1][1] = 0.2;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 3;
-  dNV[1] = 3;
+  dNV[0] = 2;
+  dNV[1] = 2;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -43,29 +37,23 @@ std::vector<stateStruct> setupUtils::setupModel0(std::vector<stateStruct>& model
 std::vector<stateStruct> setupUtils::setupModel1(std::vector<stateStruct>& modelParamPairs){  
   //Model 1 is the fixed model
   int modelNum = 1;
-  int paramNum = 2; //how many parameters
-  int varNum = 2; //how many variables
+  int paramNum = 2; //how many parameters: x,y
+  int varNum = 0; //how many variables
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = 0.0;
-  dRP[0][1] = 1.0;
-  dRP[1][0] = 0.0;
-  dRP[1][1] = 1.0;
+  dRP[0][0] = 0.2;
+  dRP[0][1] = 0.2;
+  dRP[1][0] = 0.2;
+  dRP[1][1] = 0.2;
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
-  dNP[0] = 2;
-  dNP[1] = 2;
+  dNP[0] = 1;
+  dNP[1] = 1;
   //Dimension Ranges for Vars
-  std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -0.1;
-  dRV[0][1] = 0.1;
-  dRV[1][0] = -0.1;
-  dRV[1][1] = 0.1;
+  std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0)); // empty size 0 vector
   //Dimension Numbers for Vars
-  std::vector<int> dNV (varNum, 0);
-  dNV[0] = 3;
-  dNV[1] = 3;
+  std::vector<int> dNV (varNum, 0); // empty size 0 vector
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 
@@ -74,8 +62,8 @@ std::vector<stateStruct> setupUtils::setupModel1(std::vector<stateStruct>& model
 std::vector<stateStruct> setupUtils::setupModel2(std::vector<stateStruct>& modelParamPairs){  
   //Model 2 is the revolute model
   int modelNum = 2;
-  int paramNum = 2; //how many parameters
-  int varNum = 2; //how many variables
+  int paramNum = 3; //how many parameters: x_pivot,y_pivot,r
+  int varNum = 1; //how many variables: theta
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
@@ -83,20 +71,20 @@ std::vector<stateStruct> setupUtils::setupModel2(std::vector<stateStruct>& model
   dRP[0][1] = 1.0;
   dRP[1][0] = 0.0;
   dRP[1][1] = 1.0;
+  dRP[2][0] = 0.0;
+  dRP[2][1] = 1.0;
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 2;
   dNP[1] = 2;
+  dNP[2] = 2;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
   dRV[0][0] = -0.1;
   dRV[0][1] = 0.1;
-  dRV[1][0] = -0.1;
-  dRV[1][1] = 0.1;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
   dNV[0] = 3;
-  dNV[1] = 3;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -175,38 +163,46 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
   //setup model parameter pair lists for each model
   std::vector<stateStruct> modelParamPairs0;
   std::vector<stateStruct> modelParamPairs1;
+  /*
   std::vector<stateStruct> modelParamPairs2;
   std::vector<stateStruct> modelParamPairs3;
   std::vector<stateStruct> modelParamPairs4;
+  */
 
   //Set up a state list for each model. 
   //Then stick together all of the lists into one master list. 
-  
+
   std::vector<stateStruct> stateList0 = setupModel0(modelParamPairs0);
-  std::vector<stateStruct> stateList1 = setupModel1(modelParamPairs1);  
+  std::vector<stateStruct> stateList1 = setupModel1(modelParamPairs1);
+  /*
   std::vector<stateStruct> stateList2 = setupModel2(modelParamPairs2);
   std::vector<stateStruct> stateList3 = setupModel3(modelParamPairs3);
   std::vector<stateStruct> stateList4 = setupModel4(modelParamPairs4);
+  */
 
   //populate the modelParamPairs vector
   modelParamPairs = modelParamPairs0;
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs1.begin(), modelParamPairs1.end());
+  /*
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs2.begin(), modelParamPairs2.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs3.begin(), modelParamPairs3.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs4.begin(), modelParamPairs4.end());  
+  */
 
   //populate the modelParamPairs vector
   stateList = stateList0;
   stateList.insert(stateList.end(), stateList1.begin(), stateList1.end());
+  /*
   stateList.insert(stateList.end(), stateList2.begin(), stateList2.end());
   stateList.insert(stateList.end(), stateList3.begin(), stateList3.end());
   stateList.insert(stateList.end(), stateList4.begin(), stateList4.end());
+  */
 
 }
 
 //Overloaded
 //setup a uniform prior over model and parameter pairs
-void setupUtils::setupUniformPrior(std::vector<double>& stateList,std::vector<double>& probList){
+void setupUtils::setupUniformPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList){
   //1. Count up how many times certain instances occur
   //A state type is a model-parameter pair
   std::vector<stateStruct> foundStateTypes; //how many different model-parameter pairs
@@ -222,7 +218,7 @@ void setupUtils::setupUniformPrior(std::vector<double>& stateList,std::vector<do
       }
     }
     if (addStateType){
-      foundStateType.push_back(stateList[i]);
+      foundStateTypes.push_back(stateList[i]);
       numVarTypesPerStateType.push_back(1);
     }
   }
@@ -245,7 +241,7 @@ void setupUtils::setupUniformPrior(std::vector<double>& stateList,std::vector<do
   }
 
   //4. Convert probabilities to log form
-  probList.clear() //make sure this bad boy is empty
+  probList.clear(); //make sure this bad boy is empty
   for (size_t i = 0; i<expProbList.size(); i++){
     probList.push_back(logUtils::safe_log(expProbList[i]));
   }
@@ -254,7 +250,7 @@ void setupUtils::setupUniformPrior(std::vector<double>& stateList,std::vector<do
 
 //Overloaded - this one has the model-parameter pairs passed to it from the state setup function
 //setup a uniform prior over model and parameter pairs
-void setupUtils::setupUniformPrior(std::vector<double>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs){
+void setupUtils::setupUniformPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs){
   //1. Count up how many times certain instances occur
   //A state type is a model-parameter pair
   std::vector<int> numVarTypesPerStateType (modelParamPairs.size(),0); //how many different variable sets per model-parameter pair
@@ -285,7 +281,7 @@ void setupUtils::setupUniformPrior(std::vector<double>& stateList,std::vector<do
   }
 
   //4. Convert probabilities to log form
-  probList.clear() //make sure this bad boy is empty
+  probList.clear(); //make sure this bad boy is empty
   for (size_t i = 0; i<expProbList.size(); i++){
     probList.push_back(logUtils::safe_log(expProbList[i]));
   }
@@ -294,17 +290,19 @@ void setupUtils::setupUniformPrior(std::vector<double>& stateList,std::vector<do
 
 //Create the list of actions
 void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
-  
+  // how many dimensions for an action
+  int actDimNum = 2;
+
   //Dimension Ranges for Actions
-  std::vector< std::vector<double> > dRA (2, std::vector<double> (2,0.0));
-  dRA[0][0] = -0.1;
-  dRA[0][1] = 0.1;
-  dRA[1][0] = -0.1;
-  dRA[1][1] = 0.1;
+  std::vector< std::vector<double> > dRA (actDimNum, std::vector<double> (2,0.0));
+  dRA[0][0] = -0.2;
+  dRA[0][1] = 0.2;
+  dRA[1][0] = -0.2;
+  dRA[1][1] = 0.2;
   //Dimension Numbers for Actions
-  std::vector<int> dNA (paramNum, 0);
-  dNA[0] = 3;
-  dNA[1] = 3;
+  std::vector<int> dNA (actDimNum, 0);
+  dNA[0] = 2;
+  dNA[1] = 2;
 
   //setup for Actions
   actionList = dimsToList(dRA,dNA);
@@ -331,7 +329,7 @@ std::vector<stateStruct> setupUtils::setupModelFromDec(std::vector< std::vector<
 
   for (size_t i=0;i<paramsList.size();i++){
     tempState.params=paramsList[i];
-    modelParamPairs.push_back(tempState)
+    modelParamPairs.push_back(tempState);
   }
 
   return createStateListForModel(modelNum,paramsList,varsList);
@@ -363,7 +361,10 @@ std::vector< std::vector<double> > setupUtils::createValueList(std::vector< std:
   std::vector< std::vector<double> > valueList;
   int dims = dimNums.size(); //how many dimension numbers is the number of dimensions
   for (size_t i=0; i<dims; i++) {
-    double delta = (dimRanges[i][1]-dimRanges[i][0])/(dimNums[i]-1); //-1 because of the spacing
+    double delta = 0.0;
+    if (dimNums[i]>1){
+      delta = (dimRanges[i][1]-dimRanges[i][0])/(dimNums[i]-1); //-1 because of the spacing
+    }
     std::vector<double> tempVect;
     for (size_t j=0; j<dimNums[i]; j++) {
       tempVect.push_back(dimRanges[i][0]+delta*j);
@@ -376,8 +377,8 @@ std::vector< std::vector<double> > setupUtils::createValueList(std::vector< std:
 
 //the recursive function
 std::vector< std::vector<double> > setupUtils::recurseList(std::vector< std::vector<double> > totalList, std::vector<double> oldSeq, int level, std::vector< std::vector<double> > valueList){
-  //bottomLevel = valueList.size();
-  if (level>valueList.size()-1) {
+  //if (level>valueList.size()-1) {
+  if (level>=valueList.size()) {
     totalList.push_back(oldSeq);
   }
   else {

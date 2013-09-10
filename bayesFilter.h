@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "stateStruct.h"
+#include "sasUtils.h"
 
 class BayesFilter {
   
@@ -14,10 +15,17 @@ class BayesFilter {
 
   //functions
   BayesFilter();
+
+  // MEGA overloaded
+  void transitionUpdateLog(std::vector<double> action, sasUtils::mapPairSVS& sasList);
+  void transitionUpdateLog(std::vector<double>& logProbList, std::vector<double> action, sasUtils::mapPairSVS& sasList);
   void transitionUpdateLog(std::vector<double> action);
   void transitionUpdateLog(std::vector<double>& logProbList, std::vector<double> action);
+
+  // overloaded
   void observationUpdateLog(std::vector<double> obs);
   void observationUpdateLog(std::vector<double>& logProbList, std::vector<double> obs);
+
   void printLogProbList();
   void printStateList();
 

@@ -7,7 +7,6 @@
 namespace filterModels {
   double logProbState(stateStruct sampleState, stateStruct meanState);
   double logProbObs(std::vector<double> obs, stateStruct state);
-
 }
   
 #endif //FILTER_MODELS_H

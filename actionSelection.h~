@@ -1,0 +1,12 @@
+#ifndef ACTION_SELECTION_H
+#define ACTION_SELECTION_H
+
+#include <vector>
+
+namespace actionSelection {
+  
+  void chooseActionSimple(std::vector< std::vector<double> >& actionList,int step,std::vector<double>& action);
+
+}
+  
+#endif //ACTION_SELECTION_H

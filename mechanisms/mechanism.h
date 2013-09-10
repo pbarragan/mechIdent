@@ -46,13 +46,17 @@ class Mechanism {
   // sens = sensor
 
   // functions
+  // Constructor and Destructor
+ Mechanism() : broadphase_(NULL),collisionConfiguration_(NULL),dispatcher_(NULL),solver_(NULL),dynamicsWorld_(NULL),gndCS_(NULL),gndRB_(NULL),rbtCS_(NULL),rbtRB_(NULL) { };
+  virtual ~Mechanism(); // calls superclass exit physics specifically
+
+
   // Same for all mechanisms
   void updatePose();
   void stepWorld(); 
   void pdController();
   stateStruct simulate(std::vector<double>& action);
   stateStruct initAndSim(stateStruct& startState,std::vector<double>& action);
-  virtual ~Mechanism(); // calls superclass exit physics specifically
   std::vector<double> sensToObs(std::vector<double>& obs);
   std::vector<double> rbtToObs(std::vector<double>& rbt);
 
@@ -67,11 +71,11 @@ class Mechanism {
   virtual void exitPhysics();
 
   // Virutal: not defined in the cpp file. defined in subclasses.
-  virtual void setStartWithState(stateStruct& startState) = 0;
-  virtual void setGoalWithAction(std::vector<double>& action) = 0;
-  virtual void returnStateOfWorld() = 0;
-  virtual std::vector<double> stToObs(stateStruct& state) = 0;
-  virtual std::vector<double> stToRbt(stateStruct& state) = 0;
-}
+  virtual void setStartWithState(stateStruct& startState){}
+  virtual void setGoalWithAction(std::vector<double>& action){}
+  virtual stateStruct returnStateOfWorld(){}
+  virtual std::vector<double> stToObs(stateStruct& state){}
+  virtual std::vector<double> stToRbt(stateStruct& state){}
+};
   
 #endif // MECHANISM_H
