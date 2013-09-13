@@ -28,6 +28,8 @@ namespace sasUtils {
   
   bool writeSAStoCSV(mapPairSVS& sasList,std::string fileName);
 
+  std::string doubleToBitString(double input);
+  double bitStringToDouble(std::string s);
 }
 
 

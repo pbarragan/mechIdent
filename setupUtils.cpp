@@ -388,6 +388,8 @@ std::vector< std::vector<double> > setupUtils::createValueList(std::vector< std:
     }
     std::vector<double> tempVect;
     for (size_t j=0; j<dimNums[i]; j++) {
+      // This is ridiculous - huge SAS problem - crazy fix
+      // HACK THIS IS NOT A FIX DELETE CHECK
       tempVect.push_back(dimRanges[i][0]+delta*j);
     }
     valueList.push_back(tempVect);

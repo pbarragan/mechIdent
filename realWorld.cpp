@@ -1,6 +1,5 @@
 // this is an MTV show from the 90s
 // The Real World
-// 10:55pm 9/12/13 - right before starting to cut out invalid states
 
 #include "realWorld.h"
 #include "setupUtils.h"
@@ -18,8 +17,10 @@
 #include <time.h> // for srand
 #include <stdlib.h> // for atoi
 
-// temporary
+// for gaussianNoise()
 #include "logUtils.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 //calcModelProbLog - modelUtils X
 //chooseActionLog - realWorld / actionSelection
@@ -307,9 +308,9 @@ void RealWorld::runAction(){
     // Noise should be added such that the "true" (nominal) position is unknown
     std::cout << "poseInRbt_:" << std::endl; // DELETE
     for (size_t i=0; i<poseInRbt_.size(); i++){
-      double X=randomDouble();
-      poseInRbt_[i]+=0.001*X;
-      std::cout << 0.001*X << std::endl; // DELETE
+      double X = gaussianNoise();
+      poseInRbt_[i]+=X;
+      std::cout << X << std::endl; // DELETE
       std::cout << poseInRbt_[i] << std::endl; // DELETE
     }
   }
@@ -349,8 +350,16 @@ void RealWorld::runWorld(int numSteps){
 ////////////////////////////////////////////////////////////////////////////////
 
 double RealWorld::randomDouble(){
-  double X=((double)rand()/(double)RAND_MAX);
+  double X = ((double)rand()/(double)RAND_MAX);
   return X;
+}
+
+double RealWorld::gaussianNoise(){
+  double x1 = ((double)rand()/(double)RAND_MAX);
+  double x2 = ((double)rand()/(double)RAND_MAX);
+  double sig = 0.01; // standard deviation of noise
+  double mu = 0.0; // mean of noise
+  return sqrt(-2*logUtils::safe_log(x1))*cos(2*M_PI*x2)*sig+mu;
 }
 
 void RealWorld::printModelParamProbs(std::vector<double> mpProbsLog){
@@ -390,6 +399,7 @@ int main(int argc, char* argv[])
     else{
       steps = atoi(argv[1]);
     }
+
     std::cout << "steps: " << steps << std::endl;
     RealWorld world;
 

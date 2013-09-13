@@ -42,6 +42,7 @@ class RealWorld {
   void stepWorld();
   void runWorld(int numSteps);
   double randomDouble();
+  double gaussianNoise();
   void printModelParamProbs(std::vector<double> mpProbsLog);
 };
   

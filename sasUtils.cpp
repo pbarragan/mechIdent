@@ -3,6 +3,7 @@
 #include <sstream>
 #include "sasUtils.h"
 #include "translator.h"
+#include <inttypes.h>
 
 //this is super specific to the exact state representation I am using as of 9/4/2013 (Nate and Julia's Wedding Anniversary and Frank's Birthday)
 
@@ -27,6 +28,30 @@ sasUtils::mapPairSVS sasUtils::populateSAS(std::vector<stateStruct>& states, std
   return sasHolder;
 }
 
+void printShit(double input) {
+  std::cout << input << std::endl;
+  union { double d; uint64_t i; } u;
+  u.d = input;
+  for (int i = 0; i < sizeof(double)*8; i++) {
+    if (u.i % 2) std::cout << '1';
+    else std::cout << '0';
+    u.i >>= 1;
+  }
+  std::cout << std::endl;
+}
+
+void printShit(float input) {
+  std::cout << input << std::endl;
+  union { float f; uint64_t i; } u;
+  u.f = input;
+  for (int i = 0; i < sizeof(float)*8; i++) {
+    if (u.i % 2) std::cout << '1';
+    else std::cout << '0';
+    u.i >>= 1;
+  }
+  std::cout << std::endl;
+}
+
 void sasUtils::setupSAS(mapPairSVS& sasList,std::vector<stateStruct>& states, std::vector< std::vector<double> >& actions,bool overwriteCSV){
   //overwriteCSV_ = true;
   
@@ -37,10 +62,116 @@ void sasUtils::setupSAS(mapPairSVS& sasList,std::vector<stateStruct>& states, st
     // 2) make a check to see if the SAS is a match using isMatch
     // 3) if it isn't a match, populate, or if you couldn't read, populate
     // 4) check on what happens if you overwrite a file
+
+    // DELETE
+    stateStruct tState;
+    std::vector<double> tAction;
+    tState.model=0;
+    tState.vars.push_back(-0.21);
+    tState.vars.push_back(0.21);
+    tAction.push_back(-0.22);
+    tAction.push_back(-0.22);
+    stateStruct dS = states[1];
+    std::vector<double> dA = actions[0];
+
+    std::cout << (dA[0] == tAction[0]) << "," << (dA[1] == tAction[1]) << std::endl;
+    std::cout << dA[1] << "," << tAction[1] << std::endl;
+    std::cout << (dA[1]-tAction[1]) << std::endl;
+
+    float da1 = float(dA[1]);
+    float ta1 = float(tAction[1]);
+    std::cout << "Same? " << (da1 == ta1) << std::endl;
+    double da1d = double(da1);
+    double ta1d = double(ta1);
+    std::cout << "Same? " << (da1d == ta1d) << std::endl;
+
+    // Original doubles
+    printShit(dA[1]);
+    printShit(tAction[1]);
+    // Casted as floats
+    printShit(da1);
+    printShit(ta1);
+    // Casted floats back to doubles
+    printShit(da1d);
+    printShit(ta1d);
+
+    printShit(float(dA[1])+float(dA[1]));
+
+    // printShit(2.0);
+    // printShit(-2.0);
+    // printShit(dA[1]-tAction[1]);
+    // printShit(tAction[1]-dA[1]);
+    // printShit(float(dA[1])-float(tAction[1]));
+    // printShit(float(tAction[1])-float(dA[1]));
+
+    // std::cout << "==========" << std::endl;
+    // std::cout << sizeof(double) << std::endl;
+    // union { double d; uint64_t i; } u;
+    // u.d = dA[1];
+    // for (int i = 0; i < sizeof(double)*8; i++) {
+    //   if (u.i % 2) std::cout << '1';
+    //   else std::cout << '0';
+    //   u.i >>= 1;
+    // }
+    // std::cout << std::endl;
+
+    // union { double d; uint64_t i; } v;
+    // v.d = tAction[1];
+    // for (int i = 0; i < sizeof(double)*8; i++) {
+    //   if (v.i % 2) std::cout << '1';
+    //   else std::cout << '0';
+    //   v.i >>= 1;
+    // }
+    // std::cout << std::endl;
+
+    std::cout << "six count" << sasList.count(pairSV (states[1],tAction)) << std::endl;
+    std::cout << "five count" << sasList.count(pairSV (tState,actions[0])) << std::endl;
+    std::cout << "four count" << sasList.count(pairSV (dS,dA)) << std::endl;
+    std::cout << "third count" << sasList.count(pairSV (states[1],actions[0])) << std::endl;
+    std::cout << "first count" << sasList.count(pairSV (tState,tAction)) << std::endl; 
+    std::cout << "second count" << sasList.count(pairSV (states[1],actions[0])) << std::endl;
+    std::cout << "what" << std::endl;
+    std::cout << states[0].model << std::endl;
+
+    std::cout << "params size:" << states[0].params.size() << std::endl;
+    for (size_t k=0;k<states[0].params.size();k++){
+      std::cout << states[0].params[k] << std::endl;
+    }
+    std::cout << "vars size:" << states[0].vars.size() << std::endl;
+    for (size_t k=0;k<states[0].vars.size();k++){
+      std::cout << states[0].vars[k] << std::endl;
+    }
+    std::cout << "action size: " << actions[1].size() << std::endl;
+    std::cout << actions[1][0] << "," << actions[1][1] << std::endl;
+    std::cout << "the hell" << std::endl;
+    std::cout << tState.model << std::endl;
+
+    std::cout << "params size:" << tState.params.size() << std::endl;
+    for (size_t k=0;k<tState.params.size();k++){
+      std::cout << tState.params[k] << std::endl;
+    }
+    std::cout << "vars size:" << tState.vars.size() << std::endl;
+    for (size_t k=0;k<tState.vars.size();k++){
+      std::cout << tState.vars[k] << std::endl;
+    }
+    std::cout << "action size: " << tAction.size() << std::endl;
+    std::cout << tAction[0] << "," << tAction[1] << std::endl;
+
+    //stateStruct works = sasList.at(pairSV (tState,tAction));
+    //std::cout << "works model: " << works.model << std::endl;
+    //stateStruct wontWork = sasList.at(pairSV (states[0],actions[1]));
+    //std::cout << "won't work model: " << wontWork.model << std::endl;
+
+
+    //assert(false);
+    
     if (sasUtils::isMatch(sasList,states,actions)){
       std::cout << "Don't worry, Son, we have a match." << std::endl;
     }
     else{
+      //assert(false);
+      //std::vector<double> a;
+      //a[10];
       // No match. fix it.
       std::cout << "It didn't match. Why does this always happen to me?" << std::endl;
       sasList.clear(); // Not necessary, but just to be safe
@@ -52,6 +183,7 @@ void sasUtils::setupSAS(mapPairSVS& sasList,std::vector<stateStruct>& states, st
 	else std::cout << "Failed to save the SAS data. lame." << std::endl;
       }
     }
+    //return;
   }
   else{
     std::cout << "Couldn't get the saved SAS data. Raspberries." << std::endl;
@@ -78,11 +210,34 @@ bool sasUtils::isMatch(mapPairSVS& sasList, std::vector<stateStruct>& states, st
   // would require resimulating all the pairs which would defeat the point.
 
   // make sure the number of state action pairs is the same as the number of map elements 
+  std::cout << "0" << std::endl;
   if (states.size()*actions.size() == sasList.size()){
     // check every state action pair to make sure that they exist
+    std::cout << "1" << std::endl;
     for (size_t i=0;i<actions.size();i++){
+      std::cout << "why does this shit" << std::endl;
       for (size_t j=0;j<states.size();j++){
+	std::cout << "always happen" << std::endl;
+	std::cout << sasList.count(pairSV (states[j],actions[i])) << std::endl;
 	if(sasList.count(pairSV (states[j],actions[i]))==0){
+	  // LSW HACK
+
+	  std::cout << "2" << std::endl;
+	  std::cout << states[j].model << std::endl;
+	  std::cout << "i:" << i << std::endl;
+	  std::cout << "j:" << j << std::endl;
+
+	  for (size_t k=0;k<states[j].params.size();k++){
+	    std::cout << states[j].params[k] << std::endl;
+	    printShit(states[j].params[k]);
+	  }
+	  for (size_t k=0;k<states[j].vars.size();k++){
+	    std::cout << states[j].vars[k] << std::endl;
+	    printShit(states[j].vars[k]);
+	  }
+	  std::cout << actions[i][0] << "," << actions[i][1] << std::endl;
+	  printShit(actions[i][0]);
+	  printShit(actions[i][1]);
 	  return false;
 	}
       }
@@ -154,7 +309,7 @@ bool sasUtils::readSASfromCSV(mapPairSVS& sasList,std::string fileName){
 	  std::stringstream cellStream(cell); 
 	  double result;
 	  cellStream >> result;
-	  tmpPrevState.params.push_back(result);
+	  tmpPrevState.params.push_back(bitStringToDouble(cell));
 	}
 	stepCount++;
       }
@@ -165,7 +320,7 @@ bool sasUtils::readSASfromCSV(mapPairSVS& sasList,std::string fileName){
 	  std::stringstream cellStream(cell); 
 	  double result;
 	  cellStream >> result;
-	  tmpPrevState.vars.push_back(result);
+	  tmpPrevState.vars.push_back(bitStringToDouble(cell));
 	}
 	stepCount++;
       }
@@ -177,7 +332,7 @@ bool sasUtils::readSASfromCSV(mapPairSVS& sasList,std::string fileName){
 	  std::stringstream cellStream(cell); 
 	  double result;
 	  cellStream >> result;
-	  tmpAction.push_back(result);
+	  tmpAction.push_back(bitStringToDouble(cell));
 	}
 	stepCount++;
       }
@@ -199,7 +354,7 @@ bool sasUtils::readSASfromCSV(mapPairSVS& sasList,std::string fileName){
 	  std::stringstream cellStream(cell); 
 	  double result;
 	  cellStream >> result;
-	  tmpNextState.params.push_back(result);
+	  tmpNextState.params.push_back(bitStringToDouble(cell));
 	}
 	stepCount++;
       }
@@ -210,7 +365,7 @@ bool sasUtils::readSASfromCSV(mapPairSVS& sasList,std::string fileName){
 	  std::stringstream cellStream(cell); 
 	  double result;
 	  cellStream >> result;
-	  tmpNextState.vars.push_back(result);
+	  tmpNextState.vars.push_back(bitStringToDouble(cell));
 	}
 	
 	// insert into SAS list
@@ -251,17 +406,17 @@ bool sasUtils::writeSAStoCSV(mapPairSVS& sasList,std::string fileName){
       outFile << tmpPrevState.model << "\n";
       // params
       for (size_t i=0;i<tmpPrevState.params.size();i++){
-	outFile << tmpPrevState.params[i] << ",";
+	outFile << doubleToBitString(tmpPrevState.params[i]) << ",";
       }
       outFile << "\n";
       // vars
       for (size_t i=0;i<tmpPrevState.vars.size();i++){
-	outFile << tmpPrevState.vars[i] << ",";
+	outFile << doubleToBitString(tmpPrevState.vars[i]) << ",";
       }
       outFile << "\n";
       // Write the pieces of the action
       for (size_t i=0;i<tmpAction.size();i++){
-	outFile << tmpAction[i] << ",";
+	outFile << doubleToBitString(tmpAction[i]) << ",";
       }
       outFile << "\n";
       // Write the pieces of the next state
@@ -269,12 +424,12 @@ bool sasUtils::writeSAStoCSV(mapPairSVS& sasList,std::string fileName){
       outFile << tmpNextState.model << "\n";
       // params
       for (size_t i=0;i<tmpNextState.params.size();i++){
-	outFile << tmpNextState.params[i] << ",";
+	outFile << doubleToBitString(tmpNextState.params[i]) << ",";
       }
       outFile << "\n";
       // vars
       for (size_t i=0;i<tmpNextState.vars.size();i++){
-	outFile << tmpNextState.vars[i] << ",";
+	outFile << doubleToBitString(tmpNextState.vars[i]) << ",";
       }
       outFile << "\n";
     }
@@ -285,4 +440,26 @@ bool sasUtils::writeSAStoCSV(mapPairSVS& sasList,std::string fileName){
     std::cout << "Unable to open output SAS file" << std::endl;
     return false;
   }
+}
+
+std::string sasUtils::doubleToBitString(double input){
+  std::string s = "";
+  union { double d; uint64_t i; } u;
+  u.d = input;
+  for (int i = 0; i < sizeof(double)*8; i++) {
+    if (u.i % 2) s+='1';
+    else s+='0';
+    u.i >>= 1;
+  }
+  return s;
+}
+
+double sasUtils::bitStringToDouble(std::string s){
+  union { double d; uint64_t i; } u;
+  u.i = 0;
+  for (int j = s.size(); j > 0; j--) {
+    u.i += int(s[j-1]) - int('0');
+    if (j > 1) u.i <<= 1;
+  }
+  return u.d;
 }
