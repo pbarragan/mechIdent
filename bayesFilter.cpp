@@ -11,7 +11,7 @@
 //Constructor
 BayesFilter::BayesFilter(){
  //seed the random number generator once for the filter.
-  srand((unsigned)time(NULL));
+  // srand((unsigned)time(NULL));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -132,6 +132,10 @@ void BayesFilter::observationUpdateLog(std::vector<double>& logProbList, std::ve
 	for (size_t i=0; i<stateList_.size(); i++) {
 	  logProbList[i] += filterModels::logProbObs(obs,stateList_[i]);
 	}
+
+	std::cout << "??????????????????????????????????????????? before normalization" << std::endl; // DELETE
+
+	printLogProbList();
 
 	logProbList = logUtils::normalizeVectorInLogSpace(logProbList);
 

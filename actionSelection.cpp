@@ -99,11 +99,11 @@ void actionSelection::chooseActionLog(BayesFilter& filter,std::vector< std::vect
       stateStruct sample = getSampleState(probCDF,filter.stateList_);
 
       //Step 2.2: Simulate the state with the action
-      stateStruct nextState = translator::stateTransition(sample,actionList[i],sasList);
+      stateStruct nextState = translator::stateTransition(sample,actionList[i],sasList); // use SAS
 
       //Step 2.3: Get an observation
       //Step 2.4: Update the belief state in log space
-      filter.transitionUpdateLog(localLogProbList,actionList[i]);
+      filter.transitionUpdateLog(localLogProbList,actionList[i],sasList); // use SAS
       filter.observationUpdateLog(localLogProbList,getNoisyObs(nextState));
 
       //Step 2.5: Calculate the entropy over models of the new belief state

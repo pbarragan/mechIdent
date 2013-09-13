@@ -11,10 +11,14 @@
 //dimNums gives you the number of discrete points along a dimension.
 
 std::vector<stateStruct> setupUtils::setupModel0(std::vector<stateStruct>& modelParamPairs){  
-  //Model 0 is the free model
+  // Model 0 is the free model
+  // State looks like:
+  // Model: 0
+  // Params:
+  // Vars: x,y in rbt space
   int modelNum = 0;
   int paramNum = 0; //how many parameters
-  int varNum = 2; //how many variables: x,y
+  int varNum = 2; //how many variables
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0)); // empty size 0 vector  
@@ -22,10 +26,10 @@ std::vector<stateStruct> setupUtils::setupModel0(std::vector<stateStruct>& model
   std::vector<int> dNP (paramNum, 0); // empty size 0 vector
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -0.2;
-  dRV[0][1] = 0.2;
-  dRV[1][0] = -0.2;
-  dRV[1][1] = 0.2;
+  dRV[0][0] = -0.21;
+  dRV[0][1] = 0.21;
+  dRV[1][0] = -0.21;
+  dRV[1][1] = 0.21;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
   dNV[0] = 2;
@@ -35,9 +39,13 @@ std::vector<stateStruct> setupUtils::setupModel0(std::vector<stateStruct>& model
 }
 
 std::vector<stateStruct> setupUtils::setupModel1(std::vector<stateStruct>& modelParamPairs){  
-  //Model 1 is the fixed model
+  // Model 1 is the fixed model
+  // State looks like:
+  // Model: 1
+  // Params: x,y in rbt space
+  // Vars: 
   int modelNum = 1;
-  int paramNum = 2; //how many parameters: x,y
+  int paramNum = 2; //how many parameters
   int varNum = 0; //how many variables
 
   //Dimension Ranges for Params
@@ -60,19 +68,23 @@ std::vector<stateStruct> setupUtils::setupModel1(std::vector<stateStruct>& model
 }
 
 std::vector<stateStruct> setupUtils::setupModel2(std::vector<stateStruct>& modelParamPairs){  
-  //Model 2 is the revolute model
+  // Model 2 is the revolute model
+  // State looks like:
+  // Model: 2
+  // Params: x_pivot,y_pivot in rbt space, r
+  // Vars: theta in rbt space
   int modelNum = 2;
-  int paramNum = 3; //how many parameters: x_pivot,y_pivot,r
-  int varNum = 1; //how many variables: theta
+  int paramNum = 3; //how many parameters
+  int varNum = 1; //how many variables
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = 0.0;
-  dRP[0][1] = 1.0;
-  dRP[1][0] = 0.0;
-  dRP[1][1] = 1.0;
-  dRP[2][0] = 0.0;
-  dRP[2][1] = 1.0;
+  dRP[0][0] = -0.2;
+  dRP[0][1] = 0.2;
+  dRP[1][0] = -0.2;
+  dRP[1][1] = 0.2;
+  dRP[2][0] = 0.3;
+  dRP[2][1] = 0.5;
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 2;
@@ -80,8 +92,8 @@ std::vector<stateStruct> setupUtils::setupModel2(std::vector<stateStruct>& model
   dNP[2] = 2;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -0.1;
-  dRV[0][1] = 0.1;
+  dRV[0][0] = -2.356;
+  dRV[0][1] = 2.356;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
   dNV[0] = 3;
@@ -90,60 +102,77 @@ std::vector<stateStruct> setupUtils::setupModel2(std::vector<stateStruct>& model
 }
 
 std::vector<stateStruct> setupUtils::setupModel3(std::vector<stateStruct>& modelParamPairs){  
-  //Model 1 is the prismatic model
+  // Model 3 is the prismatic model
+  // State looks like:
+  // Model: 3
+  // Params: x_axis,y_axis,theta_axis in rbt space
+  // Vars: d
   int modelNum = 3;
-  int paramNum = 2; //how many parameters
-  int varNum = 2; //how many variables
+  int paramNum = 3; //how many parameters
+  int varNum = 1; //how many variables
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = 0.0;
-  dRP[0][1] = 1.0;
-  dRP[1][0] = 0.0;
-  dRP[1][1] = 1.0;
+  dRP[0][0] = -0.2;
+  dRP[0][1] = 0.2;
+  dRP[1][0] = -0.2;
+  dRP[1][1] = 0.2;
+  dRP[2][0] = -2.356;
+  dRP[2][1] = 2.356;
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 2;
   dNP[1] = 2;
+  dNP[2] = 3;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -0.1;
-  dRV[0][1] = 0.1;
-  dRV[1][0] = -0.1;
-  dRV[1][1] = 0.1;
+  dRV[0][0] = -0.2;
+  dRV[0][1] = 0.2;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
   dNV[0] = 3;
-  dNV[1] = 3;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
 
 std::vector<stateStruct> setupUtils::setupModel4(std::vector<stateStruct>& modelParamPairs){  
-  //Model 4 is the revolute prismatic (latch) model
+  // Model 4 is the revolute prismatic latch model
+  // State looks like:
+  // Model: 4
+  // Params: x_pivot,y_pivot in rbt space, r, theta_L in rbt space, d_L
+  // Vars: theta in rbt space, d
   int modelNum = 4;
-  int paramNum = 2; //how many parameters
+  int paramNum = 5; //how many parameters
   int varNum = 2; //how many variables
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = 0.0;
-  dRP[0][1] = 1.0;
+  dRP[0][0] = -0.6;
+  dRP[0][1] = -0.6;
   dRP[1][0] = 0.0;
-  dRP[1][1] = 1.0;
+  dRP[1][1] = 0.0;
+  dRP[2][0] = 0.3;
+  dRP[2][1] = 0.5;
+  dRP[3][0] = 0.0;
+  dRP[3][1] = 0.0;
+  dRP[4][0] = 0.2;
+  dRP[4][1] = 0.2;
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
-  dNP[0] = 2;
-  dNP[1] = 2;
+  dNP[0] = 1;
+  dNP[1] = 1;
+  dNP[2] = 5;
+  dNP[3] = 1;
+  dNP[4] = 1;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -0.1;
-  dRV[0][1] = 0.1;
-  dRV[1][0] = -0.1;
-  dRV[1][1] = 0.1;
+  dRV[0][0] = -2;
+  dRV[0][1] = 2;
+  dRV[1][0] = 0.0;
+  dRV[1][1] = 0.20;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 3;
+  dNV[0] = 9;
   dNV[1] = 3;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
@@ -163,40 +192,32 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
   //setup model parameter pair lists for each model
   std::vector<stateStruct> modelParamPairs0;
   std::vector<stateStruct> modelParamPairs1;
-  /*
   std::vector<stateStruct> modelParamPairs2;
   std::vector<stateStruct> modelParamPairs3;
   std::vector<stateStruct> modelParamPairs4;
-  */
 
   //Set up a state list for each model. 
   //Then stick together all of the lists into one master list. 
 
   std::vector<stateStruct> stateList0 = setupModel0(modelParamPairs0);
   std::vector<stateStruct> stateList1 = setupModel1(modelParamPairs1);
-  /*
   std::vector<stateStruct> stateList2 = setupModel2(modelParamPairs2);
   std::vector<stateStruct> stateList3 = setupModel3(modelParamPairs3);
   std::vector<stateStruct> stateList4 = setupModel4(modelParamPairs4);
-  */
 
   //populate the modelParamPairs vector
   modelParamPairs = modelParamPairs0;
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs1.begin(), modelParamPairs1.end());
-  /*
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs2.begin(), modelParamPairs2.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs3.begin(), modelParamPairs3.end());
-  modelParamPairs.insert(modelParamPairs.end(), modelParamPairs4.begin(), modelParamPairs4.end());  
-  */
+  modelParamPairs.insert(modelParamPairs.end(), modelParamPairs4.begin(), modelParamPairs4.end());
 
   //populate the modelParamPairs vector
   stateList = stateList0;
   stateList.insert(stateList.end(), stateList1.begin(), stateList1.end());
-  /*
   stateList.insert(stateList.end(), stateList2.begin(), stateList2.end());
   stateList.insert(stateList.end(), stateList3.begin(), stateList3.end());
   stateList.insert(stateList.end(), stateList4.begin(), stateList4.end());
-  */
 
 }
 
@@ -295,10 +316,10 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
 
   //Dimension Ranges for Actions
   std::vector< std::vector<double> > dRA (actDimNum, std::vector<double> (2,0.0));
-  dRA[0][0] = -0.2;
-  dRA[0][1] = 0.2;
-  dRA[1][0] = -0.2;
-  dRA[1][1] = 0.2;
+  dRA[0][0] = -0.22;
+  dRA[0][1] = 0.18;
+  dRA[1][0] = -0.22;
+  dRA[1][1] = 0.18;
   //Dimension Numbers for Actions
   std::vector<int> dNA (actDimNum, 0);
   dNA[0] = 2;

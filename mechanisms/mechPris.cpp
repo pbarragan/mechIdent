@@ -13,8 +13,9 @@
 void MechPris::initialize(stateStruct& startState){
   // Set the size scale for objects in this world
   float sizeScale = 0.05;
+  float armLength = 2.0;
   // Set offsets before running Mechanism::initialize()
-  o1_ = 2*sizeScale;
+  o1_ = 2*sizeScale+armLength/2; // offset between center of beam and handle
   o2_ = 10;
 
   // Initialize standard physics for Mechanism
@@ -29,7 +30,7 @@ void MechPris::initialize(stateStruct& startState){
   btVector3 link0O = startPoseLink0_; // link0 origin
   btVector3 rbtO = startPose_; // rbt origin
 
-  //----------make fxd rigid body (the pivot)---------//
+  //----------make fxd rigid body (the sliding pivot)---------//
   // shape
   const btVector3 fxdBoxHalfExtents( sizeScale, 1.0f, sizeScale );
   fxdCS_ = new btBoxShape(fxdBoxHalfExtents);
@@ -44,11 +45,11 @@ void MechPris::initialize(stateStruct& startState){
   fxdRB_ = createRigidBody(fxdCS_,fxdMass,fxdBT);
   // add it to the dynamics world
   dynamicsWorld_->addRigidBody(fxdRB_);
-  //--------end make fxd rigid body (the sliding box)-------//
+  //--------end make fxd rigid body (the sliding pivot)-------//
   
-  //----------make link0 rigid body (the rotating arm)---------//
+  //----------make link0 rigid body (the sliding arm)---------//
   // shape
-  const btVector3 link0BoxHalfExtents( 1.0f, 0.5f, 0.5f );
+  const btVector3 link0BoxHalfExtents( armLength/2, 0.5f, 0.5f );
   link0CS_ = new btBoxShape(link0BoxHalfExtents);
   // position
   btTransform link0BT;
@@ -57,11 +58,11 @@ void MechPris::initialize(stateStruct& startState){
   link0BT.setRotation(startQuatLink0_);
   // mass
   btScalar link0Mass = 1.0f;
-  //create the link0 rigid body
+  // create the link0 rigid body
   link0RB_ = createRigidBody(link0CS_,link0Mass,link0BT);
-  //add it to the dynamics world
+  // add it to the dynamics world
   dynamicsWorld_->addRigidBody(link0RB_);
-  //--------end make link0 rigid body (the sliding box)-------//
+  //--------end make link0 rigid body (the sliding arm)-------//
 
   //--------make rbt rigid body (the robots manipulator)------//
   // shape
@@ -72,9 +73,9 @@ void MechPris::initialize(stateStruct& startState){
   rbtBT_.setOrigin(rbtO);
   // mass
   btScalar rbtMass = 0.1f;
-  //create the rbt rigid body
+  // create the rbt rigid body
   rbtRB_ = createRigidBody(rbtCS_,rbtMass,rbtBT_);
-  //add it to the dynamics world
+  // add it to the dynamics world
   dynamicsWorld_->addRigidBody(rbtRB_);
   //------end make rbt rigid body (the robots manipulator)----//
 
@@ -84,23 +85,21 @@ void MechPris::initialize(stateStruct& startState){
 
   // Scope used in this section to avoid renaming local variables
 
-  //--------create hinge constraint between fxd and link0------//
+  //--------create slider constraint between fxd and link0------//
   {
-    const btVector3 pivotInA( 0.0f, 0.0f, 0.0f );   
-    const btVector3 pivotInB( -r_/2.0f, 0.0f, 0.0f );
-    btVector3 axisInA( 0.0f, 1.0f, 0.0f );
-    btVector3 axisInB( 0.0f, 1.0f, 0.0f );
-    bool useReferenceFrameA = false;
-    fxdLink0HC_ = new btHingeConstraint(*fxdRB_,*link0RB_,pivotInA,pivotInB,axisInA,axisInB,useReferenceFrameA);
+    btTransform frameInA = btTransform::getIdentity();
+    btTransform frameInB = btTransform::getIdentity();
+    bool useLinearReferenceFrameA = true;
+    fxdLink0SC_ = new btSliderConstraint(*fxdRB_,*link0RB_,frameInA,frameInB,useLinearReferenceFrameA);
     // add constraint to the world
     const bool isDisableCollisionsBetweenLinkedBodies = true; //disable collisions
-    dynamicsWorld_->addConstraint(fxdLink0HC_,isDisableCollisionsBetweenLinkedBodies);
+    dynamicsWorld_->addConstraint(fxdLink0SC_,isDisableCollisionsBetweenLinkedBodies);
   }
-  //------end create hinge constraint between fxd and link0----//
+  //------end create slider constraint between fxd and link0----//
   
   //--------create hinge constraint between link0 and rbt------//
   {
-    const btVector3 pivotInA( r_/2.0f, 0.0f, 0.0f );   
+    const btVector3 pivotInA( o1_, 0.0f, 0.0f );   
     const btVector3 pivotInB( 0.0f, 0.0f, 0.0f );
     btVector3 axisInA( 0.0f, 1.0f, 0.0f );
     btVector3 axisInB( 0.0f, 1.0f, 0.0f );
@@ -140,7 +139,7 @@ void MechPris::exitPhysics(){
   // cleanup in the reverse order of creation/initialization
   // remove additional things created in this subclass
   delete link0RbtHC_;
-  delete fxdLink0HC_;
+  delete fxdLink0SC_;
   delete link0CS_;
   delete fxdCS_;
 }
@@ -226,61 +225,63 @@ void MechPris::setGoalWithAction(std::vector<double>& action){
 // virtual
 stateStruct MechPris::returnStateOfWorld(){
   // State looks like:
-  // Model: 2
-  // Params: x_pivot,y_pivot in rbt space, r
-  // Vars: theta in rbt space
+  // Model: 3
+  // Params: x_axis,y_axis,theta_axis in rbt space
+  // Vars: d
 
   stateStruct endState;
-  endState.model = 2;
-  endState.params.push_back(x_p_);
-  endState.params.push_back(y_p_);
-  endState.params.push_back(r_);
+  endState.model = 3;
+  endState.params.push_back(x_a_);
+  endState.params.push_back(y_a_);
+  endState.params.push_back(theta_a_);
   std::vector<double> tempVarsSim = convBtVect3ToStdVect(pose_);
   std::vector<double> tempVarsRbt = convCoordsSimToRbt(tempVarsSim);
-  // only returns betwenn -pi and pi
-  endState.vars.push_back(atan2(tempVarsRbt[1]-y_p_,tempVarsRbt[0]-x_p_));
+  // there are two possible equations to solve for d. This is 1 choice.
+  endState.vars.push_back((tempVarsRbt[0]-x_a_)/cos(theta_a_));
   return endState;
 }
 
 // virtual
 std::vector<double> MechPris::stToObs(stateStruct& state){
   // State looks like:
-  // Model: 2
-  // Params: x_pivot,y_pivot in rbt space, r
-  // Vars: theta in rbt space  
-  double theta = state.vars[0];
-  double x_p = state.params[0];
-  double y_p = state.params[1];
-  double r = state.params[2];
+  // Model: 3
+  // Params: x_axis,y_axis,theta_axis in rbt space
+  // Vars: d
+
+  double d = state.vars[0];
+  double x_a = state.params[0];
+  double y_a = state.params[1];
+  double theta_a = state.params[2];
   
   // Observation looks like:
   // x,y in rbt space
   std::vector<double> obs (2,0.0);
 
   // Calculate
-  obs[0] = x_p+r*cos(theta); // set x_obs
-  obs[1] = y_p+r*sin(theta); // set y_obs
+  obs[0] = x_a+d*cos(theta_a); // set x_obs
+  obs[1] = y_a+d*sin(theta_a); // set y_obs
   return obs;
 }
 
 // virtual
 std::vector<double> MechPris::stToRbt(stateStruct& state){
   // State looks like:
-  // Model: 2
-  // Params: x_pivot,y_pivot in rbt space, r
-  // Vars: theta in rbt space
-  double theta = state.vars[0];
-  double x_p = state.params[0];
-  double y_p = state.params[1];
-  double r = state.params[2];
+  // Model: 3
+  // Params: x_axis,y_axis,theta_axis in rbt space
+  // Vars: d
+
+  double d = state.vars[0];
+  double x_a = state.params[0];
+  double y_a = state.params[1];
+  double theta_a = state.params[2];
 
   // Robot looks like:
   // x,y in rbt space
   std::vector<double> rbt (2,0.0);
 
   // Calculate
-  rbt[0] = x_p+r*cos(theta); // set x_obs
-  rbt[1] = y_p+r*sin(theta); // set y_obs
+  rbt[0] = x_a+d*cos(theta_a); // set x_obs
+  rbt[1] = y_a+d*sin(theta_a); // set y_obs
   return rbt;
 }
 

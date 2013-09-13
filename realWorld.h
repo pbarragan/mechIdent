@@ -18,8 +18,8 @@ class RealWorld {
   std::vector< std::vector<double> > actionList_;
   sasUtils::mapPairSVS sasList_;
 
-  std::vector<double> action_; // current action
-  std::vector<double> poseInRbt_; // current state in robot space
+  std::vector<double> action_; // current action in robot space: x,y
+  std::vector<double> poseInRbt_; // current state in robot space: x,y
   int step_; // the step that the world is on
 
   bool useSAS_; // if true, use the SAS list
@@ -29,6 +29,11 @@ class RealWorld {
   RealWorld();
   ~RealWorld();
   void initMechFree();
+  void initMechFixed();
+  void initMechRev();
+  void initMechPris();
+  void initMechRevPrisL();
+  void initMechPrisPrisL();
   void updateFilter(std::vector<double> action,std::vector<double> obs);
   void nextAction();
   void runAction();

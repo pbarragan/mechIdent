@@ -1,5 +1,5 @@
-#ifndef MECH_PRIS_H
-#define MECH_PRIS_H
+#ifndef MECH_REV_PRIS_L_H
+#define MECH_REV_PRIS_L_H
 
 #include <vector>
 #include <btBulletDynamicsCommon.h>
@@ -7,7 +7,7 @@
 #include "../stateStruct.h"
 #include "mechanism.h"
 
-class MechPris : public Mechanism {
+class MechRevPrisL : public Mechanism {
 
  public:
   // variables
@@ -17,23 +17,50 @@ class MechPris : public Mechanism {
 
   // initialization parameters in sim
   btVector3 startPoseLink0_;
+  btVector3 startPoseLink1_;
   btVector3 startPoseFxd_;
-  double x_a_;
-  double y_a_;
-  double theta_a_;
+
+  btVector3 startPoseFxdA_;
+  btVector3 startPoseFxdB_;
+  btVector3 startPoseFxdC_;
+
+  //    - state parameters
+  double x_p_;
+  double y_p_;
+  double r_;
+  double theta_L_;
+  double d_L_;
+
+  //    - geometry variables
+  double sizeScale_;
+  double link0Len_; // Prismatic link
+  double link1Len_; // Revolute link
   double o1_;
   double o2_;
+  double l1_;
   btQuaternion startQuatLink0_;
-
+  btQuaternion startQuatLink1_;
+  btQuaternion startQuatFxdABC_;
 
   // objects
   btCollisionShape* link0CS_;
   btRigidBody* link0RB_;
+  btCollisionShape* link1CS_;
+  btRigidBody* link1RB_;
   btCollisionShape* fxdCS_;
   btRigidBody* fxdRB_;
 
+  //     - latch rigid bodies
+  btCollisionShape* fxdACS_;
+  btRigidBody* fxdARB_;
+  btCollisionShape* fxdBCS_;
+  btRigidBody* fxdBRB_;
+  btCollisionShape* fxdCCS_;
+  btRigidBody* fxdCRB_;
+
   // constraints
-  btSliderConstraint* fxdLink0SC_; //this is the pivot constraint
+  btHingeConstraint* fxdLink1HC_; //this is the constraint where the robot holds
+  btSliderConstraint* link1Link0SC_; //this is the pivot constraint
   btHingeConstraint* link0RbtHC_; //this is the constraint where the robot holds
 
   // controller
@@ -54,8 +81,8 @@ class MechPris : public Mechanism {
 
   // functions
   // Constructor and Destructor
- MechPris() : link0CS_(NULL),link0RB_(NULL),link0RbtHC_(NULL),fxdCS_(NULL),fxdRB_(NULL),fxdLink0SC_(NULL) { };
-  virtual ~MechPris();
+ MechRevPrisL() : link0CS_(NULL),link0RB_(NULL),link1CS_(NULL),link1RB_(NULL),fxdCS_(NULL),fxdRB_(NULL),fxdACS_(NULL),fxdARB_(NULL),fxdBCS_(NULL),fxdBRB_(NULL),fxdCCS_(NULL),fxdCRB_(NULL),fxdLink1HC_(NULL),link1Link0SC_(NULL),link0RbtHC_(NULL) { };
+  virtual ~MechRevPrisL();
 
   // Specific to subclass
 
@@ -71,4 +98,4 @@ class MechPris : public Mechanism {
   virtual std::vector<double> stToRbt(stateStruct& state);
 };
   
-#endif // MECH_PRIS_H
+#endif // MECH_REV_PRIS_L_H

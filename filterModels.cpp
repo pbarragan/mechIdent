@@ -3,9 +3,11 @@
 #include "logUtils.h"
 #include "filterModels.h"
 
+#include <iostream> // DELETE
+
 double filterModels::logProbState(stateStruct sampleState, stateStruct meanState){
   //Move this outside later maybe
-  double transArray[] = {0.0000001,0.0,0.0,0.0000001};
+  double transArray[] = {0.0001,0.0,0.0,0.0001};
   std::vector<double> transCovMat;
   transCovMat.assign(transArray, transArray + sizeof(transArray)/sizeof(double));
   
@@ -25,7 +27,7 @@ double filterModels::logProbState(stateStruct sampleState, stateStruct meanState
 
 double filterModels::logProbObs(std::vector<double> obs, stateStruct state){
   //Move this outside later maybe
-  double obsArray[] = {0.0000001,0.0,0.0,0.0000001};
+  double obsArray[] = {0.0001,0.0,0.0,0.0001};
   std::vector<double> obsCovMat;
   obsCovMat.assign(obsArray, obsArray + sizeof(obsArray)/sizeof(double));
 
@@ -34,5 +36,23 @@ double filterModels::logProbObs(std::vector<double> obs, stateStruct state){
   //std::vector<double> obsInO = translator::translateObsToO(obs);
   std::vector<double> obsInObs = obs;
   std::vector<double> meanStateInObs = translator::translateStToObs(state);
-  return logUtils::evaluteLogMVG(obsInObs,meanStateInObs,obsCovMat);
+  double hold = logUtils::evaluteLogMVG(obsInObs,meanStateInObs,obsCovMat);
+  if (state.model==4 || state.model==2 || state.model==3){
+    std::cout << "?????????????????????????????????????????" << std::endl;
+    std::cout << "model: " << state.model << std::endl;
+    std::cout << "params: " << std::endl;
+    for(size_t i=0;i<state.params.size();i++){
+      std::cout << state.params[i] << ",";
+    }
+    std::cout << std::endl;
+    std::cout << "vars: " << std::endl;
+    for(size_t i=0;i<state.vars.size();i++){
+      std::cout << state.vars[i] << ",";
+    }
+    std::cout << std::endl;
+    std::cout << "obsInObs: " << obsInObs[0] << "," << obsInObs[1] << std::endl;
+    std::cout << "meanStateInObs: " << meanStateInObs[0] << "," << meanStateInObs[1] << std::endl;
+    std::cout << "prob: " << hold << std::endl;
+  }
+  return hold;
 }

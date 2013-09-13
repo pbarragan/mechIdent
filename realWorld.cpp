@@ -1,5 +1,6 @@
 // this is an MTV show from the 90s
 // The Real World
+// 10:55pm 9/12/13 - right before starting to cut out invalid states
 
 #include "realWorld.h"
 #include "setupUtils.h"
@@ -8,6 +9,10 @@
 
 #include "mechanisms/mechFree.h"
 #include "mechanisms/mechFixed.h"
+#include "mechanisms/mechRev.h"
+#include "mechanisms/mechPris.h"
+#include "mechanisms/mechRevPrisL.h"
+#include "mechanisms/mechPrisPrisL.h"
 
 #include <iostream> // for cout
 #include <time.h> // for srand
@@ -51,7 +56,24 @@ RealWorld::RealWorld(){
   // setup either robot or simulator
   useRobot_ = false;
   if (!useRobot_){
-    initMechFree();
+    int modelNum = 4;
+    switch(modelNum){
+    case 0:
+      initMechFree();
+      break;
+    case 1:
+      initMechFixed();
+     break;
+    case 2:
+      initMechRev();
+      break;
+    case 3:
+      initMechPris();
+      break;
+    case 4:
+      initMechRevPrisL();
+      break;
+    }
   }
 
   // use the SAS list?
@@ -71,7 +93,18 @@ RealWorld::~RealWorld(){
   delete mechPtr_;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//                            End Mechanism Section                           //
+////////////////////////////////////////////////////////////////////////////////
+
 void RealWorld::initMechFree(){
+  // State looks like:
+  // Model: 0
+  // Params:
+  // Vars: x,y in rbt space
+
+  std::cout << "Initializing a MechFree simulation in place of robot" << std::endl;
+
   // create start state
   stateStruct startState;
   startState.model = 0;
@@ -88,6 +121,150 @@ void RealWorld::initMechFree(){
   mechPtr_->initialize(startState);
 }
 
+void RealWorld::initMechFixed(){
+  // State looks like:
+  // Model: 1
+  // Params: x,y in rbt space
+  // Vars: 
+
+  std::cout << "Initializing a MechFixed simulation in place of robot" << std::endl;
+
+  // create start state
+  stateStruct startState;
+  startState.model = 1;
+  std::vector<double> stateParams;
+  stateParams.push_back(0.2);
+  stateParams.push_back(0.2);
+  startState.params = stateParams;
+  
+  // initialize robot pose
+  poseInRbt_ = stateParams;
+
+  // create mechanism
+  mechPtr_ = new MechFixed();
+  mechPtr_->initialize(startState);
+}
+
+void RealWorld::initMechRev(){
+  // State looks like:
+  // Model: 2
+  // Params: x_pivot,y_pivot in rbt space, r
+  // Vars: theta in rbt space
+
+  std::cout << "Initializing a MechRev simulation in place of robot" << std::endl;
+
+  // create start state
+  stateStruct startState;
+  startState.model = 2;
+  std::vector<double> stateParams;
+  stateParams.push_back(0.2);
+  stateParams.push_back(0.2);
+  stateParams.push_back(0.5);
+  startState.params = stateParams;
+  std::vector<double> stateVars;
+  stateVars.push_back(0.0);
+  startState.vars = stateVars;
+
+  // create mechanism
+  mechPtr_ = new MechRev();
+  mechPtr_->initialize(startState);  
+
+  // initialize robot pose
+  poseInRbt_ = mechPtr_->stToRbt(startState);
+}
+
+void RealWorld::initMechPris(){
+  // State looks like:
+  // Model: 3
+  // Params: x_axis,y_axis,theta_axis in rbt space
+  // Vars: d
+
+  std::cout << "Initializing a MechPris simulation in place of robot" << std::endl;
+
+  // create start state
+  stateStruct startState;
+  startState.model = 3;
+  std::vector<double> stateParams;
+  stateParams.push_back(-0.2);
+  stateParams.push_back(-0.2);
+  stateParams.push_back(-2.356);
+  startState.params = stateParams;
+  std::vector<double> stateVars;
+  stateVars.push_back(0);
+  startState.vars = stateVars;
+
+  // create mechanism
+  mechPtr_ = new MechPris();
+  mechPtr_->initialize(startState);
+
+  // initialize robot pose
+  poseInRbt_ = mechPtr_->stToRbt(startState);
+}
+
+void RealWorld::initMechRevPrisL(){
+  // State looks like:
+  // Model: 4
+  // Params: x_pivot,y_pivot in rbt space, r, theta_L in rbt space, d_L
+  // Vars: theta in rbt space, d
+
+  std::cout << "Initializing a MechRevPrisL simulation in place of robot" << std::endl;
+
+  // create start state
+  stateStruct startState;
+  startState.model = 4;
+  std::vector<double> stateParams;
+  stateParams.push_back(-0.6);
+  stateParams.push_back(0.0);
+  stateParams.push_back(0.4); // 0.431915
+  stateParams.push_back(0.0);
+  stateParams.push_back(0.2);
+  startState.params = stateParams;
+  std::vector<double> stateVars;
+  stateVars.push_back(0.0);
+  stateVars.push_back(0.20);
+  startState.vars = stateVars;
+
+  // create mechanism
+  mechPtr_ = new MechRevPrisL();
+  mechPtr_->initialize(startState);
+
+  // initialize robot pose
+  poseInRbt_ = mechPtr_->stToRbt(startState);
+  std::cout << "poseInRbt_: " << poseInRbt_[0] << "," <<poseInRbt_[1] << std::endl;
+}
+
+void RealWorld::initMechPrisPrisL(){
+  // State looks like:
+  // Model: 5
+  // Params: x_axis2,y_axis2,theta_axis2 in rbt space, d_L2, d_L1
+  // Vars: d_2, d_1
+
+  std::cout << "Initializing a MechPrisPrisL simulation in place of robot" << std::endl;
+
+  // create start state
+  stateStruct startState;
+  startState.model = 5;
+  std::vector<double> stateParams;
+  stateParams.push_back(-0.2);
+  stateParams.push_back(-0.2);
+  stateParams.push_back(-2.356);
+  startState.params = stateParams;
+  std::vector<double> stateVars;
+  stateVars.push_back(0);
+  startState.vars = stateVars;
+
+  // create mechanism
+  mechPtr_ = new MechPrisPrisL();
+  mechPtr_->initialize(startState);
+
+  // initialize robot pose
+  poseInRbt_ = mechPtr_->stToRbt(startState);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//                            End Mechanism Section                           //
+////////////////////////////////////////////////////////////////////////////////
+
 void RealWorld::updateFilter(std::vector<double> action,std::vector<double> obs){
   // check if you should pass the SAS list to the filter
   if (useSAS_){
@@ -96,18 +273,26 @@ void RealWorld::updateFilter(std::vector<double> action,std::vector<double> obs)
   else {
     filter_.transitionUpdateLog(action);
   }
+  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! after transition" << std::endl; // DELETE
+  filter_.printLogProbList(); // DELETE
   filter_.observationUpdateLog(obs);
+  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! after observation" << std::endl; // DELETE
+  filter_.printLogProbList(); // DELETE
+
 }
 
 void RealWorld::nextAction(){
   //actionSelection::chooseActionLog(actionList_,filter_,action_);
-  //actionSelection::chooseActionSimple(actionList_,step_,action_);
+  actionSelection::chooseActionSimple(actionList_,step_,action_);
+  
+  /*
   if(useSAS_){
     actionSelection::chooseActionLog(filter_,actionList_,action_,modelParamPairs_,sasList_);
   }
   else{
     actionSelection::chooseActionLog(filter_,actionList_,action_,modelParamPairs_);
   }
+  */
   std::cout << "action: " << action_[0] << "," << action_[1] << std::endl;
 }
 
@@ -120,9 +305,12 @@ void RealWorld::runAction(){
     // The state known to the robot should have some noise on it. 
     // The simulation returns the nominal answer.
     // Noise should be added such that the "true" (nominal) position is unknown
+    std::cout << "poseInRbt_:" << std::endl; // DELETE
     for (size_t i=0; i<poseInRbt_.size(); i++){
       double X=randomDouble();
       poseInRbt_[i]+=0.001*X;
+      std::cout << 0.001*X << std::endl; // DELETE
+      std::cout << poseInRbt_[i] << std::endl; // DELETE
     }
   }
 }
@@ -211,7 +399,8 @@ int main(int argc, char* argv[])
     //world.runWorld(steps);
     
     //testing stuff
-    //world.filter_.printStateList();
+    world.filter_.printStateList();
+    world.filter_.printLogProbList();
 
     /*
     std::cout << "modelParamPairs: " << std::endl;

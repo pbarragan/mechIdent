@@ -4,6 +4,9 @@
 #include "mechFree.h"
 #include "mechFixed.h"
 #include "mechRev.h"
+#include "mechPris.h"
+#include "mechRevPrisL.h"
+#include "mechPrisPrisL.h"
 
 #include "../translator.h"
 #include "../setupUtils.h"
@@ -155,7 +158,140 @@ int main(){
   printVect(nextRevState.params);
   std::cout << "vars: " << nextRevState.vars.size() << std::endl;
   printVect(nextRevState.vars);
+
+  std::vector<double> obsRev = rev->stToObs(nextRevState);
+  std::cout << "obs:" << std::endl;
+  for (size_t i=0;i<obsRev.size();i++){
+    std::cout << obsRev[i] << ",";
+  }
+  std::cout << std::endl;
+
+  std::vector<double> rbtRev = rev->stToRbt(nextRevState);
+  std::cout << "rbt:" << std::endl;
+  for (size_t i=0;i<rbtRev.size();i++){
+    std::cout << rbtRev[i] << ",";
+  }
+  std::cout << std::endl;
   delete rev;
+
+  // Primsmatic
+  MechPris* pris = new MechPris();
+
+  stateStruct prisState;
+  prisState.model=3;
+  prisState.params.push_back(0.1);
+  prisState.params.push_back(0.0);
+  prisState.params.push_back(0.7856);
+  prisState.vars.push_back(0.0);
+  
+  std::vector<double> prisAction;
+  prisAction.push_back(0.15);
+  prisAction.push_back(0.05);
+
+  stateStruct nextPrisState = pris->initAndSim(prisState,prisAction);
+
+  std::cout << "pris:\nmodel: " << nextPrisState.model << std::endl;
+  std::cout << "params: " << nextPrisState.params.size() << std::endl;
+  printVect(nextPrisState.params);
+  std::cout << "vars: " << nextPrisState.vars.size() << std::endl;
+  printVect(nextPrisState.vars);
+
+  std::vector<double> obsPris = pris->stToObs(nextPrisState);
+  std::cout << "obs:" << std::endl;
+  for (size_t i=0;i<obsPris.size();i++){
+    std::cout << obsPris[i] << ",";
+  }
+  std::cout << std::endl;
+
+  std::vector<double> rbtPris = pris->stToRbt(nextPrisState);
+  std::cout << "rbt:" << std::endl;
+  for (size_t i=0;i<rbtPris.size();i++){
+    std::cout << rbtPris[i] << ",";
+  }
+  std::cout << std::endl;
+  delete pris;
+
+  // RevPris Latch
+  MechRevPrisL* revPrisL = new MechRevPrisL();
+
+  stateStruct revPrisLState;
+  revPrisLState.model=4;
+  revPrisLState.params.push_back(0.0);
+  revPrisLState.params.push_back(0.0);
+  revPrisLState.params.push_back(0.50);
+  revPrisLState.params.push_back(0.0);
+  revPrisLState.params.push_back(0.20);
+
+  revPrisLState.vars.push_back(0.0);
+  revPrisLState.vars.push_back(0.20);
+
+  std::vector<double> revPrisLAction;
+  revPrisLAction.push_back(0.65);
+  revPrisLAction.push_back(0.10);
+
+  stateStruct nextRevPrisLState = revPrisL->initAndSim(revPrisLState,revPrisLAction);
+
+  std::cout << "revPrisL:\nmodel: " << nextRevPrisLState.model << std::endl;
+  std::cout << "params: " << nextRevPrisLState.params.size() << std::endl;
+  printVect(nextRevPrisLState.params);
+  std::cout << "vars: " << nextRevPrisLState.vars.size() << std::endl;
+  printVect(nextRevPrisLState.vars);
+
+  std::vector<double> obsRevPrisL = revPrisL->stToObs(nextRevPrisLState);
+  std::cout << "obs:" << std::endl;
+  for (size_t i=0;i<obsRevPrisL.size();i++){
+    std::cout << obsRevPrisL[i] << ",";
+  }
+  std::cout << std::endl;
+
+  std::vector<double> rbtRevPrisL = revPrisL->stToRbt(nextRevPrisLState);
+  std::cout << "rbt:" << std::endl;
+  for (size_t i=0;i<rbtRevPrisL.size();i++){
+    std::cout << rbtRevPrisL[i] << ",";
+  }
+  std::cout << std::endl;
+  delete revPrisL;
+
+  // PrisPris Latch
+  MechPrisPrisL* prisPrisL = new MechPrisPrisL();
+
+  stateStruct prisPrisLState;
+  prisPrisLState.model=4;
+  prisPrisLState.params.push_back(0.0);
+  prisPrisLState.params.push_back(0.0);
+  prisPrisLState.params.push_back(0.7854);
+  prisPrisLState.params.push_back(0.35);
+  prisPrisLState.params.push_back(0.30);
+
+  prisPrisLState.vars.push_back(0.35);
+  prisPrisLState.vars.push_back(0.30);
+
+  std::vector<double> prisPrisLAction;
+  prisPrisLAction.push_back(-0.0354);
+  prisPrisLAction.push_back(0.4554);
+
+  stateStruct nextPrisPrisLState = prisPrisL->initAndSim(prisPrisLState,prisPrisLAction);
+
+  std::cout << "prisPrisL:\nmodel: " << nextPrisPrisLState.model << std::endl;
+  std::cout << "params: " << nextPrisPrisLState.params.size() << std::endl;
+  printVect(nextPrisPrisLState.params);
+  std::cout << "vars: " << nextPrisPrisLState.vars.size() << std::endl;
+  printVect(nextPrisPrisLState.vars);
+
+  std::vector<double> obsPrisPrisL = prisPrisL->stToObs(nextPrisPrisLState);
+  std::cout << "obs:" << std::endl;
+  for (size_t i=0;i<obsPrisPrisL.size();i++){
+    std::cout << obsPrisPrisL[i] << ",";
+  }
+  std::cout << std::endl;
+
+  std::vector<double> rbtPrisPrisL = prisPrisL->stToRbt(nextPrisPrisLState);
+  std::cout << "rbt:" << std::endl;
+  for (size_t i=0;i<rbtPrisPrisL.size();i++){
+    std::cout << rbtPrisPrisL[i] << ",";
+  }
+  std::cout << std::endl;
+  delete prisPrisL;
 
   return 1;
 }
