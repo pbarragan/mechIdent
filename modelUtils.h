@@ -11,8 +11,9 @@ namespace modelUtils {
   std::vector<double> calcModelParamProbLog(std::vector<stateStruct>& stateList,std::vector<double>& probList);
   std::vector<double> calcModelParamProbLog(std::vector<stateStruct>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs);
   
+  std::vector<double> calcModelParamProbLogWOExp(std::vector<stateStruct>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs);
+
   std::vector<double> calcModelProb(std::vector<stateStruct>& stateList, std::vector<double>& probList);
 
 }
-  
 #endif //MODEL_UTILS_H

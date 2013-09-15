@@ -9,7 +9,7 @@
 namespace actionSelection {
   
   void chooseActionSimple(std::vector< std::vector<double> >& actionList,int step,std::vector<double>& action);
-
+  void chooseActionRandom(std::vector< std::vector<double> >& actionList,std::vector<double>& action);
   // overloaded
   void chooseActionLog(BayesFilter& filter,std::vector< std::vector<double> >& actionList,std::vector<double>& action,std::vector<stateStruct>& modelParamPairs);
   void chooseActionLog(BayesFilter& filter,std::vector< std::vector<double> >& actionList,std::vector<double>& action,std::vector<stateStruct>& modelParamPairs,sasUtils::mapPairSVS& sasList);

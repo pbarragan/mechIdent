@@ -15,7 +15,7 @@ namespace setupUtils {
 
   void setupStates(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs);
 
-  void setupModelParamPairs(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs);
+  void setupModelParamPairs(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs,std::vector<int>& numVarTypesPerStateType);
 
   //overloaded
   void setupUniformPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList);

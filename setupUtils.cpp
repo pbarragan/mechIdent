@@ -95,10 +95,10 @@ std::vector<stateStruct> setupUtils::setupModel2(std::vector<stateStruct>& model
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
   dRV[0][0] = -3.14;
-  dRV[0][1] = -1.57;
+  dRV[0][1] = 3.14;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 50;
+  dNV[0] = 100;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -128,7 +128,7 @@ std::vector<stateStruct> setupUtils::setupModel3(std::vector<stateStruct>& model
   dNP[2] = 1;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = 0.0;
+  dRV[0][0] = -0.45255;
   dRV[0][1] = 0.45255;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
@@ -149,16 +149,16 @@ std::vector<stateStruct> setupUtils::setupModel4(std::vector<stateStruct>& model
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = -0.6;
-  dRP[0][1] = -0.6;
+  dRP[0][0] = -0.2;
+  dRP[0][1] = -0.2;
   dRP[1][0] = 0.0;
   dRP[1][1] = 0.0;
-  dRP[2][0] = 0.4;
-  dRP[2][1] = 0.4;
+  dRP[2][0] = 0.1;
+  dRP[2][1] = 0.1;
   dRP[3][0] = 0.0;
   dRP[3][1] = 0.0;
-  dRP[4][0] = 0.2;
-  dRP[4][1] = 0.2;
+  dRP[4][0] = 0.1;
+  dRP[4][1] = 0.1;
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 1;
@@ -168,13 +168,13 @@ std::vector<stateStruct> setupUtils::setupModel4(std::vector<stateStruct>& model
   dNP[4] = 1;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -.78;
-  dRV[0][1] = .78;
+  dRV[0][0] = -1.57;
+  dRV[0][1] = 1.57;
   dRV[1][0] = 0.0;
-  dRV[1][1] = 0.40;
+  dRV[1][1] = 0.20;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 10;
+  dNV[0] = 12;
   dNV[1] = 10;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
@@ -218,7 +218,7 @@ std::vector<stateStruct> setupUtils::setupModel5(std::vector<stateStruct>& model
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
   dNV[0] = 10;
-  dNV[1] = 10;
+  dNV[1] = 8;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -269,16 +269,18 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
   stateList.insert(stateList.end(), stateList5.begin(), stateList5.end());
 }
 
-void setupUtils::setupModelParamPairs(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs){
+void setupUtils::setupModelParamPairs(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs,std::vector<int>& numVarTypesPerStateType){
   //1. Count up how many times certain instances occur
   //A state type is a model-parameter pair
   std::vector<stateStruct> tempModelParamPairs; //how many different model-parameter pairs
+  numVarTypesPerStateType.clear(); //how many different variable sets per model-parameter pair
   bool addStateType;
   for (size_t i=0; i<stateList.size(); i++){
     addStateType = true;
     for (size_t j=0; j<tempModelParamPairs.size(); j++){
       if (stateList[i].model == tempModelParamPairs[j].model && stateList[i].params == tempModelParamPairs[j].params){
 	addStateType = false;
+	numVarTypesPerStateType[j]++;
 	break; //the break assumes we didn't somehow add the same pair twice to the found list
       }
     }
@@ -286,6 +288,7 @@ void setupUtils::setupModelParamPairs(std::vector<stateStruct>& stateList,std::v
       stateStruct tempState = stateList[i];
       tempState.vars.clear(); // Remove variables from any model-param pair
       tempModelParamPairs.push_back(tempState);
+      numVarTypesPerStateType.push_back(1);
     }
   }
   modelParamPairs.clear(); // Empty the vector before reassigning
@@ -387,10 +390,10 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
 
   //Dimension Ranges for Actions
   std::vector< std::vector<double> > dRA (actDimNum, std::vector<double> (2,0.0));
-  dRA[0][0] = -0.15;
-  dRA[0][1] = 0.15;
-  dRA[1][0] = -0.15;
-  dRA[1][1] = 0.15;
+  dRA[0][0] = -0.12;
+  dRA[0][1] = 0.12;
+  dRA[1][0] = -0.12;
+  dRA[1][1] = 0.12;
   //Dimension Numbers for Actions
   std::vector<int> dNA (actDimNum, 0);
   dNA[0] = 2;

@@ -46,7 +46,7 @@ double filterModels::logProbState(stateStruct sampleState, stateStruct meanState
 
 double filterModels::logProbObs(std::vector<double> obs, stateStruct state){
   //Move this outside later maybe
-  double obsArray[] = {0.0001,0.0,0.0,0.0001};
+  double obsArray[] = {0.01,0.0,0.0,0.01};
   std::vector<double> obsCovMat;
   obsCovMat.assign(obsArray, obsArray + sizeof(obsArray)/sizeof(double));
 
@@ -58,7 +58,7 @@ double filterModels::logProbObs(std::vector<double> obs, stateStruct state){
   double hold = logUtils::evaluteLogMVG(obsInObs,meanStateInObs,obsCovMat);
 
   
-  if (state.model==3 || state.model==5){
+  if (state.model==4 || state.model==0){
     std::cout << "?????????????????????????????????????????" << std::endl;
     std::cout << "model: " << state.model << std::endl;
     std::cout << "params: " << std::endl;

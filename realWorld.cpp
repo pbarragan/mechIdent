@@ -17,6 +17,9 @@
 #include <iostream> // for cout
 #include <time.h> // for srand
 #include <stdlib.h> // for atoi
+#include <string>
+#include <ctime>
+#include <algorithm>
 
 // for gaussianNoise()
 #include "logUtils.h"
@@ -46,10 +49,35 @@
 
 
 //Constructor
-RealWorld::RealWorld(int modelNum){
+RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile) {
+  writeOutFile_ = writeOutFile;
+  stepsTotal_ = numSteps;
   modelNum_ = modelNum;
+
+  // get today's date and time
+  // current date/time based on current system
+  time_t now = time(0);
+  
+  // convert now to string form
+  char* dt = ctime(&now);
+  std::string dateString = dt;
+  dateString = dateString.substr(0,dateString.size()-1);
+  std::replace(dateString.begin(),dateString.end(),' ','_');
+  std::replace(dateString.begin(),dateString.end(),':','_');
+
+  if(writeOutFile_){ 
+    std::stringstream ss;
+    ss << "data/data" << modelNum << dateString << ".txt";
+    std::string saveName = ss.str();
+    outFile_.open(saveName.c_str());
+  }
+
   // seed the random number generator once for the real world.
   srand((unsigned)time(NULL));
+
+  //set numVarTypes vector to empty vector
+  //std::vector<int> emptyIntVect (1,0);
+  //numVarTypesPerStateType_ = emptyIntVect;
 
   // set workspace
   std::vector< std::vector<double> > emptyWorkspace (2,std::vector<double> (2,0.0));
@@ -100,7 +128,7 @@ RealWorld::RealWorld(int modelNum){
   }
   */
 
-  setupUtils::setupModelParamPairs(filter_.stateList_,modelParamPairs_); // reinitialize modelParamPairs_ after cutting out states
+  setupUtils::setupModelParamPairs(filter_.stateList_,modelParamPairs_,numVarTypesPerStateType_); // reinitialize modelParamPairs_ after cutting out states
   setupUtils::setupUniformPrior(filter_.stateList_,filter_.logProbList_,modelParamPairs_); // initliaze probabilities with a uniform distribution
 
   std::cout << "stateList_ size: " << filter_.stateList_.size() << std::endl; // Print number of states
@@ -144,11 +172,51 @@ RealWorld::RealWorld(int modelNum){
   // print model probabilities before any action is taken
   std::vector<double> mpProbsLog = modelUtils::calcModelParamProbLog(filter_.stateList_,filter_.logProbList_,modelParamPairs_);
   printModelParamProbs(mpProbsLog);
+
+  // trying to debug model 4
+  std::cout << ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Model 4 stuff" << std::endl;
+  for(size_t i=0;i<filter_.stateList_.size();i++){
+    if(filter_.stateList_[i].model==4){
+      std::vector<double> obs = translator::translateStToObs(filter_.stateList_[i]);
+      std::cout << obs[0] << "," << obs[1] << std::endl;
+    }
+  }
+  // trying to debug model 0
+  std::cout << ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Model 0 stuff" << std::endl;
+  for(size_t i=0;i<filter_.stateList_.size();i++){
+    if(filter_.stateList_[i].model==0){
+      std::vector<double> obs = translator::translateStToObs(filter_.stateList_[i]);
+      std::cout << obs[0] << "," << obs[1] << std::endl;
+    }
+  }
+
+  if(writeOutFile_){
+    // File style
+    std::stringstream ss2;
+    ss2 << "data/stateDisplay" << dateString << ".txt";
+    std::string statesFileName = ss2.str();
+
+    std::ofstream statesFile(statesFileName.c_str());
+    for(size_t i=0;i<filter_.stateList_.size();i++){
+      std::vector<double> obs = translator::translateStToObs(filter_.stateList_[i]);
+      statesFile << filter_.stateList_[i].model << "," << obs[0] << "," << obs[1] << ";\n";
+    }
+    statesFile.close();
+  }
+  
+  if(writeOutFile_){
+    writeFileInitialData(); // write the initial data to the file
+  }
+
 }
 
 //Destructor
 RealWorld::~RealWorld(){
   delete mechPtr_;
+  if(writeOutFile_){
+    outFile_ << "\n";
+    outFile_.close();
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +246,7 @@ void RealWorld::initMechFree(){
   // create mechanism
   mechPtr_ = new MechFree();
   mechPtr_->initialize(startState);
-
+  startState_=startState;
   // initialize robot pose
   poseInRbt_ = mechPtr_->stToRbt(startState);
 }
@@ -206,7 +274,7 @@ void RealWorld::initMechFixed(){
   // create mechanism
   mechPtr_ = new MechFixed();
   mechPtr_->initialize(startState);
-
+  startState_=startState;
   // initialize robot pose
   poseInRbt_ = mechPtr_->stToRbt(startState);
 }
@@ -238,7 +306,7 @@ void RealWorld::initMechRev(){
   // create mechanism
   mechPtr_ = new MechRev();
   mechPtr_->initialize(startState);  
-
+  startState_=startState;
   // initialize robot pose
   poseInRbt_ = mechPtr_->stToRbt(startState);
 }
@@ -270,7 +338,7 @@ void RealWorld::initMechPris(){
   // create mechanism
   mechPtr_ = new MechPris();
   mechPtr_->initialize(startState);
-
+  startState_=startState;
   // initialize robot pose
   poseInRbt_ = mechPtr_->stToRbt(startState);
 }
@@ -287,15 +355,15 @@ void RealWorld::initMechRevPrisL(){
   stateStruct startState;
   startState.model = 4;
   std::vector<double> stateParams;
-  stateParams.push_back(-0.6);
-  stateParams.push_back(0.0);
-  stateParams.push_back(0.4); // 0.431915
-  stateParams.push_back(0.0);
-  stateParams.push_back(0.2);
+  stateParams.push_back(-0.2); // -0.6
+  stateParams.push_back(0.0); // 0.0
+  stateParams.push_back(0.1); // 0.4
+  stateParams.push_back(0.0); // 0.0
+  stateParams.push_back(0.1); // 0.2
   startState.params = stateParams;
   std::vector<double> stateVars;
-  stateVars.push_back(0.0);
-  stateVars.push_back(0.20);
+  stateVars.push_back(0.0); // 0.0
+  stateVars.push_back(0.10); // 0.20
   startState.vars = stateVars;
 
   // check if state is valid
@@ -305,7 +373,7 @@ void RealWorld::initMechRevPrisL(){
   // create mechanism
   mechPtr_ = new MechRevPrisL();
   mechPtr_->initialize(startState);
-
+  startState_=startState;
   // initialize robot pose
   poseInRbt_ = mechPtr_->stToRbt(startState);
 }
@@ -340,7 +408,7 @@ void RealWorld::initMechPrisPrisL(){
   // create mechanism
   mechPtr_ = new MechPrisPrisL();
   mechPtr_->initialize(startState);
-
+  startState_=startState;
   // initialize robot pose
   poseInRbt_ = mechPtr_->stToRbt(startState);
 }
@@ -376,16 +444,27 @@ void RealWorld::updateFilter(std::vector<double> action,std::vector<double> obs)
 
 void RealWorld::nextAction(){
   //actionSelection::chooseActionLog(actionList_,filter_,action_);
-  actionSelection::chooseActionSimple(actionList_,step_,action_);
-  
-  /*
-  if(useSAS_){
-    actionSelection::chooseActionLog(filter_,actionList_,action_,modelParamPairs_,sasList_);
+  //actionSelection::chooseActionSimple(actionList_,step_,action_);
+  int whichSelectionType = 1; // which action selection scheme should we use
+  actionSelectionType_ = whichSelectionType;
+
+  if (whichSelectionType == 0){
+    std::cout << "Simple Action Selection:" << std::endl;
+    actionSelection::chooseActionSimple(actionList_,step_,action_);
   }
-  else{
-    actionSelection::chooseActionLog(filter_,actionList_,action_,modelParamPairs_);
+  else if (whichSelectionType == 1){
+    std::cout << "Random Action Selection:" << std::endl;
+    actionSelection::chooseActionRandom(actionList_,action_);
   }
-  */
+  else if (whichSelectionType == 2){
+    std::cout << "Entropy Action Selection:" << std::endl;
+    if(useSAS_){
+      actionSelection::chooseActionLog(filter_,actionList_,action_,modelParamPairs_,sasList_);
+    }
+    else{
+      actionSelection::chooseActionLog(filter_,actionList_,action_,modelParamPairs_);
+    }
+  }
   std::cout << "\033[1;31mstep: \033[0m" << step_ << std::endl;
   std::cout << "\033[1;31maction: \033[0m" << action_[0] << "," << action_[1] << std::endl;
 }
@@ -434,6 +513,7 @@ std::vector<double> RealWorld::getObs(){
 std::vector<double> RealWorld::getObs(std::vector<double>& poseInRbt){
   // This is very specific to the simulation
   std::vector<double> obs = mechPtr_->rbtToObs(poseInRbt);
+  obs_ = obs;
   return obs;
 }
 
@@ -451,7 +531,11 @@ void RealWorld::runWorld(int numSteps){
     //filter_.printLogProbList();
     std::vector<double> mpProbsLog = modelUtils::calcModelParamProbLog(filter_.stateList_,filter_.logProbList_,modelParamPairs_);
     printModelParamProbs(mpProbsLog);
+    if(writeOutFile_){
+      writeFileStepData(); // write the step data to the file
+    }
   }
+  //outFile << "did this work\n";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -466,7 +550,7 @@ double RealWorld::randomDouble(){
 double RealWorld::gaussianNoise(){
   double x1 = ((double)rand()/(double)RAND_MAX);
   double x2 = ((double)rand()/(double)RAND_MAX);
-  double sig = 0.00001; // standard deviation of noise
+  double sig = 0.01; // standard deviation of noise - it worked when it was 0.00001 - still worked with 0.01
   double mu = 0.0; // mean of noise
   return sqrt(-2*logUtils::safe_log(x1))*cos(2*M_PI*x2)*sig+mu;
 }
@@ -481,12 +565,155 @@ void RealWorld::printModelParamProbs(std::vector<double> mpProbsLog){
     }
     std::cout << std::endl;
     std::cout << "Prob: " << mpProbsLog[i] << std::endl;
+    std::cout << "Number Var Types: " << numVarTypesPerStateType_[i] << std::endl;;
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //                             End Aux Section                                //
 ////////////////////////////////////////////////////////////////////////////////
+
+void RealWorld::writeFileInitialData(){
+  //
+  outFile_ << "Real Model:\n";
+  outFile_ << modelNum_ << "\n";
+  //
+  outFile_ << "Real Params:\n";
+  for (size_t i=0;i<startState_.params.size();i++){
+  outFile_ << startState_.params[i] << ",";
+  }
+  outFile_ << "\n";
+  //
+  outFile_ << "Real Vars:\n";
+  for (size_t i=0;i<startState_.vars.size();i++){
+  outFile_ << startState_.vars[i] << ",";
+  }
+  outFile_ << "\n";
+  //
+  outFile_ << "Num States:\n";
+  outFile_ << filter_.stateList_.size() << "\n";	
+  //
+  outFile_ << "States:\n";
+  for (size_t j=0;j<filter_.stateList_.size();j++){
+    //
+    outFile_ << "Model:\n";
+    outFile_ << filter_.stateList_[j].model << "\n";
+    //
+    outFile_ << "Params:\n";
+    for (size_t i=0;i<filter_.stateList_[j].params.size();i++){
+      outFile_ << filter_.stateList_[j].params[i] << ",";
+    }
+    outFile_ << "\n";
+    //
+    outFile_ << "Vars:\n";
+    for (size_t i=0;i<filter_.stateList_[j].vars.size();i++){
+      outFile_ << filter_.stateList_[j].vars[i] << ",";
+    }
+    outFile_ << "\n";
+  }
+  //
+  outFile_ << "Num Actioins:\n";
+  outFile_ << actionList_.size() << "\n";	
+  //
+  outFile_ << "Actions:\n";
+  for (size_t i=0;i<actionList_.size();i++){
+    for (size_t j=0;j<actionList_[i].size();j++){
+      outFile_ << actionList_[i][j]<< ",";
+    }
+    outFile_ << "\n";
+  }
+  //
+  outFile_ << "Num Model-Param Pairs:\n";
+  outFile_ << modelParamPairs_.size() << "\n";	
+  //
+  outFile_ << "Model-Param Pairs:\n";
+  for (size_t j=0;j<modelParamPairs_.size();j++){
+    //
+    outFile_ << "Model:\n";
+    outFile_ << modelParamPairs_[j].model << "\n";
+    //
+    outFile_ << "Params:\n";
+    for (size_t i=0;i<modelParamPairs_[j].params.size();i++){
+      outFile_ << modelParamPairs_[j].params[i] << ",";
+    }
+    outFile_ << "\n";
+    //
+    outFile_ << "Num Var Types:\n";
+    outFile_ << numVarTypesPerStateType_[j] << "\n";
+  }
+  //
+  outFile_ << "Initial Log Probs:\n";
+  for (size_t i=0;i<filter_.logProbList_.size();i++){
+    outFile_ << filter_.logProbList_[i]<< "\n";
+  }
+  //
+  outFile_ << "Initial Model-Param Log Probs:\n";
+  std::vector<double> mpProbsLog = modelUtils::calcModelParamProbLogWOExp(filter_.stateList_,filter_.logProbList_,modelParamPairs_);
+  for (size_t i=0;i<mpProbsLog.size();i++){
+    outFile_ << mpProbsLog[i]<< "\n";
+  }
+  //
+  outFile_ << "Initial Model-Param Probs:\n";
+  std::vector<double> mpProbs = modelUtils::calcModelParamProbLog(filter_.stateList_,filter_.logProbList_,modelParamPairs_);
+  for (size_t i=0;i<mpProbs.size();i++){
+    outFile_ << mpProbs[i]<< "\n";
+  }
+  //
+  outFile_ << "Initial Pose in Rbt:\n";
+  for (size_t i=0;i<poseInRbt_.size();i++){
+    outFile_ << poseInRbt_[i]<< ",";
+  }
+  outFile_ << "\n";
+  //
+  outFile_ << "Total Steps:\n";
+  outFile_ << stepsTotal_ << "\n";
+
+}
+
+void RealWorld::writeFileStepData(){
+  //
+  outFile_ << "Step:\n";
+  outFile_ << step_ << "\n";
+  //
+  outFile_ << "Action Selection Type:\n";
+  outFile_ << actionSelectionType_ << "\n";
+  //
+  outFile_ << "Action:\n";
+  for (size_t i=0;i<action_.size();i++){
+    outFile_ << action_[i]<< ",";
+  }
+  outFile_ << "\n";
+  //
+  outFile_ << "Pose in Rbt:\n";
+  for (size_t i=0;i<poseInRbt_.size();i++){
+    outFile_ << poseInRbt_[i]<< ",";
+  }
+  outFile_ << "\n";
+  //
+  outFile_ << "Observation in Obs:\n";
+  for (size_t i=0;i<obs_.size();i++){
+    outFile_ << obs_[i]<< ",";
+  }
+  outFile_ << "\n";
+  //
+  outFile_ << "Log Probs:\n";
+  for (size_t i=0;i<filter_.logProbList_.size();i++){
+    outFile_ << filter_.logProbList_[i]<< "\n";
+  }
+  //
+  outFile_ << "Model-Param Log Probs:\n";
+  std::vector<double> mpProbsLog = modelUtils::calcModelParamProbLogWOExp(filter_.stateList_,filter_.logProbList_,modelParamPairs_);
+  for (size_t i=0;i<mpProbsLog.size();i++){
+    outFile_ << mpProbsLog[i]<< "\n";
+  }
+  //
+  outFile_ << "Model-Param Probs:\n";
+  std::vector<double> mpProbs = modelUtils::calcModelParamProbLog(filter_.stateList_,filter_.logProbList_,modelParamPairs_);
+  for (size_t i=0;i<mpProbs.size();i++){
+    outFile_ << mpProbs[i]<< "\n";
+  }
+}
+
 
 void printVect(std::vector<double> vect){
   for (size_t i=0; i<vect.size(); i++){
@@ -497,26 +724,41 @@ void printVect(std::vector<double> vect){
 
 int main(int argc, char* argv[])
 {
-  if (argc > 3) { // We expect 3 arguments: the program name, the model number, the number of iterations
+  if (argc > 4) { // We expect 3 arguments: the program name, the model number, the number of iterations, writeOutFile
     std::cerr << "Usage: " << argv[0] << "NUMBER OF ITERATIONS" << std::endl;
   }
   else {
     int steps;
     int modelNum;
+    int writeOutFile;
     if (argc == 1){
       modelNum = 0; // default: free model
       steps = 1; // default: run one step
+      writeOutFile = 0; // default: don't write file
     }
     else if (argc == 2){
+      modelNum = atoi(argv[1]);
       steps = 1; // default: run one step
+      writeOutFile = 0; // default: don't write file
+    }
+    else if (argc == 3){
+      modelNum = atoi(argv[1]);
+      steps = atoi(argv[2]);
+      writeOutFile = 0; // default: don't write file
     }
     else{
       modelNum = atoi(argv[1]);
       steps = atoi(argv[2]);
+      writeOutFile = atoi(argv[3]);
     }
 
+    //std::string fileName = "savedData.txt";
+    //std::ofstream outFile(fileName.c_str());    
+    //outFile << "test";
+    //outFile.close();
+
     std::cout << "steps: " << steps << std::endl;
-    RealWorld world(modelNum);
+    RealWorld world(modelNum,steps,writeOutFile);
 
     //world.nextAction();
     //std::cout << "action: " << world.action_[0] << "," << world.action_[1] << std::endl;
@@ -556,15 +798,32 @@ int main(int argc, char* argv[])
 	std::cout << tmpPrevState.params[i] << std::endl;
       }
       std::cout << "vars" << tmpPrevState.vars.size() << std::endl;
-      for (size_t i=0;i<tmpPrevState.vars.size();i++){
+      for (size_t i=0;i<tmpPrevState.vars.size();i++){ 
 	std::cout << tmpPrevState.vars[i] << std::endl;
       }
     }
     */
     world.runWorld(steps);
+    //outFile.close();
     std::vector<double> mpProbsLog = modelUtils::calcModelParamProbLog(world.filter_.stateList_,world.filter_.logProbList_,world.modelParamPairs_);
     world.printModelParamProbs(mpProbsLog);
     std::cout << "\033[1;31mbold red text\033[0m\n";
+    for(size_t i=0;i<10;i++){
+      std::vector<double> tempAction;
+      actionSelection::chooseActionRandom(world.actionList_,tempAction);
+      std::cout << "random action: " << tempAction[0] << "," << tempAction[1] << std::endl;
+    }
   }
+
+  // current date/time based on current system
+  time_t now = time(0);
+  
+  // convert now to string form
+  char* dt = ctime(&now);
+  std::string dateString = dt;
+  std::replace(dateString.begin(),dateString.end(),' ','_');
+  std::replace(dateString.begin(),dateString.end(),':','_');
+  std::cout << "The local date and time is: " << dt << std::endl;
+  std::cout << dateString << std::endl;
   return 1;
 }

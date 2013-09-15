@@ -224,18 +224,18 @@ int main(){
 
   stateStruct revPrisLState;
   revPrisLState.model=4;
-  revPrisLState.params.push_back(-0.40);
+  revPrisLState.params.push_back(-0.20);
   revPrisLState.params.push_back(0.0);
-  revPrisLState.params.push_back(0.25);
+  revPrisLState.params.push_back(0.1);
   revPrisLState.params.push_back(0.0);
   revPrisLState.params.push_back(0.10);
 
-  revPrisLState.vars.push_back(-0.90);
-  revPrisLState.vars.push_back(0.20);
+  revPrisLState.vars.push_back(0.0);
+  revPrisLState.vars.push_back(0.0);
 
   std::vector<double> revPrisLAction;
-  revPrisLAction.push_back(-0.05);
-  revPrisLAction.push_back(-0.35);
+  revPrisLAction.push_back(0.15);
+  revPrisLAction.push_back(0.15);
 
   //std::cout << "Is revPrisLState valid: " << revPrisL->isStateValid(revPrisLState,workspace) << std::endl;
   
@@ -321,6 +321,23 @@ int main(){
   std::vector<double> fake2 (2,0.0);
   fake1[1] = 0.000000001;
   std::cout << "check: " << (fake1==fake2) << std::endl;
+
+  // logUtilities shit
+  
+  /*
+  stateStruct testState4;
+  testState4.model = 4;
+  std::vector<double> comeOn;
+  comeOn.push_back(-0.2);
+  comeOn.push_back(0.0);
+  comeOn.push_back(0.1);
+  comeOn.push_back(0.0);
+  comeOn.push_back(0.1);
+
+  
+
+  testState4.params
+  */
 
   return 1;
 }

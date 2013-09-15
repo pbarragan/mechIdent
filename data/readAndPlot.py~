@@ -1,0 +1,14 @@
+from matplotlib import pyplot
+import numpy
+
+#def readInitialData():
+
+f = open('data5Sun_Sep_15_15_21_05_2013.txt','r')
+f.readline()
+model = int(f.readline())
+for i in range(5):
+    f.readline()
+numStates = int(f.readline())
+f.close()
+print model
+print numStates

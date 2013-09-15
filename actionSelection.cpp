@@ -12,6 +12,12 @@ void actionSelection::chooseActionSimple(std::vector< std::vector<double> >& act
   action = actionList[step%actionList.size()];
 }
 
+// Random action selection.
+void actionSelection::chooseActionRandom(std::vector< std::vector<double> >& actionList,std::vector<double>& action){
+  size_t ind = rand() % actionList.size();
+  action = actionList[ind];
+}
+
 // overloaded
 // Use an entropy metric to choose the next action
 void actionSelection::chooseActionLog(BayesFilter& filter,std::vector< std::vector<double> >& actionList,std::vector<double>& action,std::vector<stateStruct>& modelParamPairs){
