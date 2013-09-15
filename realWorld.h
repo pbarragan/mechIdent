@@ -17,16 +17,18 @@ class RealWorld {
   std::vector<stateStruct> modelParamPairs_;
   std::vector< std::vector<double> > actionList_;
   sasUtils::mapPairSVS sasList_;
+  std::vector< std::vector<double> > workspace_; // robot workspace box
 
   std::vector<double> action_; // current action in robot space: x,y
   std::vector<double> poseInRbt_; // current state in robot space: x,y
   int step_; // the step that the world is on
+  int modelNum_; // number of the model to use in the simulation
 
   bool useSAS_; // if true, use the SAS list
   bool useRobot_; // if true, use the robot
 
   //functions
-  RealWorld();
+  RealWorld(int modelNum);
   ~RealWorld();
   void initMechFree();
   void initMechFixed();
@@ -34,6 +36,7 @@ class RealWorld {
   void initMechPris();
   void initMechRevPrisL();
   void initMechPrisPrisL();
+  bool initializedNearZero();
   void updateFilter(std::vector<double> action,std::vector<double> obs);
   void nextAction();
   void runAction();

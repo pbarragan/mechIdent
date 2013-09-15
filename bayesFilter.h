@@ -28,6 +28,6 @@ class BayesFilter {
 
   void printLogProbList();
   void printStateList();
-
+  void printStatesAndProbs();
 }; 
 #endif //BAYES_FILTER_H

@@ -86,6 +86,8 @@ class MechPrisPrisL : public Mechanism {
   virtual ~MechPrisPrisL();
 
   // Specific to subclass
+  // Only exists in latch classes
+  bool inContact();
 
   // Redefined in subclasses. Must use superclass version as well.
   virtual void initialize(stateStruct& startState);
@@ -97,6 +99,7 @@ class MechPrisPrisL : public Mechanism {
   virtual stateStruct returnStateOfWorld();
   virtual std::vector<double> stToObs(stateStruct& state);
   virtual std::vector<double> stToRbt(stateStruct& state);
+  virtual bool isStateValid(stateStruct& state,std::vector< std::vector<double> >& workspace);
 };
   
 #endif // MECH_PRIS_PRIS_L_H

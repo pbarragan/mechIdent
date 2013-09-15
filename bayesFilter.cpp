@@ -133,9 +133,9 @@ void BayesFilter::observationUpdateLog(std::vector<double>& logProbList, std::ve
 	  logProbList[i] += filterModels::logProbObs(obs,stateList_[i]);
 	}
 
-	std::cout << "??????????????????????????????????????????? before normalization" << std::endl; // DELETE
+	//std::cout << "??????????????????????????????????????????? before normalization" << std::endl; // DELETE
 
-	printLogProbList();
+	//printLogProbList();
 
 	logProbList = logUtils::normalizeVectorInLogSpace(logProbList);
 
@@ -171,6 +171,24 @@ void BayesFilter::printStateList(){
       std::cout << stateList_[ii].vars[jj] << ',';
     }
     std::cout << std::endl;
+  }
+}
+
+void BayesFilter::printStatesAndProbs(){
+  std::cout << "Printing States and Probs:" << std::endl;
+  for (size_t ii = 0; ii<stateList_.size(); ii++) {
+    std::cout << "Model: " << stateList_[ii].model << std::endl;
+    std::cout << "Params: ";
+    for (size_t jj = 0; jj<stateList_[ii].params.size(); jj++) {
+      std::cout << stateList_[ii].params[jj] << ',';
+    }
+    std::cout << std::endl;
+    std::cout << "Vars: ";
+    for (size_t jj = 0; jj<stateList_[ii].vars.size(); jj++) {
+      std::cout << stateList_[ii].vars[jj] << ',';
+    }
+    std::cout << std::endl;
+    std::cout << "Log Prob: " << logProbList_[ii] <<std::endl;
   }
 }
 

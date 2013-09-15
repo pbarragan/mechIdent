@@ -5,6 +5,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include <iostream> // DELETE
+
 ////////////////////////////////////////////////////////////////////////////////
 //                             Redefined Section                              //
 ////////////////////////////////////////////////////////////////////////////////
@@ -181,6 +183,11 @@ void MechRevPrisL::initialize(stateStruct& startState){
     btTransform frameInB = btTransform::getIdentity();
     bool useLinearReferenceFrameA = true;
     link1Link0SC_ = new btSliderConstraint(*link1RB_,*link0RB_,frameInA,frameInB,useLinearReferenceFrameA);
+    // add sliding limits
+    btScalar lower = -sizeScale_;
+    btScalar upper = link1Len_;
+    link1Link0SC_->setLowerLinLimit(lower);
+    link1Link0SC_->setUpperLinLimit(upper);
     // add constraint to the world
     const bool isDisableCollisionsBetweenLinkedBodies = true; //disable collisions
     dynamicsWorld_->addConstraint(link1Link0SC_,isDisableCollisionsBetweenLinkedBodies);
@@ -238,6 +245,7 @@ void MechRevPrisL::initialize(stateStruct& startState){
   updatePose();
 
   //-------END INITIALIZE REMAINING PARAMETERS SECTION-------//
+  //std::cout << "In contact?: " << inContact() << std::endl;
 }
 
 // virtual
@@ -270,6 +278,28 @@ void MechRevPrisL::exitPhysics(){
 MechRevPrisL::~MechRevPrisL(){
   exitPhysics();
   // This should then call Mechanism::~Mechanism() automatically
+}
+
+// Specific to latch mechanisms
+bool MechRevPrisL::inContact(){
+  if (dynamicsWorld_){
+    dynamicsWorld_->performDiscreteCollisionDetection();
+    ///one way to draw all the contact points is iterating over contact manifolds in the dispatcher:  
+    int numManifolds = dynamicsWorld_->getDispatcher()->getNumManifolds();
+    for (size_t i=0;i<numManifolds;i++)
+      {
+	btPersistentManifold* contactManifold = dynamicsWorld_->getDispatcher()->getManifoldByIndexInternal(i);
+	
+	int numContacts = contactManifold->getNumContacts();
+	if (numContacts > 0){
+	  //std::cout << "INVALID" << std::endl;
+	  return true;
+	}
+      }
+    //std::cout << "VALID" << std::endl;
+    return false;
+  }
+  //else std::cout << "There is no world to check collisions in" << std::endl;
 }
 
 // Not Defined in super (base) class
@@ -453,6 +483,31 @@ std::vector<double> MechRevPrisL::stToRbt(stateStruct& state){
   rbt[0] = x_p+(r+d)*cos(theta); // set x_obs
   rbt[1] = y_p+(r+d)*sin(theta); // set y_obs
   return rbt;
+}
+
+bool MechRevPrisL::isStateValid(stateStruct& state,std::vector< std::vector<double> >& workspace){
+  // State looks like:
+  // Model: 4
+  // Params: x_pivot,y_pivot in rbt space, r, theta_L in rbt space, d_L
+  // Vars: theta in rbt space, d
+  
+  // Multiple conditions to check in order of increasing cost of computation
+  double d = state.vars[1];
+  double r = state.params[2];
+  double d_L = state.params[4];
+  // Check if state violates the basic rules of this latch
+  if (d<0 || d>r || r<d_L || r<=0 || d_L<=0){ /*std::cout << "error 1" << std::endl;*/ return false;}
+  else{
+    // Check if state places rbt outside of rbt workspace
+    std::vector<double> rbt = stToRbt(state);
+    if (rbt[0]<workspace[0][0] || rbt[0]>workspace[0][1] || rbt[1]<workspace[1][0] || rbt[1]>workspace[1][1]){ /*std::cout << "error 2" << std::endl;*/ return false;}
+    else{
+      // Check if state causes collision on initialization
+      initialize(state);
+      if (inContact()){ /*std::cout << "error 3" << std::endl;*/ return false;}
+      else return true;
+    }
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

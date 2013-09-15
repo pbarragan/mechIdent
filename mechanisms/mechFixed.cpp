@@ -5,6 +5,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include <iostream> // DELETE
+
 ////////////////////////////////////////////////////////////////////////////////
 //                             Redefined Section                              //
 ////////////////////////////////////////////////////////////////////////////////
@@ -100,6 +102,19 @@ std::vector<double> MechFixed::stToRbt(stateStruct& state){
   // Robot looks like:
   // x,y in rbt space
   return state.params;
+}
+
+bool MechFixed::isStateValid(stateStruct& state,std::vector< std::vector<double> >& workspace){
+  // State looks like:
+  // Model: 1
+  // Params: x,y in rbt space
+  // Vars: 
+  
+  // Single conditions to check
+  // Check if state places rbt outside of rbt workspace
+  std::vector<double> rbt = stToRbt(state);
+  if (rbt[0]<workspace[0][0] || rbt[0]>workspace[0][1] || rbt[1]<workspace[1][0] || rbt[1]>workspace[1][1]){ /*std::cout << "error 2" << std::endl;*/ return false;}
+  else return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

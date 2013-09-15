@@ -322,5 +322,8 @@ int main(){
   fake1[1] = 0.000000001;
   std::cout << "check: " << (fake1==fake2) << std::endl;
 
+  // logUtilities shit
+  
+
   return 1;
 }

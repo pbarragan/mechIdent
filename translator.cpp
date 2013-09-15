@@ -57,6 +57,7 @@ stateStruct translator::stateTransition(stateStruct& state, std::vector<double>&
 stateStruct translator::stateTransition(stateStruct& state, std::vector<double>& action, sasUtils::mapPairSVS& sasList){
   stateStruct nextState = sasUtils::getFromSAS(sasList,state,action);
   // DELETE
+  /*
   if (nextState.model == 4){
     MechRevPrisL mech;
     std::vector<double> hold = mech.stToRbt(nextState);
@@ -68,6 +69,7 @@ stateStruct translator::stateTransition(stateStruct& state, std::vector<double>&
     std::cout << hold[0] << std::endl;
     std::cout << hold[1] << std::endl;
   }
+  */
   return nextState;
 }
 
@@ -92,3 +94,9 @@ std::vector<double> translator::translateSensToObs(std::vector<double>& obs){
   return sensInObs;
 }
 
+bool translator::isStateValid(stateStruct& state,std::vector< std::vector<double> >& workspace){
+  Mechanism* mechPtr = createMechanism(state.model);
+  bool valid = mechPtr->isStateValid(state,workspace);
+  delete mechPtr;
+  return valid;
+}

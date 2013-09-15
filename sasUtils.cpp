@@ -53,7 +53,6 @@ void printShit(float input) {
 }
 
 void sasUtils::setupSAS(mapPairSVS& sasList,std::vector<stateStruct>& states, std::vector< std::vector<double> >& actions,bool overwriteCSV){
-  //overwriteCSV_ = true;
   
   std::string fileName = "files/sasSave.txt";
   if (sasUtils::readSASfromCSV(sasList,fileName)){
@@ -63,6 +62,7 @@ void sasUtils::setupSAS(mapPairSVS& sasList,std::vector<stateStruct>& states, st
     // 3) if it isn't a match, populate, or if you couldn't read, populate
     // 4) check on what happens if you overwrite a file
 
+    /*
     // DELETE
     stateStruct tState;
     std::vector<double> tAction;
@@ -162,16 +162,11 @@ void sasUtils::setupSAS(mapPairSVS& sasList,std::vector<stateStruct>& states, st
     //stateStruct wontWork = sasList.at(pairSV (states[0],actions[1]));
     //std::cout << "won't work model: " << wontWork.model << std::endl;
 
-
-    //assert(false);
-    
+    */
     if (sasUtils::isMatch(sasList,states,actions)){
       std::cout << "Don't worry, Son, we have a match." << std::endl;
     }
     else{
-      //assert(false);
-      //std::vector<double> a;
-      //a[10];
       // No match. fix it.
       std::cout << "It didn't match. Why does this always happen to me?" << std::endl;
       sasList.clear(); // Not necessary, but just to be safe
@@ -210,34 +205,11 @@ bool sasUtils::isMatch(mapPairSVS& sasList, std::vector<stateStruct>& states, st
   // would require resimulating all the pairs which would defeat the point.
 
   // make sure the number of state action pairs is the same as the number of map elements 
-  std::cout << "0" << std::endl;
   if (states.size()*actions.size() == sasList.size()){
     // check every state action pair to make sure that they exist
-    std::cout << "1" << std::endl;
     for (size_t i=0;i<actions.size();i++){
-      std::cout << "why does this shit" << std::endl;
       for (size_t j=0;j<states.size();j++){
-	std::cout << "always happen" << std::endl;
-	std::cout << sasList.count(pairSV (states[j],actions[i])) << std::endl;
 	if(sasList.count(pairSV (states[j],actions[i]))==0){
-	  // LSW HACK
-
-	  std::cout << "2" << std::endl;
-	  std::cout << states[j].model << std::endl;
-	  std::cout << "i:" << i << std::endl;
-	  std::cout << "j:" << j << std::endl;
-
-	  for (size_t k=0;k<states[j].params.size();k++){
-	    std::cout << states[j].params[k] << std::endl;
-	    printShit(states[j].params[k]);
-	  }
-	  for (size_t k=0;k<states[j].vars.size();k++){
-	    std::cout << states[j].vars[k] << std::endl;
-	    printShit(states[j].vars[k]);
-	  }
-	  std::cout << actions[i][0] << "," << actions[i][1] << std::endl;
-	  printShit(actions[i][0]);
-	  printShit(actions[i][1]);
 	  return false;
 	}
       }

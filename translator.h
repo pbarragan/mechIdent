@@ -15,6 +15,8 @@ namespace translator {
   std::vector<double> translateStToObs(stateStruct& state);
   std::vector<double> translateStToRbt(stateStruct& state); 
   std::vector<double> translateSensToObs(std::vector<double>& obs);
+
+  bool isStateValid(stateStruct& state,std::vector< std::vector<double> >& workspace);
 }
   
 #endif //TRANSLATOR_H

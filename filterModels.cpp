@@ -6,18 +6,37 @@
 #include <iostream> // DELETE
 
 double filterModels::logProbState(stateStruct sampleState, stateStruct meanState){
+
+  //sampleState is the sample vector. meanState is the mean vector. This just drops a gaussian at the meanState with a constant covariance from the class.	
+  if (meanState.model==sampleState.model && meanState.params==sampleState.params){
   //Move this outside later maybe
   double transArray[] = {0.0001,0.0,0.0,0.0001};
   std::vector<double> transCovMat;
   transCovMat.assign(transArray, transArray + sizeof(transArray)/sizeof(double));
-  
-  //sampleState is the sample vector. meanState is the mean vector. This just drops a gaussian at the meanState with a constant covariance from the class.	
-  if (meanState.model==sampleState.model){
+
     //translate to the observation space which should be a vector directly comparable with another
     std::vector<double> sampleStateInObs = translator::translateStToObs(sampleState);
     std::vector<double> meanStateInObs = translator::translateStToObs(meanState);
+    /*
+    std::cout << "===============TRANSITION===========" << std::endl;
+    std::cout << "Model: " << meanState.model << std::endl;
+    std::cout << "params: " << std::endl;
+    for(size_t i=0;i<meanState.params.size();i++){
+      std::cout << meanState.params[i] << ",";
+    }
+    std::cout << std::endl;
+    std::cout << "vars: " << std::endl;
+    for(size_t i=0;i<meanState.vars.size();i++){
+      std::cout << meanState.vars[i] << ",";
+    }
+    std::cout << std::endl;
 
-    return logUtils::evaluteLogMVG(sampleStateInObs,meanStateInObs,transCovMat);
+    std::cout << "sampleStateInObs: " << sampleStateInObs[0] << "," << sampleStateInObs[1] << std::endl;
+    std::cout << "meanStateInObs: " << meanStateInObs[0] << "," << meanStateInObs[1] << std::endl;
+    */
+    double hold = logUtils::evaluteLogMVG(sampleStateInObs,meanStateInObs,transCovMat);
+    //std::cout << "prob: " << hold << std::endl;
+    return hold;
   }
   else {
     //return 0.0 in log space
@@ -37,7 +56,9 @@ double filterModels::logProbObs(std::vector<double> obs, stateStruct state){
   std::vector<double> obsInObs = obs;
   std::vector<double> meanStateInObs = translator::translateStToObs(state);
   double hold = logUtils::evaluteLogMVG(obsInObs,meanStateInObs,obsCovMat);
-  if (state.model==4 || state.model==2 || state.model==3){
+
+  
+  if (state.model==3 || state.model==5){
     std::cout << "?????????????????????????????????????????" << std::endl;
     std::cout << "model: " << state.model << std::endl;
     std::cout << "params: " << std::endl;
@@ -54,5 +75,6 @@ double filterModels::logProbObs(std::vector<double> obs, stateStruct state){
     std::cout << "meanStateInObs: " << meanStateInObs[0] << "," << meanStateInObs[1] << std::endl;
     std::cout << "prob: " << hold << std::endl;
   }
+  
   return hold;
 }

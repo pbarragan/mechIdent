@@ -1,7 +1,9 @@
 //Setup Utilities
 #include "setupUtils.h"
-#include "stateStruct.h"
 #include "logUtils.h"
+#include "translator.h"
+
+#include <iostream> // DELETE
 
 ////////////////////////////////////////////////////////////////////////////////
 //                              Model Section                                 //
@@ -26,14 +28,14 @@ std::vector<stateStruct> setupUtils::setupModel0(std::vector<stateStruct>& model
   std::vector<int> dNP (paramNum, 0); // empty size 0 vector
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -0.21;
-  dRV[0][1] = 0.21;
-  dRV[1][0] = -0.21;
-  dRV[1][1] = 0.21;
+  dRV[0][0] = -0.15;
+  dRV[0][1] = 0.15;
+  dRV[1][0] = -0.15;
+  dRV[1][1] = 0.15;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 2;
-  dNV[1] = 2;
+  dNV[0] = 10;
+  dNV[1] = 10;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -50,10 +52,10 @@ std::vector<stateStruct> setupUtils::setupModel1(std::vector<stateStruct>& model
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = 0.2;
-  dRP[0][1] = 0.2;
-  dRP[1][0] = 0.2;
-  dRP[1][1] = 0.2;
+  dRP[0][0] = 0.0;
+  dRP[0][1] = 0.0;
+  dRP[1][0] = 0.0;
+  dRP[1][1] = 0.0;
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 1;
@@ -79,24 +81,24 @@ std::vector<stateStruct> setupUtils::setupModel2(std::vector<stateStruct>& model
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = -0.2;
-  dRP[0][1] = 0.2;
-  dRP[1][0] = -0.2;
-  dRP[1][1] = 0.2;
-  dRP[2][0] = 0.3;
-  dRP[2][1] = 0.5;
+  dRP[0][0] = 0.3;
+  dRP[0][1] = 0.3;
+  dRP[1][0] = 0.3;
+  dRP[1][1] = 0.3;
+  dRP[2][0] = 0.42426;
+  dRP[2][1] = 0.42426;
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
-  dNP[0] = 2;
-  dNP[1] = 2;
-  dNP[2] = 2;
+  dNP[0] = 1;
+  dNP[1] = 1;
+  dNP[2] = 1;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -2.356;
-  dRV[0][1] = 2.356;
+  dRV[0][0] = -3.14;
+  dRV[0][1] = -1.57;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 3;
+  dNV[0] = 50;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -113,24 +115,24 @@ std::vector<stateStruct> setupUtils::setupModel3(std::vector<stateStruct>& model
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = -0.2;
-  dRP[0][1] = 0.2;
-  dRP[1][0] = -0.2;
-  dRP[1][1] = 0.2;
-  dRP[2][0] = -2.356;
-  dRP[2][1] = 2.356;
+  dRP[0][0] = -0.16;
+  dRP[0][1] = -0.16;
+  dRP[1][0] = -0.16;
+  dRP[1][1] = -0.16;
+  dRP[2][0] = 0.7865;
+  dRP[2][1] = 0.7865;
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
-  dNP[0] = 2;
-  dNP[1] = 2;
-  dNP[2] = 3;
+  dNP[0] = 1;
+  dNP[1] = 1;
+  dNP[2] = 1;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -0.2;
-  dRV[0][1] = 0.2;
+  dRV[0][0] = 0.0;
+  dRV[0][1] = 0.45255;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 3;
+  dNV[0] = 50;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -151,8 +153,8 @@ std::vector<stateStruct> setupUtils::setupModel4(std::vector<stateStruct>& model
   dRP[0][1] = -0.6;
   dRP[1][0] = 0.0;
   dRP[1][1] = 0.0;
-  dRP[2][0] = 0.3;
-  dRP[2][1] = 0.5;
+  dRP[2][0] = 0.4;
+  dRP[2][1] = 0.4;
   dRP[3][0] = 0.0;
   dRP[3][1] = 0.0;
   dRP[4][0] = 0.2;
@@ -161,19 +163,62 @@ std::vector<stateStruct> setupUtils::setupModel4(std::vector<stateStruct>& model
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 1;
   dNP[1] = 1;
-  dNP[2] = 5;
+  dNP[2] = 1;
   dNP[3] = 1;
   dNP[4] = 1;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -2;
-  dRV[0][1] = 2;
+  dRV[0][0] = -.78;
+  dRV[0][1] = .78;
   dRV[1][0] = 0.0;
+  dRV[1][1] = 0.40;
+  //Dimension Numbers for Vars
+  std::vector<int> dNV (varNum, 0);
+  dNV[0] = 10;
+  dNV[1] = 10;
+
+  return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
+}
+
+std::vector<stateStruct> setupUtils::setupModel5(std::vector<stateStruct>& modelParamPairs){  
+  // Model 5 is the prismatic prismatic latch model
+  // State looks like:
+  // Model: 5
+  // Params: x_axis2,y_axis2,theta_axis2 in rbt space, d_L2, d_L1
+  // Vars: d_2, d_1
+  int modelNum = 5;
+  int paramNum = 5; //how many parameters
+  int varNum = 2; //how many variables
+
+  //Dimension Ranges for Params
+  std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
+  dRP[0][0] = -0.1;
+  dRP[0][1] = -0.1;
+  dRP[1][0] = -0.1;
+  dRP[1][1] = -0.1;
+  dRP[2][0] = 0.0;
+  dRP[2][1] = 0.0;
+  dRP[3][0] = 0.1;
+  dRP[3][1] = 0.1;
+  dRP[4][0] = 0.1;
+  dRP[4][1] = 0.1;
+  //Dimension Numbers for Params
+  std::vector<int> dNP (paramNum, 0);
+  dNP[0] = 1;
+  dNP[1] = 1;
+  dNP[2] = 1;
+  dNP[3] = 1;
+  dNP[4] = 1;
+  //Dimension Ranges for Vars
+  std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
+  dRV[0][0] = 0.01;
+  dRV[0][1] = 0.20;
+  dRV[1][0] = 0.01;
   dRV[1][1] = 0.20;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 9;
-  dNV[1] = 3;
+  dNV[0] = 10;
+  dNV[1] = 10;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -195,6 +240,7 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
   std::vector<stateStruct> modelParamPairs2;
   std::vector<stateStruct> modelParamPairs3;
   std::vector<stateStruct> modelParamPairs4;
+  std::vector<stateStruct> modelParamPairs5;
 
   //Set up a state list for each model. 
   //Then stick together all of the lists into one master list. 
@@ -204,6 +250,7 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
   std::vector<stateStruct> stateList2 = setupModel2(modelParamPairs2);
   std::vector<stateStruct> stateList3 = setupModel3(modelParamPairs3);
   std::vector<stateStruct> stateList4 = setupModel4(modelParamPairs4);
+  std::vector<stateStruct> stateList5 = setupModel5(modelParamPairs5);
 
   //populate the modelParamPairs vector
   modelParamPairs = modelParamPairs0;
@@ -211,6 +258,7 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs2.begin(), modelParamPairs2.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs3.begin(), modelParamPairs3.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs4.begin(), modelParamPairs4.end());
+  modelParamPairs.insert(modelParamPairs.end(), modelParamPairs5.begin(), modelParamPairs5.end());
 
   //populate the modelParamPairs vector
   stateList = stateList0;
@@ -218,7 +266,30 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
   stateList.insert(stateList.end(), stateList2.begin(), stateList2.end());
   stateList.insert(stateList.end(), stateList3.begin(), stateList3.end());
   stateList.insert(stateList.end(), stateList4.begin(), stateList4.end());
+  stateList.insert(stateList.end(), stateList5.begin(), stateList5.end());
+}
 
+void setupUtils::setupModelParamPairs(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs){
+  //1. Count up how many times certain instances occur
+  //A state type is a model-parameter pair
+  std::vector<stateStruct> tempModelParamPairs; //how many different model-parameter pairs
+  bool addStateType;
+  for (size_t i=0; i<stateList.size(); i++){
+    addStateType = true;
+    for (size_t j=0; j<tempModelParamPairs.size(); j++){
+      if (stateList[i].model == tempModelParamPairs[j].model && stateList[i].params == tempModelParamPairs[j].params){
+	addStateType = false;
+	break; //the break assumes we didn't somehow add the same pair twice to the found list
+      }
+    }
+    if (addStateType){
+      stateStruct tempState = stateList[i];
+      tempState.vars.clear(); // Remove variables from any model-param pair
+      tempModelParamPairs.push_back(tempState);
+    }
+  }
+  modelParamPairs.clear(); // Empty the vector before reassigning
+  modelParamPairs = tempModelParamPairs;
 }
 
 //Overloaded
@@ -269,7 +340,7 @@ void setupUtils::setupUniformPrior(std::vector<stateStruct>& stateList,std::vect
 
 }
 
-//Overloaded - this one has the model-parameter pairs passed to it from the state setup function
+//Overloaded - this one has the model-parameter pairs passed to it
 //setup a uniform prior over model and parameter pairs
 void setupUtils::setupUniformPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs){
   //1. Count up how many times certain instances occur
@@ -316,10 +387,10 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
 
   //Dimension Ranges for Actions
   std::vector< std::vector<double> > dRA (actDimNum, std::vector<double> (2,0.0));
-  dRA[0][0] = -0.22;
-  dRA[0][1] = 0.18;
-  dRA[1][0] = -0.22;
-  dRA[1][1] = 0.18;
+  dRA[0][0] = -0.15;
+  dRA[0][1] = 0.15;
+  dRA[1][0] = -0.15;
+  dRA[1][1] = 0.15;
   //Dimension Numbers for Actions
   std::vector<int> dNA (actDimNum, 0);
   dNA[0] = 2;
@@ -332,6 +403,40 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
 
 ////////////////////////////////////////////////////////////////////////////////
 //                             End Setup Section                              //
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//                             Validate Section                               //
+////////////////////////////////////////////////////////////////////////////////
+
+void setupUtils::validateStates(std::vector<stateStruct>& stateList,std::vector< std::vector<double> >& workspace){
+  // All workspace stuff right now assumes a 2D workspace - FIX
+  // States must be within the workspace and satisfy model-specific conditions
+  std::vector<stateStruct> tempStates;
+  for (size_t i=0;i<stateList.size();i++){
+    if (translator::isStateValid(stateList[i],workspace)){
+      tempStates.push_back(stateList[i]);
+    }
+  }
+  stateList.clear();
+  stateList = tempStates;
+}
+
+void setupUtils::validateActions(std::vector< std::vector<double> >& actionList,std::vector< std::vector<double> >& workspace){
+  // All workspace stuff right now assumes a 2D workspace - FIX
+  // Actions must be within the workspace
+  std::vector< std::vector<double> > tempActions;
+  for (size_t i=0;i<actionList.size();i++){
+    if (!(actionList[i][0]<workspace[0][0] || actionList[i][0]>workspace[0][1] || actionList[i][1]<workspace[1][0] || actionList[i][1]>workspace[1][1])){
+      tempActions.push_back(actionList[i]);
+    }
+  }
+  actionList.clear();
+  actionList = tempActions;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//                           End Validate Section                             //
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////

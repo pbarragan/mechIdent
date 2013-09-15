@@ -55,6 +55,7 @@ class MechFree : public Mechanism {
   virtual stateStruct returnStateOfWorld();
   virtual std::vector<double> stToObs(stateStruct& state);
   virtual std::vector<double> stToRbt(stateStruct& state);
+  virtual bool isStateValid(stateStruct& state,std::vector< std::vector<double> >& workspace);
 };
   
 #endif // MECH_FREE_H

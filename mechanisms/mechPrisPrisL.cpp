@@ -5,6 +5,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include <iostream> // DELETE
+
 ////////////////////////////////////////////////////////////////////////////////
 //                             Redefined Section                              //
 ////////////////////////////////////////////////////////////////////////////////
@@ -16,10 +18,6 @@ void MechPrisPrisL::initialize(stateStruct& startState){
   // Set offsets before running Mechanism::initialize()
   o3_ = 0.1*sizeScale_; // tiny spacing between latch and handle
   l1_ = 6*sizeScale_; // length of side pieces of latch
-  link0Len_ = 1.0; // length of link connected to robot
-  link1Len_ = link0Len_; // length of link connected to fixed pivot
-  o1_ = link0Len_/2+2*sizeScale_;
-  o2_ = link1Len_/2+2*sizeScale_;
 
   // Initialize standard physics for Mechanism
   Mechanism::initialize(startState);
@@ -172,6 +170,11 @@ void MechPrisPrisL::initialize(stateStruct& startState){
     btTransform frameInB = btTransform::getIdentity();
     bool useLinearReferenceFrameA = true;
     fxdLink1SC_ = new btSliderConstraint(*fxdRB_,*link1RB_,frameInA,frameInB,useLinearReferenceFrameA);
+    // add sliding limits
+    btScalar lower = -link1Len_/2; // HACK -link1Len_/2
+    btScalar upper = link1Len_/2-2*sizeScale_; // HACK link1Len_/2
+    fxdLink1SC_->setLowerLinLimit(lower);
+    fxdLink1SC_->setUpperLinLimit(upper);
     // add constraint to the world
     const bool isDisableCollisionsBetweenLinkedBodies = true; //disable collisions
     dynamicsWorld_->addConstraint(fxdLink1SC_,isDisableCollisionsBetweenLinkedBodies);
@@ -189,6 +192,11 @@ void MechPrisPrisL::initialize(stateStruct& startState){
     frameInA.setRotation(frameInAQuat);
     bool useLinearReferenceFrameA = true;
     link1Link0SC_ = new btSliderConstraint(*link1RB_,*link0RB_,frameInA,frameInB,useLinearReferenceFrameA);
+    // add sliding limits
+    btScalar lower = -link0Len_/2; // HACK -link0Len_/2-2*sizeScale_
+    btScalar upper = link0Len_/2-2*sizeScale_; // HACK link0Len_/2
+    link1Link0SC_->setLowerLinLimit(lower);
+    link1Link0SC_->setUpperLinLimit(upper);
     // add constraint to the world
     const bool isDisableCollisionsBetweenLinkedBodies = true; //disable collisions
     dynamicsWorld_->addConstraint(link1Link0SC_,isDisableCollisionsBetweenLinkedBodies);
@@ -280,6 +288,28 @@ MechPrisPrisL::~MechPrisPrisL(){
   // This should then call Mechanism::~Mechanism() automatically
 }
 
+// Specific to latch mechanisms
+bool MechPrisPrisL::inContact(){
+  if (dynamicsWorld_){
+    dynamicsWorld_->performDiscreteCollisionDetection();
+    ///one way to draw all the contact points is iterating over contact manifolds in the dispatcher:  
+    int numManifolds = dynamicsWorld_->getDispatcher()->getNumManifolds();
+    for (size_t i=0;i<numManifolds;i++)
+      {
+	btPersistentManifold* contactManifold = dynamicsWorld_->getDispatcher()->getManifoldByIndexInternal(i);
+	
+	int numContacts = contactManifold->getNumContacts();
+	if (numContacts > 0){
+	  //std::cout << "INVALID" << std::endl;
+	  return true;
+	}
+      }
+    //std::cout << "VALID" << std::endl;
+    return false;
+  }
+  //else std::cout << "There is no world to check collisions in" << std::endl;
+}
+
 // Not Defined in super (base) class
 // virtual
 void MechPrisPrisL::setStartWithState(stateStruct& startState){
@@ -310,6 +340,10 @@ void MechPrisPrisL::setStartWithState(stateStruct& startState){
 
   // Set needed geometry variables
   double theta_a1 = theta_a2_ + 1.5708; // always add pi/2 for now
+  link0Len_ = 2*d_L1_; // length of link connected to robot
+  link1Len_ = 2*d_L2_; // length of link connected to fixed pivot
+  o1_ = link0Len_/2+2*sizeScale_;
+  o2_ = link1Len_/2+2*sizeScale_;
 
   // Calculate
   // Rbt
@@ -459,6 +493,32 @@ std::vector<double> MechPrisPrisL::stToRbt(stateStruct& state){
   rbt[0] = x_a2+d_2*cos(theta_a2)-d_1*sin(theta_a2); // set x_obs
   rbt[1] = y_a2+d_2*sin(theta_a2)+d_1*cos(theta_a2); // set y_obs
   return rbt;
+}
+
+bool MechPrisPrisL::isStateValid(stateStruct& state,std::vector< std::vector<double> >& workspace){
+  // State looks like:
+  // Model: 5
+  // Params: x_axis2,y_axis2,theta_axis2 in rbt space, d_L2, d_L1
+  // Vars: d_2, d_1
+  
+  // Multiple conditions to check in order of increasing cost of computation
+  double d_2 = state.vars[0];
+  double d_1 = state.vars[1];
+  double d_L2 = state.params[3];
+  double d_L1 = state.params[4];
+  // Check if state violates the basic rules of this latch
+  if (d_2<0 || d_2>2*d_L2 || d_1<0 || d_1>2*d_L1 || d_L2<=0 || d_L1<=0){ /*std::cout << "error 1" << std::endl;*/ return false;}
+  else{
+    // Check if state places rbt outside of rbt workspace
+    std::vector<double> rbt = stToRbt(state);
+    if (rbt[0]<workspace[0][0] || rbt[0]>workspace[0][1] || rbt[1]<workspace[1][0] || rbt[1]>workspace[1][1]){ /*std::cout << "error 2" << std::endl;*/ return false;}
+    else{
+      // Check if state causes collision on initialization
+      initialize(state);
+      if (inContact()){ /*std::cout << "error 3" << std::endl;*/ return false;}
+      else return true;
+    }
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

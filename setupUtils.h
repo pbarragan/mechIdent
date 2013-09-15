@@ -11,14 +11,21 @@ namespace setupUtils {
   std::vector<stateStruct> setupModel2(std::vector<stateStruct>& modelParamPairs);  
   std::vector<stateStruct> setupModel3(std::vector<stateStruct>& modelParamPairs);  
   std::vector<stateStruct> setupModel4(std::vector<stateStruct>& modelParamPairs); 
+  std::vector<stateStruct> setupModel5(std::vector<stateStruct>& modelParamPairs); 
 
   void setupStates(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs);
+
+  void setupModelParamPairs(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs);
 
   //overloaded
   void setupUniformPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList);
   void setupUniformPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs);
 
   void setupActions(std::vector< std::vector<double> >& actionList);
+  
+  void validateStates(std::vector<stateStruct>& stateList,std::vector< std::vector<double> >& workspace);
+
+  void validateActions(std::vector< std::vector<double> >& actionList,std::vector< std::vector<double> >& workspace);
 
   std::vector<stateStruct> setupModelFromDec(std::vector< std::vector<double> >& dRP,std::vector<int>& dNP,std::vector< std::vector<double> >& dRV,std::vector<int>& dNV,int& modelNum,std::vector<stateStruct>& modelParamPairs);
 
