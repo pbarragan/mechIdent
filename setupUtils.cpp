@@ -396,8 +396,8 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
   dRA[1][1] = 0.12;
   //Dimension Numbers for Actions
   std::vector<int> dNA (actDimNum, 0);
-  dNA[0] = 2;
-  dNA[1] = 2;
+  dNA[0] = 3;
+  dNA[1] = 3;
 
   //setup for Actions
   actionList = dimsToList(dRA,dNA);

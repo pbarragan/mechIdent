@@ -1,0 +1,23 @@
+import subprocess
+
+model = 5
+trials = 1
+writeFile = 0
+actionSelectionType = 0
+
+asTypes = ['simple','random','entropy']
+
+path = 'data/model'+str(model)+'/'+asTypes[actionSelectionType]+'/'
+
+for i in range(10):
+    
+    command1 = './testRealWorld'+str(model)+srt(trials)+str(writeFile)+str(actionSelectionType)
+    command2 = 'FILE=$(ls '+path+' -Art | tail -n 1)'
+    command3 = 'cp $FILE '+path+'data'+str(model)+'_'+str(i)+'.txt'
+    # run commands
+    p = subprocess.Popen(command1,shell=True)
+    p.wait()
+    p = subprocess.Popen(command2,shell=True)
+    p.wait()
+    p = subprocess.Popen(command3,shell=True)
+    p.wait()

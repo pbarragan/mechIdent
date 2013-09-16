@@ -41,25 +41,23 @@ def get_data(fileName):
 
 #main
 #just to get the numbers we want
-trials = 1
-startFileName = 'model5/entropy/data5_0.txt'
+model = 5
+asTypes = ['simple','random','entropy']
+asNum = 1
+
+path = 'data/model'+str(model)+'/'+asTypes[asNum]+'/'
+
+startFileName = path+'data5_0.txt'
+
+
+#setup
 startData, nSteps, nMPPairs, m = get_data(startFileName)
-
 totalData = numpy.array(startData)
-
-for i in range(1,trials):
-    fileName = 'model5/data5_'+str(i)+'.txt'
-    data, numSteps, numMPPairs, model = get_data(fileName)
-    dataArray = numpy.array(data)
-    totalData += dataArray
-
-avgData = totalData/trials
-#print avgData[5,:]
 
 inds = range(nSteps+1)
 models = ['Free','Fixed','Rev','Pris','RevPrisL','PrisPrisL']
 for i in range(nMPPairs):
-    pyplot.plot(inds,avgData[i,:],'-o')
+    pyplot.plot(inds,totalData[i,:],'-o')
 
 pyplot.title(models[m])
 pyplot.ylabel('Probability')

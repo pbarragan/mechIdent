@@ -49,10 +49,11 @@
 
 
 //Constructor
-RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile) {
+RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelectionType) {
   writeOutFile_ = writeOutFile;
   stepsTotal_ = numSteps;
   modelNum_ = modelNum;
+  actionSelectionType_ = actionSelectionType;
 
   // get today's date and time
   // current date/time based on current system
@@ -173,6 +174,7 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile) {
   std::vector<double> mpProbsLog = modelUtils::calcModelParamProbLog(filter_.stateList_,filter_.logProbList_,modelParamPairs_);
   printModelParamProbs(mpProbsLog);
 
+  /*
   // trying to debug model 4
   std::cout << ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Model 4 stuff" << std::endl;
   for(size_t i=0;i<filter_.stateList_.size();i++){
@@ -189,6 +191,7 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile) {
       std::cout << obs[0] << "," << obs[1] << std::endl;
     }
   }
+  */
 
   if(writeOutFile_){
     // File style
@@ -434,19 +437,18 @@ void RealWorld::updateFilter(std::vector<double> action,std::vector<double> obs)
   else {
     filter_.transitionUpdateLog(action);
   }
-  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! after transition" << std::endl; // DELETE
-  filter_.printStatesAndProbs(); // DELETE
+  //std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! after transition" << std::endl; // DELETE
+  //filter_.printStatesAndProbs(); // DELETE
   filter_.observationUpdateLog(obs);
-  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! after observation" << std::endl; // DELETE
-  filter_.printStatesAndProbs(); // DELETE
+  //std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! after observation" << std::endl; // DELETE
+  //filter_.printStatesAndProbs(); // DELETE
 
 }
 
 void RealWorld::nextAction(){
   //actionSelection::chooseActionLog(actionList_,filter_,action_);
   //actionSelection::chooseActionSimple(actionList_,step_,action_);
-  int whichSelectionType = 1; // which action selection scheme should we use
-  actionSelectionType_ = whichSelectionType;
+  int whichSelectionType = actionSelectionType_; // which action selection scheme should we use
 
   if (whichSelectionType == 0){
     std::cout << "Simple Action Selection:" << std::endl;
@@ -724,32 +726,43 @@ void printVect(std::vector<double> vect){
 
 int main(int argc, char* argv[])
 {
-  if (argc > 4) { // We expect 3 arguments: the program name, the model number, the number of iterations, writeOutFile
+  if (argc > 5) { // We expect 3 arguments: the program name, the model number, the number of iterations, writeOutFile
     std::cerr << "Usage: " << argv[0] << "NUMBER OF ITERATIONS" << std::endl;
   }
   else {
     int steps;
     int modelNum;
     int writeOutFile;
+    int actionSelectionType;
     if (argc == 1){
       modelNum = 0; // default: free model
       steps = 1; // default: run one step
       writeOutFile = 0; // default: don't write file
+      actionSelectionType = 0; // default: go in order
     }
     else if (argc == 2){
       modelNum = atoi(argv[1]);
       steps = 1; // default: run one step
       writeOutFile = 0; // default: don't write file
+      actionSelectionType = 0; // default: go in order
     }
     else if (argc == 3){
       modelNum = atoi(argv[1]);
       steps = atoi(argv[2]);
       writeOutFile = 0; // default: don't write file
+      actionSelectionType = 0; // default: go in order
+    }
+    else if (argc == 4){
+      modelNum = atoi(argv[1]);
+      steps = atoi(argv[2]);
+      writeOutFile = atoi(argv[3]);
+      actionSelectionType = 0; // default: go in order
     }
     else{
       modelNum = atoi(argv[1]);
       steps = atoi(argv[2]);
       writeOutFile = atoi(argv[3]);
+      actionSelectionType = atoi(argv[4]);
     }
 
     //std::string fileName = "savedData.txt";
@@ -758,7 +771,7 @@ int main(int argc, char* argv[])
     //outFile.close();
 
     std::cout << "steps: " << steps << std::endl;
-    RealWorld world(modelNum,steps,writeOutFile);
+    RealWorld world(modelNum,steps,writeOutFile,actionSelectionType);
 
     //world.nextAction();
     //std::cout << "action: " << world.action_[0] << "," << world.action_[1] << std::endl;
@@ -806,7 +819,7 @@ int main(int argc, char* argv[])
     world.runWorld(steps);
     //outFile.close();
     std::vector<double> mpProbsLog = modelUtils::calcModelParamProbLog(world.filter_.stateList_,world.filter_.logProbList_,world.modelParamPairs_);
-    world.printModelParamProbs(mpProbsLog);
+    //world.printModelParamProbs(mpProbsLog);
     std::cout << "\033[1;31mbold red text\033[0m\n";
     for(size_t i=0;i<10;i++){
       std::vector<double> tempAction;

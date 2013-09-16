@@ -30,8 +30,8 @@ void actionSelection::chooseActionLog(BayesFilter& filter,std::vector< std::vect
 
   //Step 2: For each action, sample a state from the belief n times. Simulate this state with the action and get an observation. Update the belief with the action-observation pair. Calculate the entropy of the new belief. Average the entropies over the n samples.
   std::vector<double> avgEntropyList; //this is a list of average entropies, one for each action
-  int nSamples = 1; //number of samples of the belief state per action
-
+  int nSamples = 4; //number of samples of the belief state per action
+  //std::cout << "samples" << nSamples << std::endl;
   for (size_t i = 0; i<actionList.size(); i++){
     std::vector<double> entropyList; //this is per action
     for (size_t j = 0; j<nSamples; j++){
@@ -92,8 +92,8 @@ void actionSelection::chooseActionLog(BayesFilter& filter,std::vector< std::vect
 
   //Step 2: For each action, sample a state from the belief n times. Simulate this state with the action and get an observation. Update the belief with the action-observation pair. Calculate the entropy of the new belief. Average the entropies over the n samples.
   std::vector<double> avgEntropyList; //this is a list of average entropies, one for each action
-  int nSamples = 1; //number of samples of the belief state per action
-
+  int nSamples = 4; //number of samples of the belief state per action
+  std::cout << "samples" << nSamples << std::endl;
   for (size_t i = 0; i<actionList.size(); i++){
     std::vector<double> entropyList; //this is per action
     for (size_t j = 0; j<nSamples; j++){
