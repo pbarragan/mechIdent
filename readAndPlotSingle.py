@@ -88,6 +88,7 @@ path = 'data/model'+str(model)+'/'+asTypes[asNum]+'/'
 
 startFileName = path+'data'+str(model)+'_'+str(trialNum)+'.txt'
 
+#startFileName = 'data/videoData/data0.txt'
 
 #setup
 startData, nSteps, nMPPairs, m = get_data_w_actions(startFileName)

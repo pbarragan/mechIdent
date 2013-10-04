@@ -39,7 +39,7 @@ class RealWorld {
   bool useRobot_; // if true, use the robot
 
   //functions
-  RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelectionType);
+  RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelectionType,int useRobot);
   ~RealWorld();
   void initMechFree();
   void initMechFixed();

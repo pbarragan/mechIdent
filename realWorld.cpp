@@ -6,6 +6,7 @@
 #include "actionSelection.h"
 #include "modelUtils.h"
 #include "translator.h"
+#include "robotComm.h"
 
 #include "mechanisms/mechFree.h"
 #include "mechanisms/mechFixed.h"
@@ -26,34 +27,16 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-//calcModelProbLog - modelUtils X
-//chooseActionLog - realWorld / actionSelection
-//createValueList - setupUtils X
-//recruseList - setupUtils X
-
-//setupActions - setupUtils X
-//setupStates - setupUtils X
-//setupUniformPrior - setupUtils X
-//getObs - realWorld
-//populateSAS - setupUtils
-//setupSAS - setupUtils
-
-//To DO:
-//setup the function in modelUtils to use the modelParamPairs. overload it. X
-
-// make the getObs function for the simulations
-//0) choose action
-//1) run the real world
-//2) updateFilter
-//3) repeat
-
+// for timing
+//#include <sys/time.h>
 
 //Constructor
-RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelectionType) {
+RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelectionType,int useRobot) : mechPtr_(NULL) {
   writeOutFile_ = writeOutFile;
   stepsTotal_ = numSteps;
   modelNum_ = modelNum;
   actionSelectionType_ = actionSelectionType;
+  useRobot_ = useRobot;
 
   // get today's date and time
   // current date/time based on current system
@@ -135,7 +118,7 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
   std::cout << "stateList_ size: " << filter_.stateList_.size() << std::endl; // Print number of states
 
   // setup either robot or simulator
-  useRobot_ = false;
+  //useRobot_ = false;
   if (!useRobot_){
     //int modelNum = 5; // Which mechanism to use for the "real world"
     switch(modelNum_){
@@ -158,10 +141,17 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
       initMechPrisPrisL();
       break;
     }
-    if(initializedNearZero()) std::cout << "We initialized the simulate robot near zero. Heck yeah." << std::endl;
-    else std::cout << "\033[1;31mYou screwed up. The simulated robot didn't start with its hand at zero.\033[0m" << std::endl;
-    std::cout << "poseInRbt_: " << poseInRbt_[0] << "," <<poseInRbt_[1] << std::endl; // print out the robot's pose
   }
+  else if (useRobot_){
+    mechPtr_ = new Mechanism();
+    std::vector<double> zeroVect (2,0.0);
+    poseInRbt_ = zeroVect; // relies on 2D - robot always starts at 0.0
+  }
+
+  // Print the initial pose of the robot
+  if(initializedNearZero()) std::cout << "We initialized the simulate robot near zero. Heck yeah." << std::endl;
+  else std::cout << "\033[1;31mYou screwed up. The simulated robot didn't start with its hand at zero.\033[0m" << std::endl;
+  std::cout << "poseInRbt_: " << poseInRbt_[0] << "," <<poseInRbt_[1] << std::endl; // print out the robot's pose
 
   // use the SAS list?
   useSAS_ = true;
@@ -358,15 +348,15 @@ void RealWorld::initMechRevPrisL(){
   stateStruct startState;
   startState.model = 4;
   std::vector<double> stateParams;
-  stateParams.push_back(-0.2); // -0.6
+  stateParams.push_back(0.27); // -0.6 // ICRA 2014 and Vid1 - -0.2
   stateParams.push_back(0.0); // 0.0
-  stateParams.push_back(0.1); // 0.4
-  stateParams.push_back(0.0); // 0.0
+  stateParams.push_back(0.17); // 0.4 // ICRA 2014 and Vid1 - 0.1
+  stateParams.push_back(-3.14159); // 0.0 // ICRA 2014 and Vid1 - 0.0
   stateParams.push_back(0.1); // 0.2
   startState.params = stateParams;
   std::vector<double> stateVars;
-  stateVars.push_back(0.0); // 0.0
-  stateVars.push_back(0.10); // 0.20
+  stateVars.push_back(-3.14159); // 0.0 // ICRA 2014 and Vid1 - 0.0
+  stateVars.push_back(0.10); // 0.20 // ICRA 2014 and Vid1 - 0.10
   startState.vars = stateVars;
 
   // check if state is valid
@@ -504,6 +494,19 @@ void RealWorld::runAction(){
       std::cout << "after: " << poseInRbt_[i] << std::endl; // DELETE
     }
   }
+  else if (useRobot_){
+    // Send action to robot and wait
+    if (robotComm::sendRequest(action_)){
+      std::cout << "Send action to robot." << std::endl;
+      // Get response. Set pose of robot. getObs() can then be used
+      if (robotComm::getResponse(poseInRbt_)){ 
+	std::cout << "Got pose from robot." << std::endl;
+	std::cout << "poseInRbt_ after action: " << poseInRbt_[0] << "," << poseInRbt_[1] << std::endl;
+      }
+      else std::cout << "\033[1;31mFailed to get pose from robot.\033[0m" << std::endl;
+    }
+    else std::cout << "\033[1;31mFailed to send action to robot.\033[0m" << std::endl;
+  }
 }
 
 //overload this function
@@ -513,7 +516,7 @@ std::vector<double> RealWorld::getObs(){
 
 //overload this function
 std::vector<double> RealWorld::getObs(std::vector<double>& poseInRbt){
-  // This is very specific to the simulation
+  // This can be used for simulation or robot
   std::vector<double> obs = mechPtr_->rbtToObs(poseInRbt);
   obs_ = obs;
   return obs;
@@ -576,21 +579,37 @@ void RealWorld::printModelParamProbs(std::vector<double> mpProbsLog){
 ////////////////////////////////////////////////////////////////////////////////
 
 void RealWorld::writeFileInitialData(){
-  //
-  outFile_ << "Real Model:\n";
-  outFile_ << modelNum_ << "\n";
-  //
-  outFile_ << "Real Params:\n";
-  for (size_t i=0;i<startState_.params.size();i++){
-  outFile_ << startState_.params[i] << ",";
+  // Write different things depending on whether using the robot or not
+  if (!useRobot_){
+    // use simulation
+    //
+    outFile_ << "Real Model:\n";
+    outFile_ << modelNum_ << "\n";
+    //
+    outFile_ << "Real Params:\n";
+    for (size_t i=0;i<startState_.params.size();i++){
+      outFile_ << startState_.params[i] << ",";
+    }
+    outFile_ << "\n";
+    //
+    outFile_ << "Real Vars:\n";
+    for (size_t i=0;i<startState_.vars.size();i++){
+      outFile_ << startState_.vars[i] << ",";
+    }
+    outFile_ << "\n";
   }
-  outFile_ << "\n";
-  //
-  outFile_ << "Real Vars:\n";
-  for (size_t i=0;i<startState_.vars.size();i++){
-  outFile_ << startState_.vars[i] << ",";
+  else if (useRobot_){
+    // using robot
+        //
+    outFile_ << "Real Model:\n";
+    outFile_ << "unknown" << "\n";
+    //
+    outFile_ << "Real Params:\n";
+    outFile_ << "unknown" << "\n";
+    //
+    outFile_ << "Real Vars:\n";
+    outFile_ << "unknown" << "\n";
   }
-  outFile_ << "\n";
   //
   outFile_ << "Num States:\n";
   outFile_ << filter_.stateList_.size() << "\n";	
@@ -724,9 +743,13 @@ void printVect(std::vector<double> vect){
   std::cout << std::endl;
 }
 
+double timeDiff(timespec& ts1, timespec& ts2){
+  return (double) ts2.tv_sec - (double) ts1.tv_sec + ((double) ts2.tv_nsec - (double) ts1.tv_nsec)/1000000000; 
+}
+
 int main(int argc, char* argv[])
 {
-  if (argc > 5) { // We expect 3 arguments: the program name, the model number, the number of iterations, writeOutFile
+  if (argc > 6) { // We expect 3 arguments: the program name, the model number, the number of iterations, writeOutFile
     std::cerr << "Usage: " << argv[0] << "NUMBER OF ITERATIONS" << std::endl;
   }
   else {
@@ -734,109 +757,71 @@ int main(int argc, char* argv[])
     int modelNum;
     int writeOutFile;
     int actionSelectionType;
+    int useRobot;
     if (argc == 1){
       modelNum = 0; // default: free model
       steps = 1; // default: run one step
       writeOutFile = 0; // default: don't write file
       actionSelectionType = 0; // default: go in order
+      useRobot = 0; // default: use simulation
     }
     else if (argc == 2){
       modelNum = atoi(argv[1]);
       steps = 1; // default: run one step
       writeOutFile = 0; // default: don't write file
       actionSelectionType = 0; // default: go in order
+      useRobot = 0; // default: use simulation
     }
     else if (argc == 3){
       modelNum = atoi(argv[1]);
       steps = atoi(argv[2]);
       writeOutFile = 0; // default: don't write file
       actionSelectionType = 0; // default: go in order
+      useRobot = 0; // default: use simulation
     }
     else if (argc == 4){
       modelNum = atoi(argv[1]);
       steps = atoi(argv[2]);
       writeOutFile = atoi(argv[3]);
       actionSelectionType = 0; // default: go in order
+      useRobot = 0; // default: use simulation
+    }
+    else if (argc == 5){
+      modelNum = atoi(argv[1]);
+      steps = atoi(argv[2]);
+      writeOutFile = atoi(argv[3]);
+      actionSelectionType = atoi(argv[4]);
+      useRobot = 0; // default: use simulation
     }
     else{
       modelNum = atoi(argv[1]);
       steps = atoi(argv[2]);
       writeOutFile = atoi(argv[3]);
       actionSelectionType = atoi(argv[4]);
+      useRobot = atoi(argv[5]);
     }
 
-    //std::string fileName = "savedData.txt";
-    //std::ofstream outFile(fileName.c_str());    
-    //outFile << "test";
-    //outFile.close();
 
     std::cout << "steps: " << steps << std::endl;
-    RealWorld world(modelNum,steps,writeOutFile,actionSelectionType);
 
-    //world.nextAction();
-    //std::cout << "action: " << world.action_[0] << "," << world.action_[1] << std::endl;
+    timespec ts1;
+    timespec ts2;
+    timespec ts3;
 
-    //world.runWorld(steps);
+    clock_gettime(CLOCK_REALTIME, &ts1); // get time before constructor
+
+    RealWorld world(modelNum,steps,writeOutFile,actionSelectionType,useRobot);
     
-    //testing stuff
-    // world.filter_.printStateList();
-    //world.filter_.printLogProbList();
+    clock_gettime(CLOCK_REALTIME, &ts2); // get time after constructor
 
-    /*
-    std::cout << "modelParamPairs: " << std::endl;
-    for (size_t i=0;i<world.modelParamPairs_.size();i++){
-      std::cout << world.modelParamPairs_[i].model << std::endl;
-      printVect(world.modelParamPairs_[i].params);
-    }
-    std::cout << "probList: " << std::endl;
-    printVect(world.filter_.logProbList_);
-    for (size_t i = 0;i<world.filter_.logProbList_.size();i++){
-      std::cout << logUtils::safe_exp(world.filter_.logProbList_[i]) << std::endl;
-    }
-    std::cout << "actionList: " << std::endl;
-    for (size_t i=0;i<world.actionList_.size();i++){
-      printVect(world.actionList_[i]);
-    }
-
-    std::cout << "sasList size: " << world.sasList_.size() << std::endl;
-    if(world.useSAS_){
-      sasUtils::mapPairSVS_it mapIt = world.sasList_.begin();
-      stateStruct tmpPrevState = mapIt->first.first;
-      std::vector<double> tmpAction = mapIt->first.second;
-      stateStruct tmpNextState = mapIt->second;
-      
-      std::cout << "model" << tmpPrevState.model << std::endl;
-      std::cout << "params" << tmpPrevState.params.size() << std::endl;
-      for (size_t i=0;i<tmpPrevState.params.size();i++){
-	std::cout << tmpPrevState.params[i] << std::endl;
-      }
-      std::cout << "vars" << tmpPrevState.vars.size() << std::endl;
-      for (size_t i=0;i<tmpPrevState.vars.size();i++){ 
-	std::cout << tmpPrevState.vars[i] << std::endl;
-      }
-    }
-    */
     world.runWorld(steps);
-    //outFile.close();
-    std::vector<double> mpProbsLog = modelUtils::calcModelParamProbLog(world.filter_.stateList_,world.filter_.logProbList_,world.modelParamPairs_);
-    //world.printModelParamProbs(mpProbsLog);
-    std::cout << "\033[1;31mbold red text\033[0m\n";
-    for(size_t i=0;i<10;i++){
-      std::vector<double> tempAction;
-      actionSelection::chooseActionRandom(world.actionList_,tempAction);
-      std::cout << "random action: " << tempAction[0] << "," << tempAction[1] << std::endl;
-    }
-  }
 
-  // current date/time based on current system
-  time_t now = time(0);
-  
-  // convert now to string form
-  char* dt = ctime(&now);
-  std::string dateString = dt;
-  std::replace(dateString.begin(),dateString.end(),' ','_');
-  std::replace(dateString.begin(),dateString.end(),':','_');
-  std::cout << "The local date and time is: " << dt << std::endl;
-  std::cout << dateString << std::endl;
+    clock_gettime(CLOCK_REALTIME, &ts3); // get time after running world
+
+    std::cout << "Time for constructor:\n" << timeDiff(ts1,ts2) << std::endl;
+    std::cout << "Time for running world:\n" << timeDiff(ts2,ts3) << std::endl;
+    std::cout << "Time per step:\n" << timeDiff(ts2,ts3)/steps << std::endl;
+
+  }
   return 1;
 }

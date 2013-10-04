@@ -81,12 +81,12 @@ std::vector<stateStruct> setupUtils::setupModel2(std::vector<stateStruct>& model
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = 0.3;
-  dRP[0][1] = 0.3;
-  dRP[1][0] = 0.3;
-  dRP[1][1] = 0.3;
-  dRP[2][0] = 0.42426;
-  dRP[2][1] = 0.42426;
+  dRP[0][0] = 0.3111; // ICRA 2014 - 0.3
+  dRP[0][1] = 0.3111; // ICRA 2014 - 0.3
+  dRP[1][0] = 0.3111; // ICRA 2014 - 0.3
+  dRP[1][1] = 0.3111; // ICRA 2014 - 0.3
+  dRP[2][0] = 0.44; // ICRA 2014 - 0.3
+  dRP[2][1] = 0.44; // ICRA 2014 - 0.3
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 1;
@@ -115,12 +115,12 @@ std::vector<stateStruct> setupUtils::setupModel3(std::vector<stateStruct>& model
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = -0.16;
-  dRP[0][1] = -0.16;
-  dRP[1][0] = -0.16;
-  dRP[1][1] = -0.16;
-  dRP[2][0] = 0.7865;
-  dRP[2][1] = 0.7865;
+  dRP[0][0] = 0.16; // ICRA 2014 - -0.16
+  dRP[0][1] = 0.16; // ICRA 2014 - -0.16
+  dRP[1][0] = 0.16; // ICRA 2014 - -0.16
+  dRP[1][1] = 0.16; // ICRA 2014 - -0.16
+  dRP[2][0] = -2.3562; // ICRA 2014 - 0.7865 
+  dRP[2][1] = -2.3562;  // ICRA 2014 - 0.7865
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 1;
@@ -149,14 +149,14 @@ std::vector<stateStruct> setupUtils::setupModel4(std::vector<stateStruct>& model
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = -0.2;
-  dRP[0][1] = -0.2;
+  dRP[0][0] = 0.27; // ICRA 2014 and Vid1 - -0.2
+  dRP[0][1] = 0.27; // ICRA 2014 and Vid1 - -0.2
   dRP[1][0] = 0.0;
   dRP[1][1] = 0.0;
-  dRP[2][0] = 0.1;
-  dRP[2][1] = 0.1;
-  dRP[3][0] = 0.0;
-  dRP[3][1] = 0.0;
+  dRP[2][0] = 0.17; // ICRA 2014 and Vid1 - 0.1
+  dRP[2][1] = 0.17; // ICRA 2014 and Vid1 - 0.1
+  dRP[3][0] = -3.14159; // ICRA 2014 and Vid1 - 0.0
+  dRP[3][1] = -3.14159; // ICRA 2014 and Vid1 - 0.0
   dRP[4][0] = 0.1;
   dRP[4][1] = 0.1;
   //Dimension Numbers for Params
@@ -168,13 +168,13 @@ std::vector<stateStruct> setupUtils::setupModel4(std::vector<stateStruct>& model
   dNP[4] = 1;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -1.57;
-  dRV[0][1] = 1.57;
+  dRV[0][0] = -3.14159; // ICRA 2014 and Vid1 - -1.57
+  dRV[0][1] = 3.14159; // ICRA 2014 and Vid1 - 1.57
   dRV[1][0] = 0.0;
-  dRV[1][1] = 0.20;
+  dRV[1][1] = 0.27; // ICRA 2014 and Vid1 - 0.2
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 12;
+  dNV[0] = 24; // ICRA 2014 and Vid1 - 12
   dNV[1] = 10;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
