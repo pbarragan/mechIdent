@@ -97,3 +97,23 @@ double logUtils::evaluteLogMVG(Eigen::Map<Eigen::MatrixXd> sampleVec, Eigen::Map
 	return -0.5*(meanVec.rows()*safe_log(2*M_PI)+safe_log(covMat.determinant())+secondHalfDBL);
 }
 
+//This function is overloaded
+//Ver 3: pass in vectors and inverted covariance matrix and determinant of covariance matrix
+double logUtils::evaluteLogMVG(std::vector<double>& sampleVecVect, std::vector<double>& meanVecVect, std::vector<double>& invCovMatVect, double detCovMat){
+
+  /*
+	//Convert
+	Eigen::Map<Eigen::MatrixXd> sampleVec = convertVect(sampleVecVect);
+	Eigen::Map<Eigen::MatrixXd> meanVec = convertVect(meanVecVect);
+	Eigen::Map<Eigen::MatrixXd> invCovMat = convertCovMat(invCovMatVect);
+	
+	Eigen::MatrixXd error = (sampleVec - meanVec);
+	Eigen::Matrix<double,1,1> secondHalf = (error.transpose()*invCovMat*error);
+	double secondHalfDBL = secondHalf(0); //this is a hack
+	return -0.5*(meanVec.rows()*safe_log(2*M_PI)+safe_log(detCovMat)+secondHalfDBL);
+  */
+  
+	return -0.5*(2*1.83787706641+safe_log(detCovMat)+(sampleVecVect[0]-meanVecVect[0])*(sampleVecVect[0]-meanVecVect[0])*invCovMatVect[0]+(sampleVecVect[1]-meanVecVect[1])*(sampleVecVect[1]-meanVecVect[1])*invCovMatVect[1]);
+
+}
+

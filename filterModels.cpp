@@ -9,10 +9,19 @@ double filterModels::logProbState(stateStruct sampleState, stateStruct meanState
 
   //sampleState is the sample vector. meanState is the mean vector. This just drops a gaussian at the meanState with a constant covariance from the class.	
   if (meanState.model==sampleState.model && meanState.params==sampleState.params){
-  //Move this outside later maybe
-  double transArray[] = {0.0001,0.0,0.0,0.0001};
-  std::vector<double> transCovMat;
-  transCovMat.assign(transArray, transArray + sizeof(transArray)/sizeof(double));
+    //Move this outside later maybe
+    double transArray[] = {0.0001,0.0,0.0,0.0001};
+    std::vector<double> transCovMat;
+    transCovMat.assign(transArray, transArray + sizeof(transArray)/sizeof(double));
+    
+    // set additional variables
+    // create inverse matrix (hard coded)
+    double invTransArray[] = {10000.0,0.0,0.0,10000.0};
+    std::vector<double> invTransCovMat;
+    invTransCovMat.assign(invTransArray, invTransArray + sizeof(invTransArray)/sizeof(double));
+
+    // create determinant (hard coded)
+    double detCovMat = 0.00000001;
 
     //translate to the observation space which should be a vector directly comparable with another
     std::vector<double> sampleStateInObs = translator::translateStToObs(sampleState);
@@ -34,7 +43,7 @@ double filterModels::logProbState(stateStruct sampleState, stateStruct meanState
     std::cout << "sampleStateInObs: " << sampleStateInObs[0] << "," << sampleStateInObs[1] << std::endl;
     std::cout << "meanStateInObs: " << meanStateInObs[0] << "," << meanStateInObs[1] << std::endl;
     */
-    double hold = logUtils::evaluteLogMVG(sampleStateInObs,meanStateInObs,transCovMat);
+    double hold = logUtils::evaluteLogMVG(sampleStateInObs,meanStateInObs,invTransCovMat,detCovMat);
     //std::cout << "prob: " << hold << std::endl;
     return hold;
   }
@@ -50,12 +59,21 @@ double filterModels::logProbObs(std::vector<double> obs, stateStruct state){
   std::vector<double> obsCovMat;
   obsCovMat.assign(obsArray, obsArray + sizeof(obsArray)/sizeof(double));
 
+  // set additional variables
+  // create inverse matrix (hard coded)
+  double invObsArray[] = {100.0,0.0,0.0,100.0};
+  std::vector<double> invObsCovMat;
+  invObsCovMat.assign(invObsArray, invObsArray + sizeof(invObsArray)/sizeof(double));
+  
+  // create determinant (hard coded)
+  double detCovMat = 0.0001;
+
   //obs is the sample vector. state is the mean vector. This just drops a gaussian at the state with a constant covariance from the class.
   //Obs is already translated to the observation space which should be a vector directly comparable with another
   //std::vector<double> obsInO = translator::translateObsToO(obs);
   std::vector<double> obsInObs = obs;
   std::vector<double> meanStateInObs = translator::translateStToObs(state);
-  double hold = logUtils::evaluteLogMVG(obsInObs,meanStateInObs,obsCovMat);
+  double hold = logUtils::evaluteLogMVG(obsInObs,meanStateInObs,invObsCovMat,detCovMat);
 
   /*
   if (state.model==4 || state.model==0){

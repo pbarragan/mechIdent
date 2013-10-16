@@ -29,6 +29,10 @@ namespace logUtils {
   //Ver 2: pass in matrices
   double evaluteLogMVG(Eigen::Map<Eigen::MatrixXd> sampleVec, Eigen::Map<Eigen::MatrixXd> meanVec, Eigen::Map<Eigen::MatrixXd> covMat);
 
+  //This function is overloaded
+  //Ver 3: pass in vectors and inverted covariance matrix and determinant of covariance matrix
+  double evaluteLogMVG(std::vector<double>& sampleVecVect, std::vector<double>& meanVecVect, std::vector<double>& invCovMatVect, double detCovMat);
+
 }
   
 #endif //LOG_UTILS_H
