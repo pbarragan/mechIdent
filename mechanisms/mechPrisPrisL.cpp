@@ -410,7 +410,8 @@ void MechPrisPrisL::setStartWithState(stateStruct& startState){
   startQuatFxdABC_ = startQuatLink0_;
 }
 
-// virtual
+/*
+// used to be virtual
 void MechPrisPrisL::setGoalWithAction(std::vector<double>& action){
   // Action looks like:
   // x,y in rbt space
@@ -423,6 +424,7 @@ void MechPrisPrisL::setGoalWithAction(std::vector<double>& action){
   std::vector<double> tempActSim = convCoordsRbtToSim(tempActRbt);
   goalPose_ = convStdVectToBtVect3(tempActSim);
 }
+*/
 
 // virtual
 stateStruct MechPrisPrisL::returnStateOfWorld(){

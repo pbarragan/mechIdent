@@ -49,7 +49,7 @@ class MechFixed : public Mechanism {
 
   // Virutal: not defined in the superclass Mechanism.
   virtual void setStartWithState(stateStruct& startState);
-  virtual void setGoalWithAction(std::vector<double>& action);
+  // virtual void setGoalWithAction(std::vector<double>& action); // used to be virtual
   virtual stateStruct returnStateOfWorld();
   virtual std::vector<double> stToObs(stateStruct& state);
   virtual std::vector<double> stToRbt(stateStruct& state);

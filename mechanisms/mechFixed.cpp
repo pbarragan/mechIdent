@@ -56,13 +56,15 @@ void MechFixed::setStartWithState(stateStruct& startState){
   startPose_ = convStdVectToBtVect3(tempVarsSim);
 }
 
-// virtual 
+/*
+// used to be virtual 
 void MechFixed::setGoalWithAction(std::vector<double>& action){
   // Action looks like:
   // x,y in rbt space
 
   // No need to set goal
 }
+*/
 
 // virtual 
 stateStruct MechFixed::returnStateOfWorld(){

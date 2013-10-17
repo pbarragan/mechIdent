@@ -59,6 +59,7 @@ class Mechanism {
   stateStruct initAndSim(stateStruct& startState,std::vector<double>& action);
   std::vector<double> sensToObs(std::vector<double>& obs);
   std::vector<double> rbtToObs(std::vector<double>& rbt);
+  void setGoalWithAction(std::vector<double>& action); // not virtual anymore
 
   btRigidBody* createRigidBody(btCollisionShape* collisionShape,btScalar mass,const btTransform& transform);
   std::vector<double> convCoordsRbtToSim(std::vector<double>& coordsRbt);
@@ -72,7 +73,7 @@ class Mechanism {
 
   // Virutal: not defined in the cpp file. defined in subclasses.
   virtual void setStartWithState(stateStruct& startState){}
-  virtual void setGoalWithAction(std::vector<double>& action){}
+  // virtual void setGoalWithAction(std::vector<double>& action){} // used to be virtual
   virtual stateStruct returnStateOfWorld(){}
   virtual std::vector<double> stToObs(stateStruct& state){}
   virtual std::vector<double> stToRbt(stateStruct& state){}

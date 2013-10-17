@@ -129,7 +129,8 @@ void MechFree::setStartWithState(stateStruct& startState){
   startPose_ = convStdVectToBtVect3(tempVarsSim);
 }
 
-// virtual
+/*
+// used to be virtual
 void MechFree::setGoalWithAction(std::vector<double>& action){
   // Action looks like:
   // x,y in rbt space
@@ -142,6 +143,7 @@ void MechFree::setGoalWithAction(std::vector<double>& action){
   std::vector<double> tempActSim = convCoordsRbtToSim(tempActRbt);
   goalPose_ = convStdVectToBtVect3(tempActSim);
 }
+*/
 
 // virtual
 stateStruct MechFree::returnStateOfWorld(){

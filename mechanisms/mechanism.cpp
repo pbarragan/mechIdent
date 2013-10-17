@@ -149,6 +149,20 @@ std::vector<double> Mechanism::rbtToObs(std::vector<double>& rbt){
   return rbt;
 }
 
+// used to be virtual
+void Mechanism::setGoalWithAction(std::vector<double>& action){
+  // Action looks like:
+  // x,y in rbt space
+
+  // Create an x,y,z vector in rbt
+  std::vector<double> tempActRbt = action;
+  tempActRbt.push_back(1.0); // set z_rbt to 1.0
+
+  // Convert to sim and set
+  std::vector<double> tempActSim = convCoordsRbtToSim(tempActRbt);
+  goalPose_ = convStdVectToBtVect3(tempActSim);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //                     End Super (Base) Class Section                         //
 ////////////////////////////////////////////////////////////////////////////////

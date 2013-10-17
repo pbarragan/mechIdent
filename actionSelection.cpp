@@ -147,7 +147,7 @@ void actionSelection::chooseActionLog(BayesFilter& filter,std::vector< std::vect
 ////////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> actionSelection::getNoisyObs(stateStruct& state){
-  // maybe do something about srand later. nor calling now on purpose.
+  // maybe do something about srand later. not calling now on purpose.
   std::vector<double> obs = translator::translateStToObs(state);
   // add some noise
   for (size_t i=0; i<obs.size(); i++){

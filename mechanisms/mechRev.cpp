@@ -208,7 +208,8 @@ void MechRev::setStartWithState(stateStruct& startState){
   startQuatLink0_.setValue(0.0f, sin(0.5f*theta), 0.0f, cos(0.5f*theta));
 }
 
-// virtual
+/*
+// used to be virtual
 void MechRev::setGoalWithAction(std::vector<double>& action){
   // Action looks like:
   // x,y in rbt space
@@ -221,6 +222,7 @@ void MechRev::setGoalWithAction(std::vector<double>& action){
   std::vector<double> tempActSim = convCoordsRbtToSim(tempActRbt);
   goalPose_ = convStdVectToBtVect3(tempActSim);
 }
+*/
 
 // virtual
 stateStruct MechRev::returnStateOfWorld(){
