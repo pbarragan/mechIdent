@@ -55,6 +55,7 @@ class RealWorld {
   std::vector<double> getObs(std::vector<double>& stateInRbt);
   void stepWorld();
   void runWorld(int numSteps);
+  int runWorldToConf(int numSteps,double confidence);
   double randomDouble();
   double gaussianNoise();
   void printModelParamProbs(std::vector<double> mpProbsLog);

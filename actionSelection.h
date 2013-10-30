@@ -14,11 +14,16 @@ namespace actionSelection {
   void chooseActionLog(BayesFilter& filter,std::vector< std::vector<double> >& actionList,std::vector<double>& action,std::vector<stateStruct>& modelParamPairs);
   void chooseActionLog(BayesFilter& filter,std::vector< std::vector<double> >& actionList,std::vector<double>& action,std::vector<stateStruct>& modelParamPairs,sasUtils::mapPairSVS& sasList);
 
+  // overloaded
+  void chooseActionOG(BayesFilter& filter,std::vector< std::vector<double> >& actionList,std::vector<double>& action,std::vector<stateStruct>& modelParamPairs);
+  void chooseActionOG(BayesFilter& filter,std::vector< std::vector<double> >& actionList,std::vector<double>& action,std::vector<stateStruct>& modelParamPairs,sasUtils::mapPairSVS& sasList);
+
   std::vector<double> getNoisyObs(stateStruct& state);
   std::vector<double> createCDF(std::vector<double>& probList);
   stateStruct getSampleState(std::vector<double>& CDF, std::vector<stateStruct>& states);
   double calcEntropy(std::vector<double> probs);
   double randomDouble();
+  double distPointsSquared(std::vector<double> a, std::vector<double> b);
 
 }
   

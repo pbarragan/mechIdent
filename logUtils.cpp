@@ -112,8 +112,9 @@ double logUtils::evaluteLogMVG(std::vector<double>& sampleVecVect, std::vector<d
 	double secondHalfDBL = secondHalf(0); //this is a hack
 	return -0.5*(meanVec.rows()*safe_log(2*M_PI)+safe_log(detCovMat)+secondHalfDBL);
   */
-  
-	return -0.5*(2*1.83787706641+safe_log(detCovMat)+(sampleVecVect[0]-meanVecVect[0])*(sampleVecVect[0]-meanVecVect[0])*invCovMatVect[0]+(sampleVecVect[1]-meanVecVect[1])*(sampleVecVect[1]-meanVecVect[1])*invCovMatVect[1]);
+
+  //1.83787706641
+  return -0.5*(2*1.83787706641+safe_log(detCovMat)+(sampleVecVect[0]-meanVecVect[0])*(sampleVecVect[0]-meanVecVect[0])*invCovMatVect[0]+(sampleVecVect[1]-meanVecVect[1])*(sampleVecVect[1]-meanVecVect[1])*invCovMatVect[3]);
 
 }
 

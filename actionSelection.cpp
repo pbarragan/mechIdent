@@ -142,6 +142,206 @@ void actionSelection::chooseActionLog(BayesFilter& filter,std::vector< std::vect
   action = actionList[std::distance(avgEntropyList.begin(),minAvgEntIt)];
 }
 
+// overloaded
+// No SAS list
+void actionSelection::chooseActionOG(BayesFilter& filter,std::vector< std::vector<double> >& actionList,std::vector<double>& action,std::vector<stateStruct>& modelParamPairs){
+  // OG == Original Gangster
+  // The original method was simply to run a bunch of actions on the top two models in terms of probability and try to determine which action produced the most different outcome and then choose that one.
+  // this will only work if there is at least two models
+  // and the probabilities better be positive
+
+  // Step 1: Calculate all the model-parameter probabilities so you know which models to compare (the highest two)
+  std::vector<double> mpProbs = modelUtils::calcModelParamProbLog(filter.stateList_,filter.logProbList_,modelParamPairs);
+
+  if (mpProbs.size()<2){
+    std::cout << "At least 2 model-parameter pairs needed" << std::endl;
+  }
+  else {
+    double first=-1.0;
+    double second=-1.0;
+    int firstIndex=-1;
+    int secondIndex=-1;
+    
+    for (size_t i = 0; i<mpProbs.size(); i++){
+      if (mpProbs[i]>first){
+	second = first;
+	secondIndex = firstIndex;
+	first = mpProbs[i];
+	firstIndex = i;
+      }
+      else if (mpProbs[i]>second){
+	second = mpProbs[i];
+	secondIndex = i;
+      }
+    }
+
+    int firstModel = modelParamPairs[firstIndex].model;
+    int secondModel = modelParamPairs[secondIndex].model;
+
+    std::cout << "First model: " << firstModel << std::endl;
+    std::cout << "Second model: " << secondModel << std::endl;
+    
+    // Step 2: Figure out the maximum probability state for those models to simulate from 
+    // (THIS IS IN LOG SPACE)
+    stateStruct firstState;
+    double firstStateProb;
+    stateStruct secondState;
+    double secondStateProb;
+    bool foundFirst = false;
+    bool foundSecond = false;
+    
+    for (size_t i = 0; i<filter.stateList_.size(); i++){
+      if (filter.stateList_[i].model == firstModel){
+	if (foundFirst == false){
+	  firstState = filter.stateList_[i];
+	  firstStateProb = filter.logProbList_[i];
+	  foundFirst = true;
+	}
+	else if (filter.logProbList_[i] > firstStateProb){
+	  firstState = filter.stateList_[i];
+	  firstStateProb = filter.logProbList_[i];
+	}
+      }
+      else if (filter.stateList_[i].model == secondModel){
+	if (foundSecond == false){
+	  secondState = filter.stateList_[i];
+	  secondStateProb = filter.logProbList_[i];
+	  foundSecond = true;
+	}
+	else if (filter.logProbList_[i] > secondStateProb){
+	  secondState = filter.stateList_[i];
+	  secondStateProb = filter.logProbList_[i];
+	}
+      }
+    }
+    
+    // Step 3: Simulate all the actions from the states found in Step 2 + 
+    // Step 4: Calculate distances between results from Step 3 and determine which is greatest
+    stateStruct tempFirstNextState;
+    stateStruct tempSecondNextState;
+    double furthestDist = -1.0;
+    double currentDist = -2.0;
+    std::vector<double> bestAction;
+    
+    for (size_t i=0; i<actionList.size(); i++){
+      tempFirstNextState = translator::stateTransition(firstState,actionList[i]);
+      tempSecondNextState = translator::stateTransition(secondState,actionList[i]);
+      currentDist = distPointsSquared(translator::translateStToObs(tempFirstNextState),translator::translateStToObs(tempSecondNextState));
+
+      if (currentDist > furthestDist){
+	furthestDist = currentDist;
+	bestAction = actionList[i];
+      }
+    }
+    
+    // Step 5: Set the next action to do to the best action found
+    action = bestAction;
+  }
+}
+
+// overloaded
+// Use the SAS list
+void actionSelection::chooseActionOG(BayesFilter& filter,std::vector< std::vector<double> >& actionList,std::vector<double>& action,std::vector<stateStruct>& modelParamPairs,sasUtils::mapPairSVS& sasList){
+  //OG == Original Gangster
+  //The original method was simply to run a bunch of actions on the top two models in terms of probability and try to determine which action produced the most different outcome and then choose that one.
+  //this will only work if there is at least two models
+  //and the probabilities better be positive
+
+  //Step 1: Calculate all the model-parameter probabilities so you know which models to compare (the highest two)
+  //std::vector<double> modelProbs = calcModelProb();
+  std::vector<double> mpProbs = modelUtils::calcModelParamProbLog(filter.stateList_,filter.logProbList_,modelParamPairs);
+
+  if (mpProbs.size()<2){
+    std::cout << "At least 2 model-parameter pairs needed" << std::endl;
+  }
+  else {
+    //std::cout << "Let's choose a model" << std::endl;
+    double first=-1.0;
+    double second=-1.0;
+    int firstIndex=-1;
+    int secondIndex=-1;
+    
+    for (size_t i = 0; i<mpProbs.size(); i++){
+      if (mpProbs[i]>first){
+	second = first;
+	secondIndex = firstIndex;
+	first = mpProbs[i];
+	firstIndex = i;
+      }
+      else if (mpProbs[i]>second){
+	second = mpProbs[i];
+	secondIndex = i;
+      }
+    }
+
+    int firstModel = modelParamPairs[firstIndex].model;
+    int secondModel = modelParamPairs[secondIndex].model;
+
+    std::cout << "First model: " << firstModel << std::endl;
+    std::cout << "Second model: " << secondModel << std::endl;
+    
+    // Step 2: Figure out the maximum probability state for those models to simulate from 
+    // (THIS IS IN LOG SPACE)
+    stateStruct firstState;
+    double firstStateProb;
+    stateStruct secondState;
+    double secondStateProb;
+    bool foundFirst = false;
+    bool foundSecond = false;
+    
+    for (size_t i = 0; i<filter.stateList_.size(); i++){
+      if (filter.stateList_[i].model == firstModel){
+	if (foundFirst == false){
+	  firstState = filter.stateList_[i];
+	  firstStateProb = filter.logProbList_[i];
+	  foundFirst = true;
+	}
+	else if (filter.logProbList_[i] > firstStateProb){
+	  firstState = filter.stateList_[i];
+	  firstStateProb = filter.logProbList_[i];
+	}
+      }
+      else if (filter.stateList_[i].model == secondModel){
+	if (foundSecond == false){
+	  secondState = filter.stateList_[i];
+	  secondStateProb = filter.logProbList_[i];
+	  foundSecond = true;
+	}
+	else if (filter.logProbList_[i] > secondStateProb){
+	  secondState = filter.stateList_[i];
+	  secondStateProb = filter.logProbList_[i];
+	}
+      }
+    }
+
+    //Step 3: Simulate all the actions from the states found in Step 2 + 
+    //Step 4: Calculate distances between results from Step 3 and determine which is greatest
+    stateStruct tempFirstNextState;
+    stateStruct tempSecondNextState;
+    double furthestDist = -1.0;
+    double currentDist = -2.0;
+    std::vector<double> bestAction;
+    
+    std::cout << "error is righhhhhhht here:" << std::endl;
+
+    for (size_t i=0; i<actionList.size(); i++){
+      tempFirstNextState = translator::stateTransition(firstState,actionList[i],sasList); // use SAS
+      tempSecondNextState = translator::stateTransition(secondState,actionList[i],sasList); // use SAS
+      currentDist = distPointsSquared(translator::translateStToObs(tempFirstNextState),translator::translateStToObs(tempSecondNextState));
+
+      if (currentDist > furthestDist){
+	furthestDist = currentDist;
+	bestAction = actionList[i];
+      }
+    }
+
+    std::cout << "def not here" << std::endl;
+
+    //Step 5: Set the next action to do to the best action found
+    action = bestAction;
+  }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //                               Aux Section                                  //
 ////////////////////////////////////////////////////////////////////////////////
@@ -188,6 +388,11 @@ double actionSelection::calcEntropy(std::vector<double> probs){
 double actionSelection::randomDouble(){
   double X = ((double)rand()/(double)RAND_MAX);
   return X;
+}
+
+double actionSelection::distPointsSquared(std::vector<double> a, std::vector<double> b){
+  //assumes 2d distances
+  return (a[0]-b[0])*(a[0]-b[0])+(a[1]-b[1])*(a[1]-b[1]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

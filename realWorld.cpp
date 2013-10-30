@@ -1,6 +1,8 @@
 // this is an MTV show from the 90s
 // The Real World
 
+#include "globalVars.h"
+
 #include "realWorld.h"
 #include "setupUtils.h"
 #include "actionSelection.h"
@@ -26,6 +28,9 @@
 #include "logUtils.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
+
+// for averaging
+#include <numeric>      // std::accumulate
 
 // for timing
 //#include <sys/time.h>
@@ -457,6 +462,15 @@ void RealWorld::nextAction(){
       actionSelection::chooseActionLog(filter_,actionList_,action_,modelParamPairs_);
     }
   }
+  else if (whichSelectionType == 3){
+    std::cout << "OG Action Selection:" << std::endl;
+    if(useSAS_){
+      actionSelection::chooseActionOG(filter_,actionList_,action_,modelParamPairs_,sasList_);
+    }
+    else{
+      actionSelection::chooseActionOG(filter_,actionList_,action_,modelParamPairs_);
+    }
+  }
   std::cout << "\033[1;31mstep: \033[0m" << step_ << std::endl;
   std::cout << "\033[1;31maction: \033[0m" << action_[0] << "," << action_[1] << std::endl;
 }
@@ -540,6 +554,35 @@ void RealWorld::runWorld(int numSteps){
       writeFileStepData(); // write the step data to the file
     }
   }
+  //outFile << "did this work\n";
+}
+
+int RealWorld::runWorldToConf(int numSteps,double confidence){
+  // run the world until confidence in a single model reaches threshold or number of steps runs out
+  int stepsNeeded = 0;
+  bool end=false;
+  for (size_t i=0;i<numSteps;i++){
+    step_=i;
+    stepWorld();
+    //filter_.printLogProbList();
+    std::vector<double> mpProbsLog = modelUtils::calcModelParamProbLog(filter_.stateList_,filter_.logProbList_,modelParamPairs_);
+    printModelParamProbs(mpProbsLog);
+    if(writeOutFile_){
+      writeFileStepData(); // write the step data to the file
+    }
+    stepsNeeded=i;
+    // check if you've reached the confidence level and exit if you have
+    for (size_t j=0;j<mpProbsLog.size();j++){
+      if (mpProbsLog[j]>=confidence){
+	end=true;
+	break;
+      }
+    }
+    if (end){
+      break;
+    }
+  }
+  return stepsNeeded;
   //outFile << "did this work\n";
 }
 
@@ -804,24 +847,42 @@ int main(int argc, char* argv[])
 
     std::cout << "steps: " << steps << std::endl;
 
-    timespec ts1;
-    timespec ts2;
-    timespec ts3;
-
-    clock_gettime(CLOCK_REALTIME, &ts1); // get time before constructor
-
-    RealWorld world(modelNum,steps,writeOutFile,actionSelectionType,useRobot);
-    
-    clock_gettime(CLOCK_REALTIME, &ts2); // get time after constructor
-
-    world.runWorld(steps);
-
-    clock_gettime(CLOCK_REALTIME, &ts3); // get time after running world
-
-    std::cout << "Time for constructor:\n" << timeDiff(ts1,ts2) << std::endl;
-    std::cout << "Time for running world:\n" << timeDiff(ts2,ts3) << std::endl;
-    std::cout << "Time per step:\n" << timeDiff(ts2,ts3)/steps << std::endl;
-
+    bool basic = true;
+    if (basic){
+      timespec ts1;
+      timespec ts2;
+      timespec ts3;
+      
+      clock_gettime(CLOCK_REALTIME, &ts1); // get time before constructor
+      
+      RealWorld world(modelNum,steps,writeOutFile,actionSelectionType,useRobot);
+      
+      clock_gettime(CLOCK_REALTIME, &ts2); // get time after constructor
+      
+      world.runWorld(steps);
+      
+      clock_gettime(CLOCK_REALTIME, &ts3); // get time after running world
+      
+      std::cout << "Time for constructor:\n" << timeDiff(ts1,ts2) << std::endl;
+      std::cout << "Time for running world:\n" << timeDiff(ts2,ts3) << std::endl;
+      std::cout << "Time per step:\n" << timeDiff(ts2,ts3)/steps << std::endl;
+    }
+    else{
+      int numExps = 10;
+      double conf = 0.9;
+      std::vector<int> stepsNeededVect;
+      for (size_t i=0;i<numExps;i++){
+	RealWorld world(modelNum,steps,writeOutFile,actionSelectionType,useRobot);
+	stepsNeededVect.push_back(world.runWorldToConf(steps,conf));
+      }
+      std::cout << "Steps Needed:" << std::endl;
+      for (size_t i=0;i<stepsNeededVect.size();i++){
+	std::cout << stepsNeededVect[i] << ",";
+      }
+      std::cout << std::endl << "Avg:" << std::endl;
+      std::cout << std::accumulate(stepsNeededVect.begin(),stepsNeededVect.end(),0.0)/numExps << std::endl;
+    }
+    std::cout << RELATIVE << std::endl;
   }
   return 1;
 }
