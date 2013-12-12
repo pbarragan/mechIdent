@@ -3,7 +3,11 @@
 #include "logUtils.h"
 #include "translator.h"
 
+#include "globalVars.h" // Global variables
+
 #include <iostream> // DELETE
+#define _USE_MATH_DEFINES
+#include <math.h> // cos, sin
 
 ////////////////////////////////////////////////////////////////////////////////
 //                              Model Section                                 //
@@ -385,23 +389,66 @@ void setupUtils::setupUniformPrior(std::vector<stateStruct>& stateList,std::vect
 
 //Create the list of actions
 void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
-  // how many dimensions for an action
-  int actDimNum = 2;
+  std::vector<double> action1;
+  std::vector<double> action2;
+  std::vector<double> action3;
+  std::vector<double> action4;
 
-  //Dimension Ranges for Actions
-  std::vector< std::vector<double> > dRA (actDimNum, std::vector<double> (2,0.0));
-  dRA[0][0] = -0.12;
-  dRA[0][1] = 0.12;
-  dRA[1][0] = -0.12;
-  dRA[1][1] = 0.12;
-  //Dimension Numbers for Actions
-  std::vector<int> dNA (actDimNum, 0);
-  dNA[0] = 3;
-  dNA[1] = 3;
+  action1.push_back(0.06);
+  action1.push_back(0.06);
 
-  //setup for Actions
-  actionList = dimsToList(dRA,dNA);
+  action2.push_back(0.06);
+  action2.push_back(-0.06);
 
+  action3.push_back(-0.06);
+  action3.push_back(-0.06);
+
+  action4.push_back(-0.06);
+  action4.push_back(0.06);
+
+  actionList.clear();
+  actionList.push_back(action1);
+  actionList.push_back(action2);
+  actionList.push_back(action3);
+  actionList.push_back(action4);
+
+  /*
+  if(RELATIVE){
+    //This is totally 2D
+    // In a circle around the gripper
+    int numPts = 8; // how many points around the circle
+    double radius = 0.06; // radius of the points
+    double angleDelta = 2*M_PI/numPts;
+
+    actionList.clear(); // clear anything in there
+    std::vector<double> tempAction; // slightly faster if outside
+
+    for (size_t i=0;i<numPts;i++){
+      tempAction.clear();
+      tempAction.push_back(radius*cos(i*angleDelta)); // add x component
+      tempAction.push_back(radius*sin(i*angleDelta)); // add y component
+      actionList.push_back(tempAction);
+    }
+  }
+  else{
+    // how many dimensions for an action
+    int actDimNum = 2;
+    
+    //Dimension Ranges for Actions
+    std::vector< std::vector<double> > dRA (actDimNum, std::vector<double> (2,0.0));
+    dRA[0][0] = -0.12;
+    dRA[0][1] = 0.12;
+    dRA[1][0] = -0.12;
+    dRA[1][1] = 0.12;
+    //Dimension Numbers for Actions
+    std::vector<int> dNA (actDimNum, 0);
+    dNA[0] = 3;
+    dNA[1] = 3;
+    
+    //setup for Actions
+    actionList = dimsToList(dRA,dNA);
+  }
+  */
 }
 
 ////////////////////////////////////////////////////////////////////////////////

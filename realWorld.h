@@ -60,6 +60,7 @@ class RealWorld {
   double gaussianNoise();
   void printModelParamProbs(std::vector<double> mpProbsLog);
 
+  void writeFileStatesForMATLAB();
   void writeFileInitialData();
   void writeFileStepData();
 };

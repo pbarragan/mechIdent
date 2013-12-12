@@ -71,10 +71,10 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
   // set workspace
   std::vector< std::vector<double> > emptyWorkspace (2,std::vector<double> (2,0.0));
   workspace_ = emptyWorkspace;
-  workspace_[0][0]=-0.151;
-  workspace_[0][1]=0.151;
-  workspace_[1][0]=-0.151;
-  workspace_[1][1]=0.151;
+  workspace_[0][0]=WORKSPACE[0][0];
+  workspace_[0][1]=WORKSPACE[0][1];
+  workspace_[1][0]=WORKSPACE[1][0];
+  workspace_[1][1]=WORKSPACE[1][1];
 
   // setup the state list, model-parameter pairs, and log probability list
   setupUtils::setupStates(filter_.stateList_,modelParamPairs_); //initialize states and model parameter pairs
@@ -97,8 +97,9 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
   }
   */
   setupUtils::validateStates(filter_.stateList_,workspace_); // validate states
-  setupUtils::validateActions(actionList_,workspace_); // validate actions
-
+  if (!RELATIVE){
+    setupUtils::validateActions(actionList_,workspace_); // validate actions
+  }
   /*
   std::cout << "actionList_ size after: " << actionList_.size() << std::endl;
 
@@ -162,7 +163,17 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
   useSAS_ = true;
   if (useSAS_){
     bool overwriteCSV = true;
-    sasUtils::setupSAS(sasList_,filter_.stateList_,actionList_,overwriteCSV);
+    std::string fileName;
+    /*
+    if (RELATIVE){
+    fileName = "files/sasSaveRel.txt";
+    }
+    else{
+    fileName = "files/sasSaveAbs.txt";
+    }
+    */
+    fileName = "files/sasSaveRel.txt";
+    sasUtils::setupSAS(sasList_,filter_.stateList_,actionList_,overwriteCSV,fileName);
   }
 
   // print model probabilities before any action is taken
@@ -204,6 +215,10 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
   
   if(writeOutFile_){
     writeFileInitialData(); // write the initial data to the file
+  }
+
+  if(true){
+    writeFileStatesForMATLAB(); // write state file for visualization in MATLAB
   }
 
 }
@@ -445,30 +460,64 @@ void RealWorld::nextAction(){
   //actionSelection::chooseActionSimple(actionList_,step_,action_);
   int whichSelectionType = actionSelectionType_; // which action selection scheme should we use
 
-  if (whichSelectionType == 0){
-    std::cout << "Simple Action Selection:" << std::endl;
-    actionSelection::chooseActionSimple(actionList_,step_,action_);
-  }
-  else if (whichSelectionType == 1){
-    std::cout << "Random Action Selection:" << std::endl;
-    actionSelection::chooseActionRandom(actionList_,action_);
-  }
-  else if (whichSelectionType == 2){
-    std::cout << "Entropy Action Selection:" << std::endl;
-    if(useSAS_){
-      actionSelection::chooseActionLog(filter_,actionList_,action_,modelParamPairs_,sasList_);
+  if (RELATIVE){
+    // relative
+    std::cout << "Relative actions:" << std::endl;
+    if (whichSelectionType == 0){
+      std::cout << "Simple Action Selection:" << std::endl;
+      actionSelection::chooseActionSimpleRel(actionList_,step_,action_,poseInRbt_,workspace_);
     }
-    else{
-      actionSelection::chooseActionLog(filter_,actionList_,action_,modelParamPairs_);
+    else if (whichSelectionType == 1){
+      std::cout << "Random Action Selection:" << std::endl;
+      actionSelection::chooseActionRandomRel(actionList_,action_,poseInRbt_,workspace_);
+    }
+    else if (whichSelectionType == 2){
+      std::cout << "Entropy Action Selection:" << std::endl;
+      if(useSAS_){
+	actionSelection::chooseActionLogRel(filter_,actionList_,action_,modelParamPairs_,sasList_,poseInRbt_,workspace_);
+      }
+      else{
+	actionSelection::chooseActionLogRel(filter_,actionList_,action_,modelParamPairs_,poseInRbt_,workspace_);
+      }
+    }
+    else if (whichSelectionType == 3){
+      std::cout << "OG Action Selection:" << std::endl;
+      if(useSAS_){
+	actionSelection::chooseActionOGRel(filter_,actionList_,action_,modelParamPairs_,sasList_,poseInRbt_,workspace_);
+      }
+      else{
+	actionSelection::chooseActionOGRel(filter_,actionList_,action_,modelParamPairs_,poseInRbt_,workspace_);
+      }
     }
   }
-  else if (whichSelectionType == 3){
-    std::cout << "OG Action Selection:" << std::endl;
-    if(useSAS_){
-      actionSelection::chooseActionOG(filter_,actionList_,action_,modelParamPairs_,sasList_);
+  else{
+    // Absolute
+    std::cout << "Absolute actions:" << std::endl;
+    if (whichSelectionType == 0){
+      std::cout << "Simple Action Selection:" << std::endl;
+      actionSelection::chooseActionSimple(actionList_,step_,action_);
     }
-    else{
-      actionSelection::chooseActionOG(filter_,actionList_,action_,modelParamPairs_);
+    else if (whichSelectionType == 1){
+      std::cout << "Random Action Selection:" << std::endl;
+      actionSelection::chooseActionRandom(actionList_,action_);
+    }
+    else if (whichSelectionType == 2){
+      std::cout << "Entropy Action Selection:" << std::endl;
+      if(useSAS_){
+	actionSelection::chooseActionLog(filter_,actionList_,action_,modelParamPairs_,sasList_);
+      }
+      else{
+	actionSelection::chooseActionLog(filter_,actionList_,action_,modelParamPairs_);
+      }
+    }
+    else if (whichSelectionType == 3){
+      std::cout << "OG Action Selection:" << std::endl;
+      if(useSAS_){
+	actionSelection::chooseActionOG(filter_,actionList_,action_,modelParamPairs_,sasList_);
+      }
+      else{
+	actionSelection::chooseActionOG(filter_,actionList_,action_,modelParamPairs_);
+      }
     }
   }
   std::cout << "\033[1;31mstep: \033[0m" << step_ << std::endl;
@@ -501,7 +550,8 @@ void RealWorld::runAction(){
 
     std::cout << "poseInRbt_:" << std::endl; // DELETE
     for (size_t i=0; i<poseInRbt_.size(); i++){
-      double X = gaussianNoise();
+      //double X = gaussianNoise(); remove the noise for a second
+      double X = 0.0;
       std::cout << "before: " << poseInRbt_[i] << std::endl; // DELETE
       poseInRbt_[i]+=X;
       std::cout << "noise: " << X << std::endl; // DELETE
@@ -620,6 +670,24 @@ void RealWorld::printModelParamProbs(std::vector<double> mpProbsLog){
 ////////////////////////////////////////////////////////////////////////////////
 //                             End Aux Section                                //
 ////////////////////////////////////////////////////////////////////////////////
+
+void RealWorld::writeFileStatesForMATLAB(){
+  // Write file to visualize states in MATLAB
+  std::ofstream stateFile;
+  std::string stateFileName = "files/stateFileForVisualization.txt";
+  stateFile.open(stateFileName.c_str());
+
+  std::vector<double> tempCartPosInRbt;
+  for(size_t i=0;i<filter_.stateList_.size();i++){
+    stateFile << filter_.stateList_[i].model;
+    tempCartPosInRbt = translator::translateStToRbt(filter_.stateList_[i]);
+    for(size_t j=0;j<tempCartPosInRbt.size();j++){
+      stateFile << "," << tempCartPosInRbt[j]; 
+    }
+    stateFile << ";\n";
+  }
+  stateFile.close();
+}
 
 void RealWorld::writeFileInitialData(){
   // Write different things depending on whether using the robot or not
@@ -869,7 +937,7 @@ int main(int argc, char* argv[])
     }
     else{
       int numExps = 10;
-      double conf = 0.9;
+      double conf = 0.7;
       std::vector<int> stepsNeededVect;
       for (size_t i=0;i<numExps;i++){
 	RealWorld world(modelNum,steps,writeOutFile,actionSelectionType,useRobot);
@@ -883,6 +951,10 @@ int main(int argc, char* argv[])
       std::cout << std::accumulate(stepsNeededVect.begin(),stepsNeededVect.end(),0.0)/numExps << std::endl;
     }
     std::cout << RELATIVE << std::endl;
+    std::cout << WORKSPACE[0][0] << std::endl;
+    std::cout << WORKSPACE[0][1] << std::endl;
+    std::cout << WORKSPACE[1][0] << std::endl;
+    std::cout << WORKSPACE[1][1] << std::endl;
   }
   return 1;
 }

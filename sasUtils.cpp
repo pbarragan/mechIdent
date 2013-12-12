@@ -52,9 +52,9 @@ void printShit(float input) {
   std::cout << std::endl;
 }
 
-void sasUtils::setupSAS(mapPairSVS& sasList,std::vector<stateStruct>& states, std::vector< std::vector<double> >& actions,bool overwriteCSV){
+void sasUtils::setupSAS(mapPairSVS& sasList,std::vector<stateStruct>& states, std::vector< std::vector<double> >& actions,bool overwriteCSV,std::string fileName){
   
-  std::string fileName = "files/sasSave.txt";
+  //std::string fileName = "files/sasSave.txt";
   if (sasUtils::readSASfromCSV(sasList,fileName)){
     std::cout << "Got the saved SAS data! Score!" << std::endl;
     // 1) Create a function that populates the SAS if it isn't
@@ -231,6 +231,18 @@ stateStruct sasUtils::getFromSAS(mapPairSVS& sasList,stateStruct& prevState, std
   // If that happens, it will throw an error.
   // map::at does not create a new element if one doesn't exist.
   // it will throw an out_of_range exception
+  /*
+  std::cout << "model: " << prevState.model << std::endl;
+  for (size_t i=0;i<prevState.params.size();i++){
+    std::cout << prevState.params[i] << ",";
+  }
+  std::cout << std::endl;
+  for (size_t i=0;i<prevState.vars.size();i++){
+    std::cout << prevState.vars[i] << ",";
+  }
+  std::cout << std::endl;
+  std::cout << action[0] << "," << action[1] << std::endl;
+  */
   return sasList.at(pairSV (prevState,action));
 }
 

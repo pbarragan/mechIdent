@@ -2,6 +2,8 @@
 //The entire filter is in log space
 #include <iostream> // for cout
 #include <fstream>
+#include <numeric> // TAKE THIS OUT
+#include <algorithm> // max_element
 
 #include "bayesFilter.h"
 #include "logUtils.h"
@@ -136,6 +138,27 @@ void BayesFilter::observationUpdateLog(std::vector<double>& logProbList, std::ve
 	//std::cout << "??????????????????????????????????????????? before normalization" << std::endl; // DELETE
 
 	//printLogProbList();
+	std::cout << "obs prob sum: " << std::accumulate(logProbList.begin(),logProbList.end(),0.0) << std::endl;
+
+	// figure out the max probability state at this point
+	std::vector<double>::iterator result;
+	result = std::max_element(logProbList.begin(),logProbList.end());
+	size_t position = std::distance(logProbList.begin(),result);
+	std::cout << "max probability state:" << std::endl;
+	stateStruct maxState = stateList_[position];
+	std::cout << "model: " << maxState.model << std::endl;
+	std::cout << "parameters: ";
+	for(size_t i=0;i<maxState.params.size();i++){
+	  std::cout << maxState.params[i] << ",";
+	}
+	std::cout << std::endl;
+	std::cout << "variables: ";
+	for(size_t i=0;i<maxState.vars.size();i++){
+	  std::cout << maxState.vars[i] << ",";
+	}
+	std::cout << std::endl;
+	std::cout << "probability: "<< *result << std::endl;
+	
 
 	logProbList = logUtils::normalizeVectorInLogSpace(logProbList);
 

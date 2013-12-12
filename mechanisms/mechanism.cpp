@@ -1,5 +1,7 @@
 // mechanism base class
 
+#include "../globalVars.h"
+
 #include "mechanism.h"
 
 #define _USE_MATH_DEFINES
@@ -108,7 +110,7 @@ void Mechanism::pdController(){
 
 stateStruct Mechanism::simulate(std::vector<double>& action){
   // set the necessary parameters from the startState
-  setGoalWithAction(action); // Virtual function: not defined in this file
+  setGoalWithAction(action); // Same for each mechanism: defined in this file
   // run iterations of the simulation to generate a new state
   // make sure dynamic world exists - allows fixed case - kind of a hack
   if (dynamicsWorld_){
@@ -151,16 +153,42 @@ std::vector<double> Mechanism::rbtToObs(std::vector<double>& rbt){
 
 // used to be virtual
 void Mechanism::setGoalWithAction(std::vector<double>& action){
-  // Action looks like:
-  // x,y in rbt space
+  if (RELATIVE){
+    // Action looks like:
+    // x,y in rbt space relative to hand
 
-  // Create an x,y,z vector in rbt
-  std::vector<double> tempActRbt = action;
-  tempActRbt.push_back(1.0); // set z_rbt to 1.0
+    // Create an x,y,z vector in rbt
+    std::vector<double> tempActRbt = action;
+    tempActRbt.push_back(0.0); // set z_rbt to 0.0 because it's relative
 
-  // Convert to sim and set
-  std::vector<double> tempActSim = convCoordsRbtToSim(tempActRbt);
-  goalPose_ = convStdVectToBtVect3(tempActSim);
+    // Convert to sim and set
+
+    // check how to add up btvect3
+    std::vector<double> tempActSim = convCoordsRbtToSim(tempActRbt);
+    //goalPose_ = startPose_; // set the goal pose to the start pose
+    goalPose_ = pose_; // set the goal pose to the current pose
+    goalPose_ += convStdVectToBtVect3(tempActSim); // add the relative action
+    std::cout << "relative" << std::endl;
+    std::cout << "x: " << goalPose_.getX() << std::endl;
+    std::cout << "y: " << goalPose_.getY() << std::endl;
+    std::cout << "z: " << goalPose_.getZ() << std::endl;
+  }
+  else {
+    // Action looks like:
+    // x,y in rbt space
+    
+    // Create an x,y,z vector in rbt
+    std::vector<double> tempActRbt = action;
+    tempActRbt.push_back(1.0); // set z_rbt to 1.0
+    
+    // Convert to sim and set
+    std::vector<double> tempActSim = convCoordsRbtToSim(tempActRbt);
+    goalPose_ = convStdVectToBtVect3(tempActSim);
+    std::cout << "absolute" << std::endl;
+    std::cout << "x: " << goalPose_.getX() << std::endl;
+    std::cout << "y: " << goalPose_.getY() << std::endl;
+    std::cout << "z: " << goalPose_.getZ() << std::endl;
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

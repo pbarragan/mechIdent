@@ -16,7 +16,7 @@ namespace sasUtils {
   
   mapPairSVS populateSAS(std::vector<stateStruct>& states, std::vector< std::vector<double> >& actions);
 
-  void setupSAS(mapPairSVS& sasList,std::vector<stateStruct>& states, std::vector< std::vector<double> >& actions,bool overwriteCSV);
+  void setupSAS(mapPairSVS& sasList,std::vector<stateStruct>& states, std::vector< std::vector<double> >& actions,bool overwriteCSV,std::string fileName);
 		
   bool isMatch(mapPairSVS& sasList, std::vector<stateStruct>& states, std::vector< std::vector<double> >& actions);
 
