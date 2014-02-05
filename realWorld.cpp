@@ -119,7 +119,10 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
   */
 
   setupUtils::setupModelParamPairs(filter_.stateList_,modelParamPairs_,numVarTypesPerStateType_); // reinitialize modelParamPairs_ after cutting out states
-  setupUtils::setupUniformPrior(filter_.stateList_,filter_.logProbList_,modelParamPairs_); // initliaze probabilities with a uniform distribution
+
+  //setupUtils::setupUniformPrior(filter_.stateList_,filter_.logProbList_,modelParamPairs_); // initliaze probabilities with a uniform distribution
+
+  setupUtils::setupGaussianPrior(filter_.stateList_,filter_.logProbList_); // initliaze probabilities with a gaussian distribution
 
   std::cout << "stateList_ size: " << filter_.stateList_.size() << std::endl; // Print number of states
 
@@ -690,6 +693,9 @@ void RealWorld::writeFileStatesForMATLAB(){
 }
 
 void RealWorld::writeFileInitialData(){
+  // Write action type
+  outFile_ << "Action type:\n";
+  outFile_ << RELATIVE << "\n";
   // Write different things depending on whether using the robot or not
   if (!useRobot_){
     // use simulation
@@ -744,7 +750,19 @@ void RealWorld::writeFileInitialData(){
     outFile_ << "\n";
   }
   //
-  outFile_ << "Num Actioins:\n";
+  outFile_ << "States in Rbt:\n";
+  //
+  std::vector<double> tempCartPosInRbt;
+  for(size_t i=0;i<filter_.stateList_.size();i++){
+    outFile_ << filter_.stateList_[i].model;
+    tempCartPosInRbt = translator::translateStToRbt(filter_.stateList_[i]);
+    for(size_t j=0;j<tempCartPosInRbt.size();j++){
+      outFile_ << "," << tempCartPosInRbt[j]; 
+    }
+    outFile_ << "\n";
+  }
+  //
+  outFile_ << "Num Actions:\n";
   outFile_ << actionList_.size() << "\n";	
   //
   outFile_ << "Actions:\n";

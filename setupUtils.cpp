@@ -240,37 +240,45 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
 
   //setup model parameter pair lists for each model
   std::vector<stateStruct> modelParamPairs0;
+  /*
   std::vector<stateStruct> modelParamPairs1;
   std::vector<stateStruct> modelParamPairs2;
   std::vector<stateStruct> modelParamPairs3;
   std::vector<stateStruct> modelParamPairs4;
   std::vector<stateStruct> modelParamPairs5;
+  */
 
   //Set up a state list for each model. 
   //Then stick together all of the lists into one master list. 
 
   std::vector<stateStruct> stateList0 = setupModel0(modelParamPairs0);
+  /*
   std::vector<stateStruct> stateList1 = setupModel1(modelParamPairs1);
   std::vector<stateStruct> stateList2 = setupModel2(modelParamPairs2);
   std::vector<stateStruct> stateList3 = setupModel3(modelParamPairs3);
   std::vector<stateStruct> stateList4 = setupModel4(modelParamPairs4);
   std::vector<stateStruct> stateList5 = setupModel5(modelParamPairs5);
+  */
 
   //populate the modelParamPairs vector
   modelParamPairs = modelParamPairs0;
+  /*
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs1.begin(), modelParamPairs1.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs2.begin(), modelParamPairs2.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs3.begin(), modelParamPairs3.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs4.begin(), modelParamPairs4.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs5.begin(), modelParamPairs5.end());
+  */
 
-  //populate the modelParamPairs vector
+  //populate the stateList vector
   stateList = stateList0;
+  /*
   stateList.insert(stateList.end(), stateList1.begin(), stateList1.end());
   stateList.insert(stateList.end(), stateList2.begin(), stateList2.end());
   stateList.insert(stateList.end(), stateList3.begin(), stateList3.end());
   stateList.insert(stateList.end(), stateList4.begin(), stateList4.end());
   stateList.insert(stateList.end(), stateList5.begin(), stateList5.end());
+  */
 }
 
 void setupUtils::setupModelParamPairs(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs,std::vector<int>& numVarTypesPerStateType){
@@ -347,11 +355,11 @@ void setupUtils::setupUniformPrior(std::vector<stateStruct>& stateList,std::vect
 
 }
 
-//Overloaded - this one has the model-parameter pairs passed to it
-//setup a uniform prior over model and parameter pairs
+// Overloaded - this one has the model-parameter pairs passed to it
+// setup a uniform prior over model and parameter pairs
 void setupUtils::setupUniformPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs){
-  //1. Count up how many times certain instances occur
-  //A state type is a model-parameter pair
+  // 1. Count up how many times certain instances occur
+  // A state type is a model-parameter pair
   std::vector<int> numVarTypesPerStateType (modelParamPairs.size(),0); //how many different variable sets per model-parameter pair
   for (size_t i=0; i<stateList.size(); i++){
     for (size_t j=0; j<modelParamPairs.size(); j++){
@@ -362,14 +370,14 @@ void setupUtils::setupUniformPrior(std::vector<stateStruct>& stateList,std::vect
     }
   }
 
-  //2. Figure out how much probability to assign to each instance
+  // 2. Figure out how much probability to assign to each instance
   double probPerStateType = (1.0/modelParamPairs.size());
   std::vector<double> probAmounts; //how much probability to assign per var type per state type. Same order as above.
   for (size_t i=0; i<modelParamPairs.size(); i++){
     probAmounts.push_back(probPerStateType/numVarTypesPerStateType[i]);
   }
 
-  //3. Assing the probability to the right instances
+  // 3. Assing the probability to the right instances
   std::vector<double> expProbList; //exponatiated probabilities
   for (size_t i=0; i<stateList.size(); i++){
     for (size_t j=0; j<modelParamPairs.size(); j++){
@@ -379,13 +387,86 @@ void setupUtils::setupUniformPrior(std::vector<stateStruct>& stateList,std::vect
     }
   }
 
-  //4. Convert probabilities to log form
-  probList.clear(); //make sure this bad boy is empty
+  // 4. Convert probabilities to log form
+  probList.clear(); // make sure this bad boy is empty
   for (size_t i = 0; i<expProbList.size(); i++){
     probList.push_back(logUtils::safe_log(expProbList[i]));
   }
 
 }
+
+// This was here when you only had one model. You updated it on 2/5/14
+/*
+// setup a gaussian prior over cartesian positions of states
+void setupUtils::setupGaussianPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList){
+
+  probList.clear(); // make sure this bad boy is empty
+
+  // holders
+  std::vector<double> tempCartPosInRbt;
+  std::vector<double> assumedCartStartPosInRbt (2,0.0); // this is just your basic assumption. that the robot starts it's gripper at 0,0.
+
+  // Define covariance matrices
+  // Might want to change this later so that it's the same as something that makes sense already
+  // set additional variables
+  // create inverse matrix (hard coded)
+  //double invObsArray[] = {100.0,0.0,0.0,100.0}; // change
+  double invObsArray[] = {10000.0,0.0,0.0,10000.0};
+
+  std::vector<double> invObsCovMat;
+  invObsCovMat.assign(invObsArray, invObsArray + sizeof(invObsArray)/sizeof(double));
+  
+  // create determinant (hard coded)
+  //double detCovMat = 0.0001; // change
+  double detCovMat = 0.00000001;
+
+  for (size_t i=0;i<stateList.size();i++){
+    tempCartPosInRbt = translator::translateStToRbt(stateList[i]);
+    probList.push_back(logUtils::evaluteLogMVG(tempCartPosInRbt,assumedCartStartPosInRbt,invObsCovMat,detCovMat));
+  }
+
+  // probList is not normalized because of the discretization
+  // normalize
+  probList = logUtils::normalizeVectorInLogSpace(probList);
+
+}
+*/
+
+// This needs to be updated
+// setup a gaussian prior over cartesian positions of states
+void setupUtils::setupGaussianPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList){
+
+  probList.clear(); // make sure this bad boy is empty
+
+  // holders
+  std::vector<double> tempCartPosInRbt;
+  std::vector<double> assumedCartStartPosInRbt (2,0.0); // this is just your basic assumption. that the robot starts it's gripper at 0,0.
+
+  // Define covariance matrices
+  // Might want to change this later so that it's the same as something that makes sense already
+  // set additional variables
+  // create inverse matrix (hard coded)
+  //double invObsArray[] = {100.0,0.0,0.0,100.0}; // change
+  double invObsArray[] = {10000.0,0.0,0.0,10000.0};
+
+  std::vector<double> invObsCovMat;
+  invObsCovMat.assign(invObsArray, invObsArray + sizeof(invObsArray)/sizeof(double));
+  
+  // create determinant (hard coded)
+  //double detCovMat = 0.0001; // change
+  double detCovMat = 0.00000001;
+
+  for (size_t i=0;i<stateList.size();i++){
+    tempCartPosInRbt = translator::translateStToRbt(stateList[i]);
+    probList.push_back(logUtils::evaluteLogMVG(tempCartPosInRbt,assumedCartStartPosInRbt,invObsCovMat,detCovMat));
+  }
+
+  // probList is not normalized because of the discretization
+  // normalize
+  probList = logUtils::normalizeVectorInLogSpace(probList);
+
+}
+
 
 //Create the list of actions
 void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){

@@ -10,18 +10,21 @@ double filterModels::logProbState(stateStruct sampleState, stateStruct meanState
   //sampleState is the sample vector. meanState is the mean vector. This just drops a gaussian at the meanState with a constant covariance from the class.	
   if (meanState.model==sampleState.model && meanState.params==sampleState.params){
     //Move this outside later maybe
-    double transArray[] = {0.0001,0.0,0.0,0.0001};
+    double transArray[] = {0.0001,0.0,0.0,0.0001}; // change
+    //double transArray[] = {0.01,0.0,0.0,0.01};
     std::vector<double> transCovMat;
     transCovMat.assign(transArray, transArray + sizeof(transArray)/sizeof(double));
     
     // set additional variables
     // create inverse matrix (hard coded)
-    double invTransArray[] = {10000.0,0.0,0.0,10000.0};
+    double invTransArray[] = {10000.0,0.0,0.0,10000.0}; // change
+    //double invTransArray[] = {100.0,0.0,0.0,100.0};
     std::vector<double> invTransCovMat;
     invTransCovMat.assign(invTransArray, invTransArray + sizeof(invTransArray)/sizeof(double));
 
     // create determinant (hard coded)
-    double detCovMat = 0.00000001;
+    double detCovMat = 0.00000001; // change
+    //double detCovMat = 0.0001;
 
     //translate to the observation space which should be a vector directly comparable with another
     std::vector<double> sampleStateInObs = translator::translateStToObs(sampleState);
@@ -55,18 +58,23 @@ double filterModels::logProbState(stateStruct sampleState, stateStruct meanState
 
 double filterModels::logProbObs(std::vector<double> obs, stateStruct state){
   //Move this outside later maybe
-  double obsArray[] = {0.01,0.0,0.0,0.01};
+  //double obsArray[] = {0.01,0.0,0.0,0.01}; // change
+  double obsArray[] = {0.0001,0.0,0.0,0.0001};
+
   std::vector<double> obsCovMat;
   obsCovMat.assign(obsArray, obsArray + sizeof(obsArray)/sizeof(double));
 
   // set additional variables
   // create inverse matrix (hard coded)
-  double invObsArray[] = {100.0,0.0,0.0,100.0};
+  //double invObsArray[] = {100.0,0.0,0.0,100.0}; // change
+  double invObsArray[] = {10000.0,0.0,0.0,10000.0};
+
   std::vector<double> invObsCovMat;
   invObsCovMat.assign(invObsArray, invObsArray + sizeof(invObsArray)/sizeof(double));
   
   // create determinant (hard coded)
-  double detCovMat = 0.0001;
+  //double detCovMat = 0.0001; // change
+  double detCovMat = 0.00000001;
 
   //obs is the sample vector. state is the mean vector. This just drops a gaussian at the state with a constant covariance from the class.
   //Obs is already translated to the observation space which should be a vector directly comparable with another

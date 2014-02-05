@@ -21,6 +21,9 @@ namespace setupUtils {
   void setupUniformPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList);
   void setupUniformPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs);
 
+  void setupGaussianPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList);
+
+
   void setupActions(std::vector< std::vector<double> >& actionList);
   
   void validateStates(std::vector<stateStruct>& stateList,std::vector< std::vector<double> >& workspace);
