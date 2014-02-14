@@ -1,0 +1,54 @@
+#include <vector>
+#include <iostream>
+#include "logUtils.h"
+
+int main(){
+  //Move this outside later maybe
+  double transArray[] = {0.0001,0.0,0.0,0.0001};
+  std::vector<double> transCovMat;
+  transCovMat.assign(transArray, transArray + sizeof(transArray)/sizeof(double));
+  
+  // set additional variables
+  // create inverse matrix (hard coded)
+  double invTransArray[] = {10000.0,0.0,0.0,10000.0};
+  std::vector<double> invTransCovMat;
+  invTransCovMat.assign(invTransArray, invTransArray + sizeof(invTransArray)/sizeof(double));
+  
+  // create determinant (hard coded)
+  double detCovMat = 0.00000001;
+  
+  
+  //Move this outside later maybe
+  double obsArray[] = {0.01,0.0,0.0,0.01};
+  std::vector<double> obsCovMat;
+  obsCovMat.assign(obsArray, obsArray + sizeof(obsArray)/sizeof(double));
+
+  // set additional variables
+  // create inverse matrix (hard coded)
+  double invObsArray[] = {100.0,0.0,0.0,100.0};
+  std::vector<double> invObsCovMat;
+  invObsCovMat.assign(invObsArray, invObsArray + sizeof(invObsArray)/sizeof(double));
+  
+  // create determinant (hard coded)
+  double detCovMatO = 0.0001;
+
+  std::vector<double> sampleState (2,0.3);
+  std::vector<double> meanState (2,0.1);
+
+  double hold = logUtils::evaluteLogMVG(sampleState,meanState,invTransCovMat,detCovMat);
+
+  double holdOld = logUtils::evaluteLogMVG(sampleState,meanState,transCovMat);
+
+  double hold2 = logUtils::evaluteLogMVG(sampleState,meanState,invObsCovMat,detCovMatO);
+
+  double hold2Old = logUtils::evaluteLogMVG(sampleState,meanState,obsCovMat);
+
+  std::cout << "hold: " << hold << std::endl;
+  std::cout << "holdOld: " << holdOld << std::endl;
+
+  std::cout << "hold2: " << hold2 << std::endl;
+  std::cout << "hold2Old: " << hold2Old << std::endl;
+
+
+  return 1;
+}

@@ -240,45 +240,37 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
 
   //setup model parameter pair lists for each model
   std::vector<stateStruct> modelParamPairs0;
-  /*
   std::vector<stateStruct> modelParamPairs1;
   std::vector<stateStruct> modelParamPairs2;
   std::vector<stateStruct> modelParamPairs3;
   std::vector<stateStruct> modelParamPairs4;
   std::vector<stateStruct> modelParamPairs5;
-  */
 
   //Set up a state list for each model. 
   //Then stick together all of the lists into one master list. 
 
   std::vector<stateStruct> stateList0 = setupModel0(modelParamPairs0);
-  /*
   std::vector<stateStruct> stateList1 = setupModel1(modelParamPairs1);
   std::vector<stateStruct> stateList2 = setupModel2(modelParamPairs2);
   std::vector<stateStruct> stateList3 = setupModel3(modelParamPairs3);
   std::vector<stateStruct> stateList4 = setupModel4(modelParamPairs4);
   std::vector<stateStruct> stateList5 = setupModel5(modelParamPairs5);
-  */
 
   //populate the modelParamPairs vector
   modelParamPairs = modelParamPairs0;
-  /*
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs1.begin(), modelParamPairs1.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs2.begin(), modelParamPairs2.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs3.begin(), modelParamPairs3.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs4.begin(), modelParamPairs4.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs5.begin(), modelParamPairs5.end());
-  */
 
   //populate the stateList vector
   stateList = stateList0;
-  /*
   stateList.insert(stateList.end(), stateList1.begin(), stateList1.end());
   stateList.insert(stateList.end(), stateList2.begin(), stateList2.end());
   stateList.insert(stateList.end(), stateList3.begin(), stateList3.end());
   stateList.insert(stateList.end(), stateList4.begin(), stateList4.end());
   stateList.insert(stateList.end(), stateList5.begin(), stateList5.end());
-  */
 }
 
 void setupUtils::setupModelParamPairs(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs,std::vector<int>& numVarTypesPerStateType){
@@ -432,10 +424,10 @@ void setupUtils::setupGaussianPrior(std::vector<stateStruct>& stateList,std::vec
 }
 */
 
-// This needs to be updated
+// Overloaded
 // setup a gaussian prior over cartesian positions of states
 void setupUtils::setupGaussianPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList){
-
+  // 0. Setup the Gaussian used to calculate the probabilities of each state.
   probList.clear(); // make sure this bad boy is empty
 
   // holders
@@ -456,20 +448,155 @@ void setupUtils::setupGaussianPrior(std::vector<stateStruct>& stateList,std::vec
   //double detCovMat = 0.0001; // change
   double detCovMat = 0.00000001;
 
-  for (size_t i=0;i<stateList.size();i++){
-    tempCartPosInRbt = translator::translateStToRbt(stateList[i]);
-    probList.push_back(logUtils::evaluteLogMVG(tempCartPosInRbt,assumedCartStartPosInRbt,invObsCovMat,detCovMat));
+  // 1. Count up how many times certain instances occur
+  // A state type is a model-parameter pair
+  std::vector<stateStruct> foundStateTypes; // how many different model-parameter pairs
+  std::vector<int> numVarTypesPerStateType; // how many different variable sets per model-parameter pair
+  std::vector<std::vector<double> > stateTypeProbLists; // a list of lists of probabilites of the foundStateTypes
+  bool addStateType;
+  for (size_t i=0; i<stateList.size(); i++){
+    addStateType = true;
+    for (size_t j=0; j<foundStateTypes.size(); j++){
+      if (stateList[i].model == foundStateTypes[j].model && stateList[i].params == foundStateTypes[j].params){
+	addStateType = false;
+	numVarTypesPerStateType[j]++;
+	// Calculate value from Gaussian distribution
+	tempCartPosInRbt = translator::translateStToRbt(stateList[i]);
+	stateTypeProbLists[j].push_back(logUtils::evaluteLogMVG(tempCartPosInRbt,assumedCartStartPosInRbt,invObsCovMat,detCovMat));
+	break; //the break assumes we didn't somehow add the same pair twice to the found list
+      }
+    }
+    if (addStateType){
+      foundStateTypes.push_back(stateList[i]);
+      numVarTypesPerStateType.push_back(1);
+      // Calculate value from Gaussian distribution
+      tempCartPosInRbt = translator::translateStToRbt(stateList[i]);
+      std::vector<double> tempProbVect;
+      tempProbVect.push_back(logUtils::evaluteLogMVG(tempCartPosInRbt,assumedCartStartPosInRbt,invObsCovMat,detCovMat));
+      stateTypeProbLists.push_back(tempProbVect);
+    }
   }
 
-  // probList is not normalized because of the discretization
-  // normalize
-  probList = logUtils::normalizeVectorInLogSpace(probList);
+  // 2. Normalize the vectors in stateTypeProbLists.
+  for (size_t i=0; i<stateTypeProbLists.size(); i++){
+    stateTypeProbLists[i] = logUtils::normalizeVectorInLogSpace(stateTypeProbLists[i]);
+  }
+
+  // 3. Figure out how much probability to assign to each model-param pair
+  double probPerStateType = logUtils::safe_log((1.0/foundStateTypes.size()));
+
+  std::cout << "hi" << std::endl;
+  for (size_t i=0; i<stateTypeProbLists.size(); i++){
+    std::cout << i << std::endl;
+    for (size_t j=0; j<stateTypeProbLists[i].size(); j++){
+      std::cout << stateTypeProbLists[i][j] << ",";
+    }
+    std::cout << std::endl;
+  }
+  // 4. Assign the probabilities to probList in the correct order.
+  // Also scale the probabilities (by adding) so the final distribution is a distribution
+  // (this assumes traversing stateList happens the same way every time. Which is probably true)
+  // This is FIFO
+  for (size_t i=0; i<stateList.size(); i++){
+    std::cout << i << std::endl;
+    for (size_t j=0; j<foundStateTypes.size(); j++){
+      if (stateList[i].model == foundStateTypes[j].model && stateList[i].params == foundStateTypes[j].params){
+	std::cout << "first" << std::endl;
+	std::cout << stateTypeProbLists[j][0] << std::endl;
+	std::cout << j << std::endl;
+	std::cout << probPerStateType << std::endl;
+	probList.push_back(stateTypeProbLists[j][0]+probPerStateType); // access the first probability for that model parameter type + scale probabilities
+	std::cout << "second" << std::endl;
+	stateTypeProbLists[j].erase(stateTypeProbLists[j].begin()); // erase the first element
+	break; // once you find the right type for a state, no need to keep iterating
+      }
+    }
+  }
+
+}
+
+// Overloaded - this one has the model-parameter pairs passed to it
+// setup a gaussian prior over cartesian positions of states
+void setupUtils::setupGaussianPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs){
+  // 0. Setup the Gaussian used to calculate the probabilities of each state.
+  probList.clear(); // make sure this bad boy is empty
+
+  // holders
+  std::vector<double> tempCartPosInRbt;
+  std::vector<double> assumedCartStartPosInRbt (2,0.0); // this is just your basic assumption. that the robot starts it's gripper at 0,0.
+
+  // Define covariance matrices
+  // Might want to change this later so that it's the same as something that makes sense already
+  // set additional variables
+  // create inverse matrix (hard coded)
+  //double invObsArray[] = {100.0,0.0,0.0,100.0}; // change
+  double invObsArray[] = {10000.0,0.0,0.0,10000.0};
+
+  std::vector<double> invObsCovMat;
+  invObsCovMat.assign(invObsArray, invObsArray + sizeof(invObsArray)/sizeof(double));
+  
+  // create determinant (hard coded)
+  //double detCovMat = 0.0001; // change
+  double detCovMat = 0.00000001;
+
+  // 1. Count up how many times certain instances occur
+  // A state type is a model-parameter pair
+  std::vector<int> numVarTypesPerStateType (modelParamPairs.size(),0); // how many different variable sets per model-parameter pair
+  std::vector<std::vector<double> > stateTypeProbLists (modelParamPairs.size(),std::vector<double>() ); // a list of lists of probabilites of the modelParamPairs
+  for (size_t i=0; i<stateList.size(); i++){
+    for (size_t j=0; j<modelParamPairs.size(); j++){
+      if (stateList[i].model == modelParamPairs[j].model && stateList[i].params == modelParamPairs[j].params){
+	numVarTypesPerStateType[j]++;
+	// Calculate value from Gaussian distribution
+	tempCartPosInRbt = translator::translateStToRbt(stateList[i]);
+	stateTypeProbLists[j].push_back(logUtils::evaluteLogMVG(tempCartPosInRbt,assumedCartStartPosInRbt,invObsCovMat,detCovMat));
+	break; //the break assumes we didn't somehow add the same pair twice to the found list
+      }
+    }
+  }
+
+  // 2. Normalize the vectors in stateTypeProbLists.
+  for (size_t i=0; i<stateTypeProbLists.size(); i++){
+    stateTypeProbLists[i] = logUtils::normalizeVectorInLogSpace(stateTypeProbLists[i]);
+  }
+
+  // 3. Figure out how much probability to assign to each model-param pair
+  double probPerStateType = logUtils::safe_log((1.0/modelParamPairs.size()));
+
+  std::cout << "hi" << std::endl;
+  for (size_t i=0; i<stateTypeProbLists.size(); i++){
+    std::cout << i << std::endl;
+    for (size_t j=0; j<stateTypeProbLists[i].size(); j++){
+      std::cout << stateTypeProbLists[i][j] << ",";
+    }
+    std::cout << std::endl;
+  }
+  // 4. Assign the probabilities to probList in the correct order.
+  // Also scale the probabilities (by adding) so the final distribution is a distribution
+  // (this assumes traversing stateList happens the same way every time. Which is probably true)
+  // This is FIFO
+  for (size_t i=0; i<stateList.size(); i++){
+    std::cout << i << std::endl;
+    for (size_t j=0; j<modelParamPairs.size(); j++){
+      if (stateList[i].model == modelParamPairs[j].model && stateList[i].params == modelParamPairs[j].params){
+	std::cout << "first" << std::endl;
+	std::cout << stateTypeProbLists[j][0] << std::endl;
+	std::cout << j << std::endl;
+	std::cout << probPerStateType << std::endl;
+	probList.push_back(stateTypeProbLists[j][0]+probPerStateType); // access the first probability for that model parameter type + scale probabilities
+	std::cout << "second" << std::endl;
+	stateTypeProbLists[j].erase(stateTypeProbLists[j].begin()); // erase the first element
+	break; // once you find the right type for a state, no need to keep iterating
+      }
+    }
+  }
 
 }
 
 
 //Create the list of actions
 void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
+  /*
   std::vector<double> action1;
   std::vector<double> action2;
   std::vector<double> action3;
@@ -492,8 +619,8 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
   actionList.push_back(action2);
   actionList.push_back(action3);
   actionList.push_back(action4);
-
-  /*
+  */
+  
   if(RELATIVE){
     //This is totally 2D
     // In a circle around the gripper
@@ -529,7 +656,7 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
     //setup for Actions
     actionList = dimsToList(dRA,dNA);
   }
-  */
+  
 }
 
 ////////////////////////////////////////////////////////////////////////////////

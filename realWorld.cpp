@@ -122,8 +122,7 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
 
   //setupUtils::setupUniformPrior(filter_.stateList_,filter_.logProbList_,modelParamPairs_); // initliaze probabilities with a uniform distribution
 
-  setupUtils::setupGaussianPrior(filter_.stateList_,filter_.logProbList_); // initliaze probabilities with a gaussian distribution
-
+  setupUtils::setupGaussianPrior(filter_.stateList_,filter_.logProbList_,modelParamPairs_); // initliaze probabilities with a gaussian distribution
   std::cout << "stateList_ size: " << filter_.stateList_.size() << std::endl; // Print number of states
 
   // setup either robot or simulator
@@ -167,15 +166,13 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
   if (useSAS_){
     bool overwriteCSV = true;
     std::string fileName;
-    /*
     if (RELATIVE){
     fileName = "files/sasSaveRel.txt";
     }
     else{
     fileName = "files/sasSaveAbs.txt";
     }
-    */
-    fileName = "files/sasSaveRel.txt";
+    //fileName = "files/sasSaveRel.txt";
     sasUtils::setupSAS(sasList_,filter_.stateList_,actionList_,overwriteCSV,fileName);
   }
 
@@ -553,8 +550,8 @@ void RealWorld::runAction(){
 
     std::cout << "poseInRbt_:" << std::endl; // DELETE
     for (size_t i=0; i<poseInRbt_.size(); i++){
-      //double X = gaussianNoise(); remove the noise for a second
-      double X = 0.0;
+      double X = gaussianNoise(); //remove the noise for a second
+      //double X = 0.0;
       std::cout << "before: " << poseInRbt_[i] << std::endl; // DELETE
       poseInRbt_[i]+=X;
       std::cout << "noise: " << X << std::endl; // DELETE
@@ -940,9 +937,9 @@ int main(int argc, char* argv[])
       timespec ts3;
       
       clock_gettime(CLOCK_REALTIME, &ts1); // get time before constructor
-      
+      std::cout << "hello" << std::endl;
       RealWorld world(modelNum,steps,writeOutFile,actionSelectionType,useRobot);
-      
+      std::cout << "didnt get here" << std::endl;
       clock_gettime(CLOCK_REALTIME, &ts2); // get time after constructor
       
       world.runWorld(steps);

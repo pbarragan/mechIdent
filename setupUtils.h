@@ -21,8 +21,9 @@ namespace setupUtils {
   void setupUniformPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList);
   void setupUniformPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs);
 
+  //overloaded
   void setupGaussianPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList);
-
+  void setupGaussianPrior(std::vector<stateStruct>& stateList,std::vector<double>& probList,std::vector<stateStruct>& modelParamPairs);
 
   void setupActions(std::vector< std::vector<double> >& actionList);
   
