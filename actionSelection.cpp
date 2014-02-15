@@ -60,20 +60,23 @@ void actionSelection::chooseActionLog(BayesFilter& filter,std::vector< std::vect
     avgEntropyList.push_back(eSum/entropyList.size());
 
     // DELETE
+    /*
     std::cout << "entropyList: ";
     for (size_t jj=0;jj<entropyList.size();jj++){
       std::cout << entropyList[jj] << ",";
     }
     std::cout << std::endl;
-
+    */
   }
   
   // DELETE
+  /*
   std::cout << "avgEntropyList: ";
   for (size_t jj=0;jj<avgEntropyList.size();jj++){
     std::cout << avgEntropyList[jj] << ",";
   }
   std::cout << std::endl;
+  */
 
   //Step 3: Choose the action which results in the lowest entropy updated belief
   std::vector<double>::iterator minAvgEntIt = std::min_element(avgEntropyList.begin(),avgEntropyList.end());
@@ -94,7 +97,7 @@ void actionSelection::chooseActionLog(BayesFilter& filter,std::vector< std::vect
   //Step 2: For each action, sample a state from the belief n times. Simulate this state with the action and get an observation. Update the belief with the action-observation pair. Calculate the entropy of the new belief. Average the entropies over the n samples.
   std::vector<double> avgEntropyList; //this is a list of average entropies, one for each action
   int nSamples = 4; //number of samples of the belief state per action
-  std::cout << "samples" << nSamples << std::endl;
+  //std::cout << "samples" << nSamples << std::endl;
   for (size_t i = 0; i<actionList.size(); i++){
     std::vector<double> entropyList; //this is per action
     for (size_t j = 0; j<nSamples; j++){
@@ -123,20 +126,23 @@ void actionSelection::chooseActionLog(BayesFilter& filter,std::vector< std::vect
     avgEntropyList.push_back(eSum/entropyList.size());
 
     // DELETE
+    /*
     std::cout << "entropyList: ";
     for (size_t jj=0;jj<entropyList.size();jj++){
       std::cout << entropyList[jj] << ",";
     }
     std::cout << std::endl;
-
+    */
   }
 
   // DELETE
+  /*
   std::cout << "avgEntropyList: ";
   for (size_t jj=0;jj<avgEntropyList.size();jj++){
     std::cout << avgEntropyList[jj] << ",";
   }
   std::cout << std::endl;
+  */
 
   //Step 3: Choose the action which results in the lowest entropy updated belief
   std::vector<double>::iterator minAvgEntIt = std::min_element(avgEntropyList.begin(),avgEntropyList.end());
@@ -179,8 +185,8 @@ void actionSelection::chooseActionOG(BayesFilter& filter,std::vector< std::vecto
     int firstModel = modelParamPairs[firstIndex].model;
     int secondModel = modelParamPairs[secondIndex].model;
 
-    std::cout << "First model: " << firstModel << std::endl;
-    std::cout << "Second model: " << secondModel << std::endl;
+    //std::cout << "First model: " << firstModel << std::endl;
+    //std::cout << "Second model: " << secondModel << std::endl;
     
     // Step 2: Figure out the maximum probability state for those models to simulate from 
     // (THIS IS IN LOG SPACE)
@@ -278,8 +284,8 @@ void actionSelection::chooseActionOG(BayesFilter& filter,std::vector< std::vecto
     int firstModel = modelParamPairs[firstIndex].model;
     int secondModel = modelParamPairs[secondIndex].model;
 
-    std::cout << "First model: " << firstModel << std::endl;
-    std::cout << "Second model: " << secondModel << std::endl;
+    //std::cout << "First model: " << firstModel << std::endl;
+    //std::cout << "Second model: " << secondModel << std::endl;
     
     // Step 2: Figure out the maximum probability state for those models to simulate from 
     // (THIS IS IN LOG SPACE)
@@ -323,7 +329,7 @@ void actionSelection::chooseActionOG(BayesFilter& filter,std::vector< std::vecto
     double currentDist = -2.0;
     std::vector<double> bestAction;
     
-    std::cout << "error is righhhhhhht here:" << std::endl;
+    //std::cout << "error is righhhhhhht here:" << std::endl;
 
     for (size_t i=0; i<actionList.size(); i++){
       tempFirstNextState = translator::stateTransition(firstState,actionList[i],sasList); // use SAS
@@ -336,7 +342,7 @@ void actionSelection::chooseActionOG(BayesFilter& filter,std::vector< std::vecto
       }
     }
 
-    std::cout << "def not here" << std::endl;
+    //std::cout << "def not here" << std::endl;
 
     //Step 5: Set the next action to do to the best action found
     action = bestAction;
@@ -415,20 +421,23 @@ void actionSelection::chooseActionLogRel(BayesFilter& filter,std::vector< std::v
     avgEntropyList.push_back(eSum/entropyList.size());
 
     // DELETE
+    /*
     std::cout << "entropyList: ";
     for (size_t jj=0;jj<entropyList.size();jj++){
       std::cout << entropyList[jj] << ",";
     }
     std::cout << std::endl;
-
+    */
   }
   
   // DELETE
+  /*
   std::cout << "avgEntropyList: ";
   for (size_t jj=0;jj<avgEntropyList.size();jj++){
     std::cout << avgEntropyList[jj] << ",";
   }
   std::cout << std::endl;
+  */
 
   //Step 3: Choose the action which results in the lowest entropy updated belief
   std::vector<double>::iterator minAvgEntIt = std::min_element(avgEntropyList.begin(),avgEntropyList.end());
@@ -454,7 +463,7 @@ void actionSelection::chooseActionLogRel(BayesFilter& filter,std::vector< std::v
   //Step 2: For each action, sample a state from the belief n times. Simulate this state with the action and get an observation. Update the belief with the action-observation pair. Calculate the entropy of the new belief. Average the entropies over the n samples.
   std::vector<double> avgEntropyList; //this is a list of average entropies, one for each action
   int nSamples = 4; //number of samples of the belief state per action
-  std::cout << "samples" << nSamples << std::endl;
+  //std::cout << "samples" << nSamples << std::endl;
   for (size_t i = 0; i<validRelActionList.size(); i++){
     std::vector<double> entropyList; //this is per action
     for (size_t j = 0; j<nSamples; j++){
@@ -483,20 +492,23 @@ void actionSelection::chooseActionLogRel(BayesFilter& filter,std::vector< std::v
     avgEntropyList.push_back(eSum/entropyList.size());
 
     // DELETE
+    /*
     std::cout << "entropyList: ";
     for (size_t jj=0;jj<entropyList.size();jj++){
       std::cout << entropyList[jj] << ",";
     }
     std::cout << std::endl;
-
+    */
   }
 
   // DELETE
+  /*
   std::cout << "avgEntropyList: ";
   for (size_t jj=0;jj<avgEntropyList.size();jj++){
     std::cout << avgEntropyList[jj] << ",";
   }
   std::cout << std::endl;
+  */
 
   //Step 3: Choose the action which results in the lowest entropy updated belief
   std::vector<double>::iterator minAvgEntIt = std::min_element(avgEntropyList.begin(),avgEntropyList.end());
@@ -543,8 +555,8 @@ void actionSelection::chooseActionOGRel(BayesFilter& filter,std::vector< std::ve
     int firstModel = modelParamPairs[firstIndex].model;
     int secondModel = modelParamPairs[secondIndex].model;
 
-    std::cout << "First model: " << firstModel << std::endl;
-    std::cout << "Second model: " << secondModel << std::endl;
+    //std::cout << "First model: " << firstModel << std::endl;
+    //std::cout << "Second model: " << secondModel << std::endl;
     
     // Step 2: Figure out the maximum probability state for those models to simulate from 
     // (THIS IS IN LOG SPACE)
@@ -646,8 +658,8 @@ void actionSelection::chooseActionOGRel(BayesFilter& filter,std::vector< std::ve
     int firstModel = modelParamPairs[firstIndex].model;
     int secondModel = modelParamPairs[secondIndex].model;
 
-    std::cout << "First model: " << firstModel << std::endl;
-    std::cout << "Second model: " << secondModel << std::endl;
+    //std::cout << "First model: " << firstModel << std::endl;
+    //std::cout << "Second model: " << secondModel << std::endl;
     
     // Step 2: Figure out the maximum probability state for those models to simulate from 
     // (THIS IS IN LOG SPACE)
@@ -691,7 +703,7 @@ void actionSelection::chooseActionOGRel(BayesFilter& filter,std::vector< std::ve
     double currentDist = -2.0;
     std::vector<double> bestAction;
     
-    std::cout << "error is righhhhhhht here:" << std::endl;
+    //std::cout << "error is righhhhhhht here:" << std::endl;
 
     for (size_t i=0; i<validRelActionList.size(); i++){
       tempFirstNextState = translator::stateTransition(firstState,validRelActionList[i],sasList); // use SAS
@@ -704,7 +716,7 @@ void actionSelection::chooseActionOGRel(BayesFilter& filter,std::vector< std::ve
       }
     }
 
-    std::cout << "def not here" << std::endl;
+    //std::cout << "def not here" << std::endl;
 
     //Step 5: Set the next action to do to the best action found
     action = bestAction;

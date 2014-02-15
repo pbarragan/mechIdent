@@ -139,8 +139,9 @@ void BayesFilter::observationUpdateLog(std::vector<double>& logProbList, std::ve
 
 	//printLogProbList();
 	//std::cout << "obs prob sum: " << std::accumulate(logProbList.begin(),logProbList.end(),0.0) << std::endl; // wrong
-	std::cout << "obs prob sum: " << logUtils::logSumExp(logProbList) << std::endl;
+	//std::cout << "obs prob sum: " << logUtils::logSumExp(logProbList) << std::endl;
 
+	/*
 	// figure out the max probability state at this point
 	std::vector<double>::iterator result;
 	result = std::max_element(logProbList.begin(),logProbList.end());
@@ -159,7 +160,7 @@ void BayesFilter::observationUpdateLog(std::vector<double>& logProbList, std::ve
 	}
 	std::cout << std::endl;
 	std::cout << "probability: "<< *result << std::endl;
-	
+	*/
 
 	logProbList = logUtils::normalizeVectorInLogSpace(logProbList);
 

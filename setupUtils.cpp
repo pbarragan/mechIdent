@@ -215,14 +215,14 @@ std::vector<stateStruct> setupUtils::setupModel5(std::vector<stateStruct>& model
   dNP[4] = 1;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = 0.01;
+  dRV[0][0] = 0.00; // used to be 0.01
   dRV[0][1] = 0.20;
-  dRV[1][0] = 0.01;
+  dRV[1][0] = 0.00; // used to be 0.01
   dRV[1][1] = 0.20;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 10;
-  dNV[1] = 8;
+  dNV[0] = 9; // used to be 10
+  dNV[1] = 9;
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -485,6 +485,7 @@ void setupUtils::setupGaussianPrior(std::vector<stateStruct>& stateList,std::vec
   // 3. Figure out how much probability to assign to each model-param pair
   double probPerStateType = logUtils::safe_log((1.0/foundStateTypes.size()));
 
+  /*
   std::cout << "hi" << std::endl;
   for (size_t i=0; i<stateTypeProbLists.size(); i++){
     std::cout << i << std::endl;
@@ -493,20 +494,24 @@ void setupUtils::setupGaussianPrior(std::vector<stateStruct>& stateList,std::vec
     }
     std::cout << std::endl;
   }
+  */
+
   // 4. Assign the probabilities to probList in the correct order.
   // Also scale the probabilities (by adding) so the final distribution is a distribution
   // (this assumes traversing stateList happens the same way every time. Which is probably true)
   // This is FIFO
   for (size_t i=0; i<stateList.size(); i++){
-    std::cout << i << std::endl;
+    //std::cout << i << std::endl;
     for (size_t j=0; j<foundStateTypes.size(); j++){
       if (stateList[i].model == foundStateTypes[j].model && stateList[i].params == foundStateTypes[j].params){
+	/*
 	std::cout << "first" << std::endl;
 	std::cout << stateTypeProbLists[j][0] << std::endl;
 	std::cout << j << std::endl;
 	std::cout << probPerStateType << std::endl;
+	*/
 	probList.push_back(stateTypeProbLists[j][0]+probPerStateType); // access the first probability for that model parameter type + scale probabilities
-	std::cout << "second" << std::endl;
+	//std::cout << "second" << std::endl;
 	stateTypeProbLists[j].erase(stateTypeProbLists[j].begin()); // erase the first element
 	break; // once you find the right type for a state, no need to keep iterating
       }
@@ -563,6 +568,7 @@ void setupUtils::setupGaussianPrior(std::vector<stateStruct>& stateList,std::vec
   // 3. Figure out how much probability to assign to each model-param pair
   double probPerStateType = logUtils::safe_log((1.0/modelParamPairs.size()));
 
+  /*
   std::cout << "hi" << std::endl;
   for (size_t i=0; i<stateTypeProbLists.size(); i++){
     std::cout << i << std::endl;
@@ -571,20 +577,24 @@ void setupUtils::setupGaussianPrior(std::vector<stateStruct>& stateList,std::vec
     }
     std::cout << std::endl;
   }
+  */
+
   // 4. Assign the probabilities to probList in the correct order.
   // Also scale the probabilities (by adding) so the final distribution is a distribution
   // (this assumes traversing stateList happens the same way every time. Which is probably true)
   // This is FIFO
   for (size_t i=0; i<stateList.size(); i++){
-    std::cout << i << std::endl;
+    //std::cout << i << std::endl;
     for (size_t j=0; j<modelParamPairs.size(); j++){
       if (stateList[i].model == modelParamPairs[j].model && stateList[i].params == modelParamPairs[j].params){
+	/*
 	std::cout << "first" << std::endl;
 	std::cout << stateTypeProbLists[j][0] << std::endl;
 	std::cout << j << std::endl;
 	std::cout << probPerStateType << std::endl;
+	*/
 	probList.push_back(stateTypeProbLists[j][0]+probPerStateType); // access the first probability for that model parameter type + scale probabilities
-	std::cout << "second" << std::endl;
+	//std::cout << "second" << std::endl;
 	stateTypeProbLists[j].erase(stateTypeProbLists[j].begin()); // erase the first element
 	break; // once you find the right type for a state, no need to keep iterating
       }

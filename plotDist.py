@@ -165,7 +165,10 @@ def get_data(fileName):
 #fileName = 'data/data0Wed_Feb_12_16_12_25_2014.txt' # full models
 #fileName = 'data/data0Wed_Feb_12_16_19_32_2014.txt' #full models, absolute
 #fileName = 'data/data0Wed_Feb_12_16_28_02_2014.txt' # full models, absolute, regular actions
-fileName = 'data/data0Thu_Feb_13_13_54_20_2014.txt' # full models, absolute, regular actions, noise, entropy action selection
+#fileName = 'data/data0Thu_Feb_13_13_54_20_2014.txt' # full models, absolute, regular actions, noise, entropy action selection
+#fileName = 'data/data0Fri_Feb_14_14_55_50_2014.txt' # full models, absolute, regular actions, noise, entropy action selection, new state space for L2
+fileName = 'data/data0Fri_Feb_14_15_02_45_2014.txt' # try again
+fileName = 'data/data0Fri_Feb_14_15_40_07_2014.txt' # try again again - final
 
 data, numSteps, numMPPairs, model, statesInRbt, logProbs, poses, actions, obs, actionType, numVarTypes = get_data(fileName)
 
@@ -278,9 +281,10 @@ for i in range(numSteps):
 
 pyplot.show()
 
+for b in range(len(statesInRbt)):
+    pyplot.plot(statesInRbt[b][0],statesInRbt[b][1],'o')
+    pyplot.show()
 
-pyplot.plot(statesInRbt[5][0],statesInRbt[5][1],'o')
-pyplot.show()
 
 '''
 #main

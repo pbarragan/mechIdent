@@ -534,6 +534,7 @@ void RealWorld::runAction(){
     // The simulation returns the nominal answer.
     // Noise should be added such that the "true" (nominal) position is unknown
 
+    /*
     std::cout << "------------------------------------------" << std::endl;
     std::cout << "model: " << tempState.model << std::endl;
     std::cout << "params: " << std::endl;
@@ -546,7 +547,7 @@ void RealWorld::runAction(){
       std::cout << tempState.vars[i] << ",";
     }
     std::cout << std::endl;
-
+    */
 
     std::cout << "poseInRbt_:" << std::endl; // DELETE
     for (size_t i=0; i<poseInRbt_.size(); i++){
@@ -937,9 +938,9 @@ int main(int argc, char* argv[])
       timespec ts3;
       
       clock_gettime(CLOCK_REALTIME, &ts1); // get time before constructor
-      std::cout << "hello" << std::endl;
+      //std::cout << "hello" << std::endl;
       RealWorld world(modelNum,steps,writeOutFile,actionSelectionType,useRobot);
-      std::cout << "didnt get here" << std::endl;
+      //std::cout << "didnt get here" << std::endl;
       clock_gettime(CLOCK_REALTIME, &ts2); // get time after constructor
       
       world.runWorld(steps);
