@@ -47,6 +47,12 @@ class RealWorld {
   void initMechPris();
   void initMechRevPrisL();
   void initMechPrisPrisL();
+
+  void initMechRev2();
+  void initMechPris2();
+  void initMechRevPrisL2();
+  void initMechPrisPrisL2();
+
   bool initializedNearZero();
   void updateFilter(std::vector<double> action,std::vector<double> obs);
   void nextAction();

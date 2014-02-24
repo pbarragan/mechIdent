@@ -148,6 +148,18 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
     case 5:
       initMechPrisPrisL();
       break;
+    case 6:
+      initMechRev2();
+      break;
+    case 7:
+      initMechPris2();
+      break;
+    case 8:
+      initMechRevPrisL2();
+      break;
+    case 9:
+      initMechPrisPrisL2();
+      break;
     }
   }
   else if (useRobot_){
@@ -304,9 +316,9 @@ void RealWorld::initMechRev(){
   stateStruct startState;
   startState.model = 2;
   std::vector<double> stateParams;
-  stateParams.push_back(0.3);
-  stateParams.push_back(0.3);
-  stateParams.push_back(0.42426);
+  stateParams.push_back(0.3111);
+  stateParams.push_back(0.3111);
+  stateParams.push_back(0.44);
   startState.params = stateParams;
   std::vector<double> stateVars;
   stateVars.push_back(-2.356);
@@ -336,9 +348,9 @@ void RealWorld::initMechPris(){
   stateStruct startState;
   startState.model = 3;
   std::vector<double> stateParams;
-  stateParams.push_back(-0.16);
-  stateParams.push_back(-0.16);
-  stateParams.push_back(0.7865);
+  stateParams.push_back(0.16);
+  stateParams.push_back(0.16);
+  stateParams.push_back(-2.3562);
   startState.params = stateParams;
   std::vector<double> stateVars;
   stateVars.push_back(0.22627);
@@ -428,6 +440,148 @@ void RealWorld::initMechPrisPrisL(){
 
 ////////////////////////////////////////////////////////////////////////////////
 //                            End Mechanism Section                           //
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//                           Extra Mechanism Section                          //
+////////////////////////////////////////////////////////////////////////////////
+
+void RealWorld::initMechRev2(){
+  // State looks like:
+  // Model: 6
+  // Params: x_pivot,y_pivot in rbt space, r
+  // Vars: theta in rbt space
+
+  std::cout << "Initializing a MechRev2 simulation in place of robot" << std::endl;
+
+  // create start state
+  stateStruct startState;
+  startState.model = 2;
+  std::vector<double> stateParams;
+  stateParams.push_back(-0.3111);
+  stateParams.push_back(-0.3111);
+  stateParams.push_back(0.44);
+  startState.params = stateParams;
+  std::vector<double> stateVars;
+  stateVars.push_back(0.7854);
+  startState.vars = stateVars;
+
+  // check if state is valid
+  if (translator::isStateValid(startState,workspace_)) std::cout << "Simulated robot start state is valid. Great job." << std::endl;
+  else std::cout << "\033[1;31mSimulated robot start state is NOT valid. This is going to be garbage. Garbage, I tell you!\033[0m" << std::endl;
+
+  // create mechanism
+  mechPtr_ = new MechRev();
+  mechPtr_->initialize(startState);  
+  startState_=startState;
+  // initialize robot pose
+  poseInRbt_ = mechPtr_->stToRbt(startState);
+}
+
+void RealWorld::initMechPris2(){
+  // State looks like:
+  // Model: 7
+  // Params: x_axis,y_axis,theta_axis in rbt space
+  // Vars: d
+
+  std::cout << "Initializing a MechPris2 simulation in place of robot" << std::endl;
+
+  // create start state
+  stateStruct startState;
+  startState.model = 3;
+  std::vector<double> stateParams;
+  stateParams.push_back(0.16);
+  stateParams.push_back(0.0);
+  stateParams.push_back(0.0);
+  startState.params = stateParams;
+  std::vector<double> stateVars;
+  stateVars.push_back(-0.16);
+  startState.vars = stateVars;
+
+  // check if state is valid
+  if (translator::isStateValid(startState,workspace_)) std::cout << "Simulated robot start state is valid. Great job." << std::endl;
+  else std::cout << "\033[1;31mSimulated robot start state is NOT valid. This is going to be garbage. Garbage, I tell you!\033[0m" << std::endl;
+
+  // create mechanism
+  mechPtr_ = new MechPris();
+  mechPtr_->initialize(startState);
+  startState_=startState;
+  // initialize robot pose
+  poseInRbt_ = mechPtr_->stToRbt(startState);
+}
+
+void RealWorld::initMechRevPrisL2(){
+  // State looks like:
+  // Model: 8
+  // Params: x_pivot,y_pivot in rbt space, r, theta_L in rbt space, d_L
+  // Vars: theta in rbt space, d
+
+  std::cout << "Initializing a MechRevPrisL2 simulation in place of robot" << std::endl;
+
+  // create start state
+  stateStruct startState;
+  startState.model = 4;
+  std::vector<double> stateParams;
+  stateParams.push_back(-0.27); // -0.6 // ICRA 2014 and Vid1 - -0.2
+  stateParams.push_back(0.0); // 0.0
+  stateParams.push_back(0.17); // 0.4 // ICRA 2014 and Vid1 - 0.1
+  stateParams.push_back(0.0); // 0.0 // ICRA 2014 and Vid1 - 0.0
+  stateParams.push_back(0.1); // 0.2
+  startState.params = stateParams;
+  std::vector<double> stateVars;
+  stateVars.push_back(0.0); // 0.0 // ICRA 2014 and Vid1 - 0.0
+  stateVars.push_back(0.10); // 0.20 // ICRA 2014 and Vid1 - 0.10
+  startState.vars = stateVars;
+
+  // check if state is valid
+  if (translator::isStateValid(startState,workspace_)) std::cout << "Simulated robot start state is valid. Great job." << std::endl;
+  else std::cout << "\033[1;31mSimulated robot start state is NOT valid. This is going to be garbage. Garbage, I tell you!\033[0m" << std::endl;
+
+  // create mechanism
+  mechPtr_ = new MechRevPrisL();
+  mechPtr_->initialize(startState);
+  startState_=startState;
+  // initialize robot pose
+  poseInRbt_ = mechPtr_->stToRbt(startState);
+}
+
+void RealWorld::initMechPrisPrisL2(){
+  // State looks like:
+  // Model: 9
+  // Params: x_axis2,y_axis2,theta_axis2 in rbt space, d_L2, d_L1
+  // Vars: d_2, d_1
+
+  std::cout << "Initializing a MechPrisPrisL2 simulation in place of robot" << std::endl;
+
+  // create start state
+  stateStruct startState;
+  startState.model = 5;
+  std::vector<double> stateParams;
+  stateParams.push_back(0.1);
+  stateParams.push_back(0.1);
+  stateParams.push_back(-3.14159);
+  stateParams.push_back(0.1);
+  stateParams.push_back(0.1);
+  startState.params = stateParams;
+  std::vector<double> stateVars;
+  stateVars.push_back(0.1);
+  stateVars.push_back(0.1);
+  startState.vars = stateVars;
+
+  // check if state is valid
+  if (translator::isStateValid(startState,workspace_)) std::cout << "Simulated robot start state is valid. Great job." << std::endl;
+  else std::cout << "\033[1;31mSimulated robot start state is NOT valid. This is going to be garbage. Garbage, I tell you!\033[0m" << std::endl;
+
+  // create mechanism
+  mechPtr_ = new MechPrisPrisL();
+  mechPtr_->initialize(startState);
+  startState_=startState;
+  // initialize robot pose
+  poseInRbt_ = mechPtr_->stToRbt(startState);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//                         End Extra Mechanism Section                        //
 ////////////////////////////////////////////////////////////////////////////////
 
 bool RealWorld::initializedNearZero(){
@@ -617,7 +771,7 @@ int RealWorld::runWorldToConf(int numSteps,double confidence){
     stepWorld();
     //filter_.printLogProbList();
     std::vector<double> mpProbsLog = modelUtils::calcModelParamProbLog(filter_.stateList_,filter_.logProbList_,modelParamPairs_);
-    printModelParamProbs(mpProbsLog);
+    //printModelParamProbs(mpProbsLog);
     if(writeOutFile_){
       writeFileStepData(); // write the step data to the file
     }
@@ -625,6 +779,7 @@ int RealWorld::runWorldToConf(int numSteps,double confidence){
     // check if you've reached the confidence level and exit if you have
     for (size_t j=0;j<mpProbsLog.size();j++){
       if (mpProbsLog[j]>=confidence){
+	std::cout << "\033[1;31mBest Guess: \033[0m" << j << std::endl;
 	end=true;
 	break;
       }
@@ -633,7 +788,7 @@ int RealWorld::runWorldToConf(int numSteps,double confidence){
       break;
     }
   }
-  return stepsNeeded;
+  return stepsNeeded+1;
   //outFile << "did this work\n";
 }
 
@@ -931,7 +1086,7 @@ int main(int argc, char* argv[])
 
     std::cout << "steps: " << steps << std::endl;
 
-    bool basic = true;
+    bool basic = false;
     if (basic){
       timespec ts1;
       timespec ts2;

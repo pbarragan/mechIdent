@@ -232,6 +232,169 @@ std::vector<stateStruct> setupUtils::setupModel5(std::vector<stateStruct>& model
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
+//                           Extra Model Section                              //
+////////////////////////////////////////////////////////////////////////////////
+
+std::vector<stateStruct> setupUtils::setupModel6(std::vector<stateStruct>& modelParamPairs){  
+  // Model 2 is the revolute model
+  // State looks like:
+  // Model: 2
+  // Params: x_pivot,y_pivot in rbt space, r
+  // Vars: theta in rbt space
+  int modelNum = 2;
+  int paramNum = 3; //how many parameters
+  int varNum = 1; //how many variables
+
+  //Dimension Ranges for Params
+  std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
+  dRP[0][0] = -0.3111; // ICRA 2014 - 0.3
+  dRP[0][1] = -0.3111; // ICRA 2014 - 0.3
+  dRP[1][0] = -0.3111; // ICRA 2014 - 0.3
+  dRP[1][1] = -0.3111; // ICRA 2014 - 0.3
+  dRP[2][0] = 0.44; // ICRA 2014 - 0.3
+  dRP[2][1] = 0.44; // ICRA 2014 - 0.3
+  //Dimension Numbers for Params
+  std::vector<int> dNP (paramNum, 0);
+  dNP[0] = 1;
+  dNP[1] = 1;
+  dNP[2] = 1;
+  //Dimension Ranges for Vars
+  std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
+  dRV[0][0] = -3.14;
+  dRV[0][1] = 3.14;
+  //Dimension Numbers for Vars
+  std::vector<int> dNV (varNum, 0);
+  dNV[0] = 100;
+
+  return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
+}
+
+std::vector<stateStruct> setupUtils::setupModel7(std::vector<stateStruct>& modelParamPairs){  
+  // Model 3 is the prismatic model
+  // State looks like:
+  // Model: 3
+  // Params: x_axis,y_axis,theta_axis in rbt space
+  // Vars: d
+  int modelNum = 3;
+  int paramNum = 3; //how many parameters
+  int varNum = 1; //how many variables
+
+  //Dimension Ranges for Params
+  std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
+  dRP[0][0] = 0.16; // ICRA 2014 - -0.16
+  dRP[0][1] = 0.16; // ICRA 2014 - -0.16
+  dRP[1][0] = 0.0; // ICRA 2014 - -0.16
+  dRP[1][1] = 0.0; // ICRA 2014 - -0.16
+  dRP[2][0] = 0.0; // ICRA 2014 - 0.7865 
+  dRP[2][1] = 0.0;  // ICRA 2014 - 0.7865
+  //Dimension Numbers for Params
+  std::vector<int> dNP (paramNum, 0);
+  dNP[0] = 1;
+  dNP[1] = 1;
+  dNP[2] = 1;
+  //Dimension Ranges for Vars
+  std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
+  dRV[0][0] = -0.45255;
+  dRV[0][1] = 0.45255;
+  //Dimension Numbers for Vars
+  std::vector<int> dNV (varNum, 0);
+  dNV[0] = 50;
+
+  return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
+}
+
+std::vector<stateStruct> setupUtils::setupModel8(std::vector<stateStruct>& modelParamPairs){  
+  // Model 4 is the revolute prismatic latch model
+  // State looks like:
+  // Model: 4
+  // Params: x_pivot,y_pivot in rbt space, r, theta_L in rbt space, d_L
+  // Vars: theta in rbt space, d
+  int modelNum = 4;
+  int paramNum = 5; //how many parameters
+  int varNum = 2; //how many variables
+
+  //Dimension Ranges for Params
+  std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
+  dRP[0][0] = -0.27; // ICRA 2014 and Vid1 - -0.2
+  dRP[0][1] = -0.27; // ICRA 2014 and Vid1 - -0.2
+  dRP[1][0] = 0.0;
+  dRP[1][1] = 0.0;
+  dRP[2][0] = 0.17; // ICRA 2014 and Vid1 - 0.1
+  dRP[2][1] = 0.17; // ICRA 2014 and Vid1 - 0.1
+  dRP[3][0] = 0.0; // ICRA 2014 and Vid1 - 0.0
+  dRP[3][1] = 0.0; // ICRA 2014 and Vid1 - 0.0
+  dRP[4][0] = 0.1;
+  dRP[4][1] = 0.1;
+  //Dimension Numbers for Params
+  std::vector<int> dNP (paramNum, 0);
+  dNP[0] = 1;
+  dNP[1] = 1;
+  dNP[2] = 1;
+  dNP[3] = 1;
+  dNP[4] = 1;
+  //Dimension Ranges for Vars
+  std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
+  dRV[0][0] = -3.14159; // ICRA 2014 and Vid1 - -1.57
+  dRV[0][1] = 3.14159; // ICRA 2014 and Vid1 - 1.57
+  dRV[1][0] = 0.0;
+  dRV[1][1] = 0.27; // ICRA 2014 and Vid1 - 0.2
+  //Dimension Numbers for Vars
+  std::vector<int> dNV (varNum, 0);
+  dNV[0] = 24; // ICRA 2014 and Vid1 - 12
+  dNV[1] = 10;
+
+  return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
+}
+
+std::vector<stateStruct> setupUtils::setupModel9(std::vector<stateStruct>& modelParamPairs){  
+  // Model 5 is the prismatic prismatic latch model
+  // State looks like:
+  // Model: 5
+  // Params: x_axis2,y_axis2,theta_axis2 in rbt space, d_L2, d_L1
+  // Vars: d_2, d_1
+  int modelNum = 5;
+  int paramNum = 5; //how many parameters
+  int varNum = 2; //how many variables
+
+  //Dimension Ranges for Params
+  std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
+  dRP[0][0] = 0.1;
+  dRP[0][1] = 0.1;
+  dRP[1][0] = 0.1;
+  dRP[1][1] = 0.1;
+  dRP[2][0] = -3.14159;
+  dRP[2][1] = -3.14159;
+  dRP[3][0] = 0.1;
+  dRP[3][1] = 0.1;
+  dRP[4][0] = 0.1;
+  dRP[4][1] = 0.1;
+  //Dimension Numbers for Params
+  std::vector<int> dNP (paramNum, 0);
+  dNP[0] = 1;
+  dNP[1] = 1;
+  dNP[2] = 1;
+  dNP[3] = 1;
+  dNP[4] = 1;
+  //Dimension Ranges for Vars
+  std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
+  dRV[0][0] = 0.00; // used to be 0.01
+  dRV[0][1] = 0.20;
+  dRV[1][0] = 0.00; // used to be 0.01
+  dRV[1][1] = 0.20;
+  //Dimension Numbers for Vars
+  std::vector<int> dNV (varNum, 0);
+  dNV[0] = 9; // used to be 10
+  dNV[1] = 9;
+
+  return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//                          End Extra Model Section                           //
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
 //                              Setup Section                                 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -246,6 +409,12 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
   std::vector<stateStruct> modelParamPairs4;
   std::vector<stateStruct> modelParamPairs5;
 
+  std::vector<stateStruct> modelParamPairs6;
+  std::vector<stateStruct> modelParamPairs7;
+  std::vector<stateStruct> modelParamPairs8;
+  std::vector<stateStruct> modelParamPairs9;
+
+
   //Set up a state list for each model. 
   //Then stick together all of the lists into one master list. 
 
@@ -256,6 +425,12 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
   std::vector<stateStruct> stateList4 = setupModel4(modelParamPairs4);
   std::vector<stateStruct> stateList5 = setupModel5(modelParamPairs5);
 
+  std::vector<stateStruct> stateList6 = setupModel6(modelParamPairs6);
+  std::vector<stateStruct> stateList7 = setupModel7(modelParamPairs7);
+  std::vector<stateStruct> stateList8 = setupModel8(modelParamPairs8);
+  std::vector<stateStruct> stateList9 = setupModel9(modelParamPairs9);
+
+
   //populate the modelParamPairs vector
   modelParamPairs = modelParamPairs0;
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs1.begin(), modelParamPairs1.end());
@@ -264,6 +439,11 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs4.begin(), modelParamPairs4.end());
   modelParamPairs.insert(modelParamPairs.end(), modelParamPairs5.begin(), modelParamPairs5.end());
 
+  modelParamPairs.insert(modelParamPairs.end(), modelParamPairs6.begin(), modelParamPairs6.end());
+  modelParamPairs.insert(modelParamPairs.end(), modelParamPairs7.begin(), modelParamPairs7.end());
+  modelParamPairs.insert(modelParamPairs.end(), modelParamPairs8.begin(), modelParamPairs8.end());
+  modelParamPairs.insert(modelParamPairs.end(), modelParamPairs9.begin(), modelParamPairs9.end());
+
   //populate the stateList vector
   stateList = stateList0;
   stateList.insert(stateList.end(), stateList1.begin(), stateList1.end());
@@ -271,6 +451,12 @@ void setupUtils::setupStates(std::vector<stateStruct>& stateList,std::vector<sta
   stateList.insert(stateList.end(), stateList3.begin(), stateList3.end());
   stateList.insert(stateList.end(), stateList4.begin(), stateList4.end());
   stateList.insert(stateList.end(), stateList5.begin(), stateList5.end());
+
+  stateList.insert(stateList.end(), stateList6.begin(), stateList6.end());
+  stateList.insert(stateList.end(), stateList7.begin(), stateList7.end());
+  stateList.insert(stateList.end(), stateList8.begin(), stateList8.end());
+  stateList.insert(stateList.end(), stateList9.begin(), stateList9.end());
+
 }
 
 void setupUtils::setupModelParamPairs(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs,std::vector<int>& numVarTypesPerStateType){

@@ -1,5 +1,9 @@
 from matplotlib import pyplot
 import numpy
+from matplotlib import rc
+
+font = {'size':16}
+rc('font',**font)
 
 def skip_lines(f,lines):
     for i in range(lines):
@@ -41,9 +45,9 @@ def get_data(fileName):
 
 #main
 #just to get the numbers we want
-model = 0
+model = 2
 asTypes = ['simple','random','entropy']
-asNum = 2
+asNum = 1
 
 path = 'data/model'+str(model)+'/'+asTypes[asNum]+'/'
 print path
@@ -70,12 +74,14 @@ models = ['Free','Fixed','Rev','Pris','RevPrisL','PrisPrisL']
 for i in range(nMPPairs):
     pyplot.plot(inds,avgData[i,:],'-o')
 
-pyplot.title(models[m]+' - '+asTypes[asNum])
+#pyplot.title(models[m]+' - '+asTypes[asNum])
 pyplot.ylabel('Probability')
 pyplot.xlabel('Step')
+pyplot.ylim(0,1)
+pyplot.xlim(0,nSteps)
 pyplot.legend(models,loc=2)
-pyplot.show()
-
+#pyplot.show()
+pyplot.savefig('dataRewrite/m2rNew.png',bbox_inches='tight')
 
 ## data, numSteps, numMPPairs, model = get_data('data5Sun_Sep_15_17_10_07_2013.txt')
 

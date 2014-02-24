@@ -212,7 +212,7 @@ for modelNum in modelNums:
         pyplot.xlim(0,nSteps)
         pyplot.legend(models,loc=0)
         outFile = outPath+'m'+str(model)+str(asTypes[asNum][0])+'.png'
-        pyplot.savefig(outFile,bbox_inches='tight')
+        #pyplot.savefig(outFile,bbox_inches='tight')
         pyplot.clf()
 
 

@@ -13,6 +13,11 @@ namespace setupUtils {
   std::vector<stateStruct> setupModel4(std::vector<stateStruct>& modelParamPairs); 
   std::vector<stateStruct> setupModel5(std::vector<stateStruct>& modelParamPairs); 
 
+  std::vector<stateStruct> setupModel6(std::vector<stateStruct>& modelParamPairs); 
+  std::vector<stateStruct> setupModel7(std::vector<stateStruct>& modelParamPairs); 
+  std::vector<stateStruct> setupModel8(std::vector<stateStruct>& modelParamPairs); 
+  std::vector<stateStruct> setupModel9(std::vector<stateStruct>& modelParamPairs); 
+
   void setupStates(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs);
 
   void setupModelParamPairs(std::vector<stateStruct>& stateList,std::vector<stateStruct>& modelParamPairs,std::vector<int>& numVarTypesPerStateType);
