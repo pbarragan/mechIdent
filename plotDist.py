@@ -167,8 +167,19 @@ def get_data(fileName):
 #fileName = 'data/data0Wed_Feb_12_16_28_02_2014.txt' # full models, absolute, regular actions
 #fileName = 'data/data0Thu_Feb_13_13_54_20_2014.txt' # full models, absolute, regular actions, noise, entropy action selection
 #fileName = 'data/data0Fri_Feb_14_14_55_50_2014.txt' # full models, absolute, regular actions, noise, entropy action selection, new state space for L2
-fileName = 'data/data0Fri_Feb_14_15_02_45_2014.txt' # try again
-fileName = 'data/data0Fri_Feb_14_15_40_07_2014.txt' # try again again - final
+#fileName = 'data/data0Fri_Feb_14_15_02_45_2014.txt' # try again
+#fileName = 'data/data0Fri_Feb_14_15_40_07_2014.txt' # try again again - final
+
+# 2/24/14 - seeing if absolute and relative are the same:
+#fileName = 'data/data0Mon_Feb_24_12_37_16_2014.txt' # absolute
+#fileName = 'data/data0Mon_Feb_24_12_38_29_2014.txt' # relative
+
+# 2/26/14 - no noise
+#fileName = 'data/data0Wed_Feb_26_09_40_55_2014.txt' # absolute
+fileName = 'data/data0Wed_Feb_26_09_41_34_2014.txt' # relative
+
+# parameters
+plotLog = True
 
 data, numSteps, numMPPairs, model, statesInRbt, logProbs, poses, actions, obs, actionType, numVarTypes = get_data(fileName)
 
@@ -183,12 +194,12 @@ symList = ["o","s","*","D","^","v"]
 # model names list
 modelNames = ["Free","Fixed","Rev","Pris","L1","L2"]
 
-print probInds
-print numVarTypes
+#print probInds
+#print numVarTypes
 #print len(logProbs[0][numVarTypes[0]:numVarTypes[1]])
-print len(data)
-print 'max'
-print math.exp(max(logProbs[2]))
+#print len(data)
+#print 'max'
+#print math.exp(max(logProbs[2]))
 # plot parameters
 mSize = 10
 sSize = 50
@@ -211,7 +222,11 @@ if rows*columns<numSteps+1:
 # initial distribution
 pyplot.subplot(rows,columns,1)
 pyplot.subplots_adjust(left=0.05,right=1.0,bottom=0.15,top=0.95,wspace=0.2,hspace=0.4)
-colorNorm = colors.Normalize(0,1) # YOU NEED THIS SO STUFF DOESN'T EXPLODDDEEE
+
+if plotLog:
+    colorNorm = colors.Normalize(-100,0)
+else:
+    colorNorm = colors.Normalize(0,1) # YOU NEED THIS SO STUFF DOESN'T EXPLODDDEEE
 # without colorNorm, you can't do repeated plotting and get a useful
 # color answer becasue it normalize colors by default
 
@@ -224,12 +239,15 @@ for j in range(len(statesInRbt)):
     
 pyplot.scatter(xs,ys,c=logProbs[0],s=sSize)
 '''
-print 'hello'
-print len(statesInRbt[1][0])
+#print 'hello'
+#print len(statesInRbt[1][0])
 #print len(logProbs[0][numVarTypes[1]:numVarTypes[2]])
-print len(data[0])
+#print len(data[0])
 for j in range(len(statesInRbt)):
-    pyplot.scatter(statesInRbt[j][0],statesInRbt[j][1],c=[math.exp(x) for x in logProbs[0][probInds[j]:probInds[j+1]]],s=sSize,marker=symList[j],norm=colorNorm)
+    if plotLog:
+        pyplot.scatter(statesInRbt[j][0],statesInRbt[j][1],c=logProbs[0][probInds[j]:probInds[j+1]],s=sSize,marker=symList[j],norm=colorNorm)
+    else:
+        pyplot.scatter(statesInRbt[j][0],statesInRbt[j][1],c=[math.exp(x) for x in logProbs[0][probInds[j]:probInds[j+1]]],s=sSize,marker=symList[j],norm=colorNorm)
 
 # create the list for the legend
 legendList=[]
@@ -241,13 +259,20 @@ pyplot.colorbar()
 pyplot.plot(poses[0][0],poses[1][0],'ro',markersize=mSize)
 pyplot.title('initial - '+actionString)
 
+print actionString
+print 'Initialization:'
+print [d[0] for d in data]
+
 for i in range(numSteps):
     pyplot.subplot(rows,columns,i+2)
-    pyplot.clim(0,1)
+    #pyplot.clim(0,1)
 
     
     for j in range(len(statesInRbt)):
-        pyplot.scatter(statesInRbt[j][0],statesInRbt[j][1],c=[math.exp(x) for x in logProbs[i+1][probInds[j]:probInds[j+1]]],s=sSize,marker=symList[j],norm=colorNorm)
+        if plotLog:
+            pyplot.scatter(statesInRbt[j][0],statesInRbt[j][1],c=logProbs[i+1][probInds[j]:probInds[j+1]],s=sSize,marker=symList[j],norm=colorNorm)
+        else:
+            pyplot.scatter(statesInRbt[j][0],statesInRbt[j][1],c=[math.exp(x) for x in logProbs[i+1][probInds[j]:probInds[j+1]]],s=sSize,marker=symList[j],norm=colorNorm)
         pyplot.hold(True)
         #print 'max'+str(i)+str(j)
         #print math.exp(max(logProbs[i+1][probInds[j]:probInds[j+1]]))
@@ -268,23 +293,36 @@ for i in range(numSteps):
     
     pyplot.legend(legendList,bbox_to_anchor=(0., -.325, 1., .5), loc=3, ncol=2, mode="expand", borderaxespad=0.)
     pyplot.colorbar()
+    print 'step: '+str(i)
     pyplot.plot(poses[0][i],poses[1][i],'ro',markersize=mSize)
+    print 'start: '+str(poses[0][i])+','+str(poses[1][i])
     pyplot.plot(poses[0][i+1],poses[1][i+1],'bo',markersize=mSize)
+    print 'end: '+str(poses[0][i+1])+','+str(poses[1][i+1])
 
     if actionType == 0:
         pyplot.plot(actions[0][i],actions[1][i],'g^',markersize=mSize)
+        print 'action: '+str(actions[0][i])+','+str(actions[1][i])
     elif actionType == 1:
         pyplot.plot(actions[0][i]+poses[0][i],actions[1][i]+poses[1][i],'g^',markersize=mSize)
+        print 'action: '+str(actions[0][i])+','+str(actions[1][i])
+        print 'result: '+str(actions[0][i]+poses[0][i])+','+str(actions[1][i]+poses[1][i])
+
+
 
     pyplot.plot(obs[0][i],obs[1][i],'yx',markersize=mSize)
+    print 'obs: '+str(obs[0][i])+','+str(obs[1][i])
     pyplot.title('step'+str(i))
+
+    print 'Distribution:'
+    print [d[i+1] for d in data] 
 
 pyplot.show()
 
+'''
 for b in range(len(statesInRbt)):
     pyplot.plot(statesInRbt[b][0],statesInRbt[b][1],'o')
     pyplot.show()
-
+'''
 
 '''
 #main
