@@ -3,7 +3,7 @@
 
 #include <vector>
 
-const bool RELATIVE = false;
+const bool RELATIVE = true;
 const double WORKSPACE[2][2] = {{-0.151,0.151},{-0.151,0.151}};
 
 #endif // GLOBAL_VARS_H

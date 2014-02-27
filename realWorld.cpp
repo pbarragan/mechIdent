@@ -1086,7 +1086,7 @@ int main(int argc, char* argv[])
 
     std::cout << "steps: " << steps << std::endl;
 
-    bool basic = false;
+    bool basic = true;
     if (basic){
       timespec ts1;
       timespec ts2;
@@ -1121,11 +1121,11 @@ int main(int argc, char* argv[])
       std::cout << std::endl << "Avg:" << std::endl;
       std::cout << std::accumulate(stepsNeededVect.begin(),stepsNeededVect.end(),0.0)/numExps << std::endl;
     }
-    std::cout << RELATIVE << std::endl;
-    std::cout << WORKSPACE[0][0] << std::endl;
-    std::cout << WORKSPACE[0][1] << std::endl;
-    std::cout << WORKSPACE[1][0] << std::endl;
-    std::cout << WORKSPACE[1][1] << std::endl;
+    //std::cout << RELATIVE << std::endl;
+    //std::cout << WORKSPACE[0][0] << std::endl;
+    //std::cout << WORKSPACE[0][1] << std::endl;
+    //std::cout << WORKSPACE[1][0] << std::endl;
+    //std::cout << WORKSPACE[1][1] << std::endl;
   }
   return 1;
 }

@@ -818,6 +818,31 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
   */
   
   if(RELATIVE){
+    /*
+    std::vector<double> action1;
+    std::vector<double> action2;
+    std::vector<double> action3;
+    std::vector<double> action4;
+    
+    action1.push_back(0.06);
+    action1.push_back(0.06);
+    
+    action2.push_back(0.06);
+    action2.push_back(-0.06);
+    
+    action3.push_back(-0.06);
+    action3.push_back(-0.06);
+    
+    action4.push_back(-0.06);
+    action4.push_back(0.06);
+    
+    actionList.clear();
+    actionList.push_back(action1);
+    actionList.push_back(action2);
+    actionList.push_back(action3);
+    actionList.push_back(action4);
+    */
+    
     //This is totally 2D
     // In a circle around the gripper
     int numPts = 8; // how many points around the circle
@@ -833,8 +858,34 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
       tempAction.push_back(radius*sin(i*angleDelta)); // add y component
       actionList.push_back(tempAction);
     }
+    
   }
   else{
+    /*
+    std::vector<double> action1;
+    std::vector<double> action2;
+    std::vector<double> action3;
+    std::vector<double> action4;
+    
+    action1.push_back(0.06);
+    action1.push_back(0.06);
+    
+    action2.push_back(0.12);
+    action2.push_back(0.0);
+    
+    action3.push_back(0.06);
+    action3.push_back(-0.06);
+    
+    action4.push_back(0.0);
+    action4.push_back(0.0);
+    
+    actionList.clear();
+    actionList.push_back(action1);
+    actionList.push_back(action2);
+    actionList.push_back(action3);
+    actionList.push_back(action4);
+    */
+
     // how many dimensions for an action
     int actDimNum = 2;
     
@@ -851,6 +902,7 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
     
     //setup for Actions
     actionList = dimsToList(dRA,dNA);
+    
   }
   
 }
