@@ -176,7 +176,10 @@ def get_data(fileName):
 
 # 2/26/14 - no noise
 #fileName = 'data/data0Wed_Feb_26_09_40_55_2014.txt' # absolute
-fileName = 'data/data0Wed_Feb_26_09_41_34_2014.txt' # relative
+#fileName = 'data/data0Wed_Feb_26_09_41_34_2014.txt' # relative
+
+fileName = 'data/data0Thu_Feb_27_00_38_55_2014.txt' # random, relative
+fileName = 'data/data0Thu_Feb_27_00_40_47_2014.txt' # random, relative, 10 actions
 
 # parameters
 plotLog = True

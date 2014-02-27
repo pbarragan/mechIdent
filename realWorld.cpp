@@ -78,6 +78,7 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
 
   // setup the state list, model-parameter pairs, and log probability list
   setupUtils::setupStates(filter_.stateList_,modelParamPairs_); //initialize states and model parameter pairs
+
   setupUtils::setupActions(actionList_); //initialize actions
 
   /*
@@ -819,7 +820,7 @@ void RealWorld::printModelParamProbs(std::vector<double> mpProbsLog){
     }
     std::cout << std::endl;
     std::cout << "Prob: " << mpProbsLog[i] << std::endl;
-    std::cout << "Number Var Types: " << numVarTypesPerStateType_[i] << std::endl;;
+    std::cout << "Number Var Types: " << numVarTypesPerStateType_[i] << std::endl;
   }
 }
 
