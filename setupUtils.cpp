@@ -173,7 +173,7 @@ std::vector<stateStruct> setupUtils::setupModel4(std::vector<stateStruct>& model
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
   dRV[0][0] = -3.14159; // ICRA 2014 and Vid1 - -1.57
-  dRV[0][1] = 3.14159; // ICRA 2014 and Vid1 - 1.57
+  dRV[0][1] = 3.14159-0.26179938779; // ICRA 2014 and Vid1 - 1.57
   dRV[1][0] = 0.0;
   dRV[1][1] = 0.27; // ICRA 2014 and Vid1 - 0.2
   //Dimension Numbers for Vars
@@ -335,7 +335,7 @@ std::vector<stateStruct> setupUtils::setupModel8(std::vector<stateStruct>& model
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
   dRV[0][0] = -3.14159; // ICRA 2014 and Vid1 - -1.57
-  dRV[0][1] = 3.14159; // ICRA 2014 and Vid1 - 1.57
+  dRV[0][1] = 3.14159-0.26179938779; // ICRA 2014 and Vid1 - 1.57
   dRV[1][0] = 0.0;
   dRV[1][1] = 0.27; // ICRA 2014 and Vid1 - 0.2
   //Dimension Numbers for Vars
@@ -846,7 +846,7 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
     //This is totally 2D
     // In a circle around the gripper
     int numPts = 8; // how many points around the circle
-    double radius = 0.06; // radius of the points
+    double radius = 0.06; // radius of the points //used to be .06, big is .12
     double angleDelta = 2*M_PI/numPts;
 
     actionList.clear(); // clear anything in there

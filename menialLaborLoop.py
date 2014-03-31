@@ -2,7 +2,7 @@ import subprocess
 import os
 
 #model = 0
-models = [0,1,2,3,4,5]
+models = [0,1,2,3,4,5,6,7,8,9]
 trials = 10
 writeFile = 1
 #actionSelectionType = 2
@@ -18,7 +18,7 @@ for mNum in models:
     for asType in actionSelectionTypes:
         actionSelectionType = asType
 
-        path = 'dataRewrite/model'+str(model)+'/'+asTypes[actionSelectionType]+'/'
+        path = 'dataBig/model'+str(model)+'/'+asTypes[actionSelectionType]+'/'
 
         for i in range(numExperiments):
             print "experiment "+str(i)

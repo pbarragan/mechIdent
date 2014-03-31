@@ -9,8 +9,12 @@ def skip_lines(f,lines):
 
 def get_data(fileName):
 
+    numberOfModels = 10
     #hold the positions - FIX THIS LATER
-    statesInRbt = [[[],[]],[[],[]],[[],[]],[[],[]],[[],[]],[[],[]]]
+    #statesInRbt = [[[],[]],[[],[]],[[],[]],[[],[]],[[],[]],[[],[]]]
+    statesInRbt = []
+    #for i in range(numberOfModels):
+    #    statesInRbt.append([[],[]])
     #hold the log probs - FIX THIS LATER
     logProbs = [[]]
     
@@ -23,6 +27,7 @@ def get_data(fileName):
     skip_lines(f,5)
     numStates = int(f.readline())
     skip_lines(f,numStates*6+2)
+    currentModel = -1
     # here's where we need to get the cartesian version of the states
     for i in range(numStates):
         holdLine = f.readline()
@@ -31,8 +36,22 @@ def get_data(fileName):
         numList.append(int(valList[0]))
         numList.append(float(valList[1]))
         numList.append(float(valList[2]))
-        statesInRbt[numList[0]][0].append(numList[1])
-        statesInRbt[numList[0]][1].append(numList[2])
+        # this is a huge hack
+        # this will only work if we have models changing
+        # can't have two different model-params with the same model in a row
+        print currentModel
+        print numList[0]
+        
+        if currentModel == numList[0]:
+            print "true"
+            statesInRbt[-1][0].append(numList[1])
+            statesInRbt[-1][1].append(numList[2])
+        else:
+            statesInRbt.append([[],[]])
+            currentModel = numList[0]
+            statesInRbt[-1][0].append(numList[1])
+            statesInRbt[-1][1].append(numList[2])
+
     skip_lines(f,1)  
     numActions = int(f.readline())
     skip_lines(f,numActions+2)
@@ -178,8 +197,11 @@ def get_data(fileName):
 #fileName = 'data/data0Wed_Feb_26_09_40_55_2014.txt' # absolute
 #fileName = 'data/data0Wed_Feb_26_09_41_34_2014.txt' # relative
 
-fileName = 'data/data0Thu_Feb_27_00_38_55_2014.txt' # random, relative
-fileName = 'data/data0Thu_Feb_27_00_40_47_2014.txt' # random, relative, 10 actions
+#fileName = 'data/data0Thu_Feb_27_00_38_55_2014.txt' # random, relative
+#fileName = 'data/data0Thu_Feb_27_00_40_47_2014.txt' # random, relative, 10 actions
+
+fileName = 'dataBig/model0/entropy/data0_0.txt' # big space
+#fileName = 'data/data4Mon_Mar_17_15_01_43_2014.txt' # big space for checking states
 
 # parameters
 plotLog = True
@@ -192,11 +214,12 @@ for i in range(len(numVarTypes)):
     probInds.append(probInds[i]+numVarTypes[i])
 
 # make list of symbols
-symList = ["o","s","*","D","^","v"]
+symList = ["o","s","*","D","^","v","x","x","x","x"]
 
 # model names list
-modelNames = ["Free","Fixed","Rev","Pris","L1","L2"]
+modelNames = ["Free","Fixed","Rev","Pris","L1","L2","Rev2","Pris2","L12","L22"]
 
+print [len(statesInRbt[x][0]) for x in range(len(statesInRbt))]
 #print probInds
 #print numVarTypes
 #print len(logProbs[0][numVarTypes[0]:numVarTypes[1]])
@@ -247,6 +270,10 @@ pyplot.scatter(xs,ys,c=logProbs[0],s=sSize)
 #print len(logProbs[0][numVarTypes[1]:numVarTypes[2]])
 #print len(data[0])
 for j in range(len(statesInRbt)):
+    if j==2:
+        print statesInRbt[j][0]
+        print statesInRbt[j][1]
+        print logProbs[0][probInds[j]:probInds[j+1]]
     if plotLog:
         pyplot.scatter(statesInRbt[j][0],statesInRbt[j][1],c=logProbs[0][probInds[j]:probInds[j+1]],s=sSize,marker=symList[j],norm=colorNorm)
     else:
@@ -321,11 +348,14 @@ for i in range(numSteps):
 
 pyplot.show()
 
-'''
+
 for b in range(len(statesInRbt)):
     pyplot.plot(statesInRbt[b][0],statesInRbt[b][1],'o')
+    pyplot.title('model '+str(b))
+    #outFile = 'dataBig/model'+str(b)+'.png'
+    #pyplot.savefig(outFile,bbox_inches='tight')
     pyplot.show()
-'''
+
 
 '''
 #main

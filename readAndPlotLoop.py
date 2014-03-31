@@ -2,6 +2,8 @@ from matplotlib import pyplot
 import numpy
 from matplotlib import rc
 
+import heapq # for max sorting
+
 font = {'size':16}
 rc('font',**font)
 
@@ -49,8 +51,12 @@ def get_data(fileName):
 
 def get_data(fileName):
 
+    numberOfModels = 10
     #hold the positions - FIX THIS LATER
-    statesInRbt = [[[],[]],[[],[]],[[],[]],[[],[]],[[],[]],[[],[]]]
+    #statesInRbt = [[[],[]],[[],[]],[[],[]],[[],[]],[[],[]],[[],[]]]
+    statesInRbt = []
+    for i in range(numberOfModels):
+        statesInRbt.append([[],[]])
     #hold the log probs - FIX THIS LATER
     logProbs = [[]]
     
@@ -62,7 +68,7 @@ def get_data(fileName):
     model = int(f.readline())
     skip_lines(f,5)
     numStates = int(f.readline())
-    skip_lines(f,numStates*6+2)
+    skip_lines(f,numStates*6+2) # 6 is correct. it's not about the model number.
     # here's where we need to get the cartesian version of the states
     for i in range(numStates):
         holdLine = f.readline()
@@ -168,18 +174,23 @@ def get_data(fileName):
 #main
 #just to get the numbers we want
 #model = 0
-modelNums =[0,1,2,3,4,5]
+modelNums = [0,1,2,3,4,5,6,7,8,9]
 asTypes = ['simple','random','entropy']
 #asNum = 2
 asNums = [1,2]
-outPath = 'dataRewrite/'
-models = ['Free','Fixed','Rev','Pris','RevPrisL','PrisPrisL']
+outPath = 'dataBigBothAgain/'
+inPath = outPath
+models = ['Free','Fixed','Rev','Pris','RevPrisL','PrisPrisL','Rev2','Pris2','RevPrisL2','PrisPrisL2']
+
+outputFile = outPath+'modelSelections.txt'
+fout = open(outputFile,'w')
 
 for modelNum in modelNums:
     for asNum in asNums:
-        path = 'dataRewrite/model'+str(modelNum)+'/'+asTypes[asNum]+'/'
+        path = inPath+'model'+str(modelNum)+'/'+asTypes[asNum]+'/'
         # print path
         startFileName = path+'data'+str(modelNum)+'_0.txt'
+        print startFileName
 
 
         # setup
@@ -194,7 +205,11 @@ for modelNum in modelNums:
             maxes=[]
             for f in range(len(data)):
                 maxes.append(data[f][-1])
-            print 'model: '+str(modelNum)+', best: '+str(maxes.index(max(maxes)))+', AStype: '+str(asNum)
+
+            top3 = heapq.nlargest(3,maxes)
+            infoString = 'model: '+str(modelNum)+', best: '+str(maxes.index(max(maxes)))+', AStype: '+str(asNum)+', top: '+str(maxes.index(top3[0]))+', p= '+str(top3[0])+', second: '+str(maxes.index(top3[1]))+', p= '+str(top3[1])+', third: '+str(maxes.index(top3[2]))+', p= '+str(top3[2])+'\n'
+            print infoString
+            fout.write(infoString)
             dataArray = numpy.array(data)
             totalData += dataArray
 
@@ -212,9 +227,10 @@ for modelNum in modelNums:
         pyplot.xlim(0,nSteps)
         pyplot.legend(models,loc=0)
         outFile = outPath+'m'+str(model)+str(asTypes[asNum][0])+'.png'
-        #pyplot.savefig(outFile,bbox_inches='tight')
+        pyplot.savefig(outFile,bbox_inches='tight')
         pyplot.clf()
 
+fout.close()
 
 ## data, numSteps, numMPPairs, model = get_data('data5Sun_Sep_15_17_10_07_2013.txt')
 
