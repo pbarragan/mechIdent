@@ -658,8 +658,8 @@ void actionSelection::chooseActionOGRel(BayesFilter& filter,std::vector< std::ve
     int firstModel = modelParamPairs[firstIndex].model;
     int secondModel = modelParamPairs[secondIndex].model;
 
-    //std::cout << "First model: " << firstModel << std::endl;
-    //std::cout << "Second model: " << secondModel << std::endl;
+    std::vector<double> firstParams = modelParamPairs[firstIndex].params;
+    std::vector<double> secondParams = modelParamPairs[secondIndex].params;
     
     // Step 2: Figure out the maximum probability state for those models to simulate from 
     // (THIS IS IN LOG SPACE)
@@ -671,7 +671,7 @@ void actionSelection::chooseActionOGRel(BayesFilter& filter,std::vector< std::ve
     bool foundSecond = false;
     
     for (size_t i = 0; i<filter.stateList_.size(); i++){
-      if (filter.stateList_[i].model == firstModel){
+      if (filter.stateList_[i].model == firstModel && filter.stateList_[i].params == firstParams){
 	if (foundFirst == false){
 	  firstState = filter.stateList_[i];
 	  firstStateProb = filter.logProbList_[i];
@@ -682,7 +682,7 @@ void actionSelection::chooseActionOGRel(BayesFilter& filter,std::vector< std::ve
 	  firstStateProb = filter.logProbList_[i];
 	}
       }
-      else if (filter.stateList_[i].model == secondModel){
+      else if (filter.stateList_[i].model == secondModel && filter.stateList_[i].params == secondParams){
 	if (foundSecond == false){
 	  secondState = filter.stateList_[i];
 	  secondStateProb = filter.logProbList_[i];
@@ -704,6 +704,7 @@ void actionSelection::chooseActionOGRel(BayesFilter& filter,std::vector< std::ve
     std::vector<double> bestAction;
     
     //std::cout << "error is righhhhhhht here:" << std::endl;
+
 
     for (size_t i=0; i<validRelActionList.size(); i++){
       tempFirstNextState = translator::stateTransition(firstState,validRelActionList[i],sasList); // use SAS

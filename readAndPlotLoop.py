@@ -160,7 +160,8 @@ def get_data(fileName):
         
         logProbs.append([])
         for i in range(numStates):
-            logProbs[-1].append(float(f.readline()))
+            hi = f.readline()
+            logProbs[-1].append(float(hi))
             
         skip_lines(f,1+numMPPairs+1)
         #skip_lines(f,11+numStates+1+numMPPairs+1)
@@ -171,14 +172,48 @@ def get_data(fileName):
 
     return data, numSteps, numMPPairs, model, statesInRbt, logProbs, poses, actions, obs, actionType, numVarTypes
 
+'''
+fileTemp = 'data/data0Wed_Apr__9_14_41_16_2014.txt'
+startData, nSteps, nMPPairs, m, sInRbt, logPs, Ps, As, Os, aType, numVTypes = get_data(fileTemp)
+
+print startData
+
+raise Exception("I know python!")
+'''
+
+
+
+#
+##
+###
+####
+###
+##
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #main
 #just to get the numbers we want
 #model = 0
 modelNums = [0,1,2,3,4,5,6,7,8,9]
-asTypes = ['simple','random','entropy']
+asTypes = ['simple','random','entropy','OG']
 #asNum = 2
-asNums = [1,2]
-outPath = 'dataBigBothAgain/'
+asNums = [1,2,3] # needs 1,2
+outPath = 'dataBig/'
 inPath = outPath
 models = ['Free','Fixed','Rev','Pris','RevPrisL','PrisPrisL','Rev2','Pris2','RevPrisL2','PrisPrisL2']
 
@@ -232,21 +267,4 @@ for modelNum in modelNums:
 
 fout.close()
 
-## data, numSteps, numMPPairs, model = get_data('data5Sun_Sep_15_17_10_07_2013.txt')
-
-## inds = range(numSteps+1)
-## models = ['Free','Fixed','Rev','Pris','RevPrisL','PrisPrisL']
-## #colors = ['r','g',
-## for i in range(numMPPairs):
-##     pyplot.plot(inds,data[i],'-o')
-
-## pyplot.title(models[model])
-## pyplot.ylabel('Probability')
-## pyplot.xlabel('Step')
-## pyplot.legend(models)
-
-## dataArray = numpy.array(data)
-## print dataArray
-## print dataArray[5,:]
-## pyplot.show()
 

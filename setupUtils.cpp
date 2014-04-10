@@ -38,8 +38,8 @@ std::vector<stateStruct> setupUtils::setupModel0(std::vector<stateStruct>& model
   dRV[1][1] = 0.15;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 10;
-  dNV[1] = 10;
+  dNV[0] = 11; // bs: 10
+  dNV[1] = 11; // bs: 10
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -98,11 +98,11 @@ std::vector<stateStruct> setupUtils::setupModel2(std::vector<stateStruct>& model
   dNP[2] = 1;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -3.14;
-  dRV[0][1] = 3.14;
+  dRV[0][0] = -3.14159; // bs: 3.14
+  dRV[0][1] = 3.14159-0.065449846949787; // bs: 3.14
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 100;
+  dNV[0] = 96; // bs: 100
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -136,7 +136,7 @@ std::vector<stateStruct> setupUtils::setupModel3(std::vector<stateStruct>& model
   dRV[0][1] = 0.45255;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 50;
+  dNV[0] = 49; // bs: 50
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -173,13 +173,13 @@ std::vector<stateStruct> setupUtils::setupModel4(std::vector<stateStruct>& model
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
   dRV[0][0] = -3.14159; // ICRA 2014 and Vid1 - -1.57
-  dRV[0][1] = 3.14159-0.26179938779; // ICRA 2014 and Vid1 - 1.57
+  dRV[0][1] = 3.14159-0.26179938779*.5; // bs: 3.14159-0.26179938779 // ICRA 2014 and Vid1 - 1.57
   dRV[1][0] = 0.0;
-  dRV[1][1] = 0.27; // ICRA 2014 and Vid1 - 0.2
+  dRV[1][1] = 0.30; // bs: 0.27 // ICRA 2014 and Vid1 - 0.2
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 24; // ICRA 2014 and Vid1 - 12
-  dNV[1] = 10;
+  dNV[0] = 24*2; // bs: 24 // ICRA 2014 and Vid1 - 12
+  dNV[1] = 16; // bs: 10
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -260,11 +260,11 @@ std::vector<stateStruct> setupUtils::setupModel6(std::vector<stateStruct>& model
   dNP[2] = 1;
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
-  dRV[0][0] = -3.14;
-  dRV[0][1] = 3.14;
+  dRV[0][0] = -3.14159; // bs: 3.14
+  dRV[0][1] = 3.14159-0.065449846949787; // bs: 3.14
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 100;
+  dNV[0] = 96; // bs: 100
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -281,8 +281,8 @@ std::vector<stateStruct> setupUtils::setupModel7(std::vector<stateStruct>& model
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = 0.16; // ICRA 2014 - -0.16
-  dRP[0][1] = 0.16; // ICRA 2014 - -0.16
+  dRP[0][0] = 0.226274; // bs: 0.16 // ICRA 2014 - -0.16
+  dRP[0][1] = 0.226274; // bs: 0.16 // ICRA 2014 - -0.16
   dRP[1][0] = 0.0; // ICRA 2014 - -0.16
   dRP[1][1] = 0.0; // ICRA 2014 - -0.16
   dRP[2][0] = 0.0; // ICRA 2014 - 0.7865 
@@ -298,7 +298,7 @@ std::vector<stateStruct> setupUtils::setupModel7(std::vector<stateStruct>& model
   dRV[0][1] = 0.45255;
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 50;
+  dNV[0] = 49; // bs: 50
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -335,13 +335,13 @@ std::vector<stateStruct> setupUtils::setupModel8(std::vector<stateStruct>& model
   //Dimension Ranges for Vars
   std::vector< std::vector<double> > dRV (varNum, std::vector<double> (2,0.0));
   dRV[0][0] = -3.14159; // ICRA 2014 and Vid1 - -1.57
-  dRV[0][1] = 3.14159-0.26179938779; // ICRA 2014 and Vid1 - 1.57
+  dRV[0][1] = 3.14159-0.26179938779*.5; // bs: 3.14159-0.26179938779 // ICRA 2014 and Vid1 - 1.57
   dRV[1][0] = 0.0;
-  dRV[1][1] = 0.27; // ICRA 2014 and Vid1 - 0.2
+  dRV[1][1] = 0.30; // bs: 0.27 // ICRA 2014 and Vid1 - 0.2
   //Dimension Numbers for Vars
   std::vector<int> dNV (varNum, 0);
-  dNV[0] = 24; // ICRA 2014 and Vid1 - 12
-  dNV[1] = 10;
+  dNV[0] = 24*2; // bs: 24 // ICRA 2014 and Vid1 - 12
+  dNV[1] = 16; // bs: 10
 
   return setupModelFromDec(dRP,dNP,dRV,dNV,modelNum,modelParamPairs);
 }
@@ -846,7 +846,7 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
     //This is totally 2D
     // In a circle around the gripper
     int numPts = 8; // how many points around the circle
-    double radius = 0.06; // radius of the points //used to be .06, big is .12
+    double radius = 0.12; // radius of the points //used to be .06, big is .12
     double angleDelta = 2*M_PI/numPts;
 
     actionList.clear(); // clear anything in there

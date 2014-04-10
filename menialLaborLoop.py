@@ -6,11 +6,11 @@ models = [0,1,2,3,4,5,6,7,8,9]
 trials = 10
 writeFile = 1
 #actionSelectionType = 2
-actionSelectionTypes = [1,2]
+actionSelectionTypes = [1,2,3] # needs 1,2
 
 numExperiments = 10
 
-asTypes = ['simple','random','entropy']
+asTypes = ['simple','random','entropy','OG']
 
 for mNum in models:
     model = mNum
@@ -18,7 +18,7 @@ for mNum in models:
     for asType in actionSelectionTypes:
         actionSelectionType = asType
 
-        path = 'dataBig/model'+str(model)+'/'+asTypes[actionSelectionType]+'/'
+        path = 'dataBigBoth/model'+str(model)+'/'+asTypes[actionSelectionType]+'/'
 
         for i in range(numExperiments):
             print "experiment "+str(i)

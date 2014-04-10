@@ -89,7 +89,7 @@ path = 'data/model'+str(model)+'/'+asTypes[asNum]+'/'
 startFileName = path+'data'+str(model)+'_'+str(trialNum)+'.txt'
 
 #startFileName = 'data/videoData/data0.txt'
-
+startFileName = 'data/data0Wed_Apr__9_14_41_16_2014.txt'
 #setup
 startData, nSteps, nMPPairs, m = get_data_w_actions(startFileName)
 totalData = numpy.array(startData)

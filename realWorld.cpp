@@ -212,7 +212,7 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
   }
   */
 
-  if(writeOutFile_){
+  if(false){
     // File style
     std::stringstream ss2;
     ss2 << "data/stateDisplay" << dateString << ".txt";
@@ -230,7 +230,7 @@ RealWorld::RealWorld(int modelNum,int numSteps,int writeOutFile,int actionSelect
     writeFileInitialData(); // write the initial data to the file
   }
 
-  if(true){
+  if(false){
     writeFileStatesForMATLAB(); // write state file for visualization in MATLAB
   }
 
@@ -1102,7 +1102,11 @@ int main(int argc, char* argv[])
       world.runWorld(steps);
       
       clock_gettime(CLOCK_REALTIME, &ts3); // get time after running world
-      
+
+      world.outFile_ << "Time for constructor:\n" << timeDiff(ts1,ts2) << "\n";
+      world.outFile_ << "Time for running world:\n" << timeDiff(ts2,ts3) << "\n";
+      world.outFile_ << "Time per step:\n" << timeDiff(ts2,ts3)/steps << "\n";
+
       std::cout << "Time for constructor:\n" << timeDiff(ts1,ts2) << std::endl;
       std::cout << "Time for running world:\n" << timeDiff(ts2,ts3) << std::endl;
       std::cout << "Time per step:\n" << timeDiff(ts2,ts3)/steps << std::endl;

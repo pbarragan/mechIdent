@@ -200,9 +200,15 @@ def get_data(fileName):
 #fileName = 'data/data0Thu_Feb_27_00_38_55_2014.txt' # random, relative
 #fileName = 'data/data0Thu_Feb_27_00_40_47_2014.txt' # random, relative, 10 actions
 
-fileName = 'dataBig/model0/entropy/data0_0.txt' # big space
+#fileName = 'dataBig/model0/entropy/data0_0.txt' # big space
 #fileName = 'data/data4Mon_Mar_17_15_01_43_2014.txt' # big space for checking states
+#fileName = 'data/data0Mon_Mar_31_14_49_52_2014.txt' # big new state space
+#fileName = 'data/data0Mon_Mar_31_15_39_34_2014.txt' # big new state space - fixed
+#fileName = 'data/data0Mon_Mar_31_15_52_40_2014.txt' # big new state space - fixed actually
+#fileName = 'data/data0Tue_Apr__1_10_39_52_2014.txt' # big new state space - fixed actually actually with more points for the rev pris latch.
 
+#fileName = 'data/data0Tue_Apr__1_11_08_11_2014.txt' # testing the new big space
+fileName = 'data/data0Thu_Apr__3_14_09_44_2014.txt' 
 # parameters
 plotLog = True
 
@@ -352,8 +358,8 @@ pyplot.show()
 for b in range(len(statesInRbt)):
     pyplot.plot(statesInRbt[b][0],statesInRbt[b][1],'o')
     pyplot.title('model '+str(b))
-    #outFile = 'dataBig/model'+str(b)+'.png'
-    #pyplot.savefig(outFile,bbox_inches='tight')
+    outFile = 'dataBigBigActions/model'+str(b)+'.png'
+    pyplot.savefig(outFile,bbox_inches='tight')
     pyplot.show()
 
 
