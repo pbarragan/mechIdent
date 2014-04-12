@@ -208,7 +208,10 @@ def get_data(fileName):
 #fileName = 'data/data0Tue_Apr__1_10_39_52_2014.txt' # big new state space - fixed actually actually with more points for the rev pris latch.
 
 #fileName = 'data/data0Tue_Apr__1_11_08_11_2014.txt' # testing the new big space
-fileName = 'data/data0Thu_Apr__3_14_09_44_2014.txt' 
+#fileName = 'data/data0Thu_Apr__3_14_09_44_2014.txt'
+#fileName = 'dataBig/model0/entropy/data0_0.txt'
+fileName = 'dataBigBigActions/model9/entropy/data9_3.txt'
+
 # parameters
 plotLog = True
 
@@ -220,7 +223,7 @@ for i in range(len(numVarTypes)):
     probInds.append(probInds[i]+numVarTypes[i])
 
 # make list of symbols
-symList = ["o","s","*","D","^","v","x","x","x","x"]
+symList = ["o","s","*","D","^","v","x",".","<",">"]
 
 # model names list
 modelNames = ["Free","Fixed","Rev","Pris","L1","L2","Rev2","Pris2","L12","L22"]
@@ -290,7 +293,7 @@ legendList=[]
 for i in range(len(data)): 
     legendList.append(modelNames[i]+" - "+str("%.3G" % (data[i][0])))
     
-pyplot.legend(legendList,bbox_to_anchor=(0., -.325, 1., .5), loc=3, ncol=2, mode="expand", borderaxespad=0.)
+#pyplot.legend(legendList,bbox_to_anchor=(0., -.325, 1., .5), loc=3, ncol=2, mode="expand", borderaxespad=0.)
 pyplot.colorbar()
 pyplot.plot(poses[0][0],poses[1][0],'ro',markersize=mSize)
 pyplot.title('initial - '+actionString)
@@ -327,7 +330,7 @@ for i in range(numSteps):
     for k in range(len(data)): 
         legendList.append(modelNames[k]+" - "+str("%.3G" % (data[k][i+1])))
     
-    pyplot.legend(legendList,bbox_to_anchor=(0., -.325, 1., .5), loc=3, ncol=2, mode="expand", borderaxespad=0.)
+    #pyplot.legend(legendList,bbox_to_anchor=(0., -.325, 1., .5), loc=3, ncol=2, mode="expand", borderaxespad=0.)
     pyplot.colorbar()
     print 'step: '+str(i)
     pyplot.plot(poses[0][i],poses[1][i],'ro',markersize=mSize)
@@ -348,7 +351,8 @@ for i in range(numSteps):
     pyplot.plot(obs[0][i],obs[1][i],'yx',markersize=mSize)
     print 'obs: '+str(obs[0][i])+','+str(obs[1][i])
     pyplot.title('step'+str(i))
-
+    outFile = 'dump/step'+str(i)+'.png'
+    pyplot.savefig(outFile,bbox_inches='tight')
     print 'Distribution:'
     print [d[i+1] for d in data] 
 
@@ -358,65 +362,6 @@ pyplot.show()
 for b in range(len(statesInRbt)):
     pyplot.plot(statesInRbt[b][0],statesInRbt[b][1],'o')
     pyplot.title('model '+str(b))
-    outFile = 'dataBigBigActions/model'+str(b)+'.png'
-    pyplot.savefig(outFile,bbox_inches='tight')
+    outFile = 'dataBig/model'+str(b)+'.png'
+    #pyplot.savefig(outFile,bbox_inches='tight')
     pyplot.show()
-
-
-'''
-#main
-#just to get the numbers we want
-model = 0
-asTypes = ['simple','random','entropy']
-asNum = 2
-
-path = 'data/model'+str(model)+'/'+asTypes[asNum]+'/'
-print path
-startFileName = path+'data'+str(model)+'_0.txt'
-
-
-#setup
-startData, nSteps, nMPPairs, m = get_data(startFileName)
-totalData = numpy.array(startData)
-
-trials = 10 #how many trials
-
-for i in range(1,trials):
-    fileName = path+'data'+str(model)+'_'+str(i)+'.txt'
-    data, numSteps, numMPPairs, model = get_data(fileName)
-    dataArray = numpy.array(data)
-    totalData += dataArray
-
-avgData = totalData/trials
-#print avgData[5,:]
-
-inds = range(nSteps+1)
-models = ['Free','Fixed','Rev','Pris','RevPrisL','PrisPrisL']
-for i in range(nMPPairs):
-    pyplot.plot(inds,avgData[i,:],'-o')
-
-pyplot.title(models[m]+' - '+asTypes[asNum])
-pyplot.ylabel('Probability')
-pyplot.xlabel('Step')
-pyplot.legend(models,loc=2)
-pyplot.show()
-
-
-## data, numSteps, numMPPairs, model = get_data('data5Sun_Sep_15_17_10_07_2013.txt')
-
-## inds = range(numSteps+1)
-## models = ['Free','Fixed','Rev','Pris','RevPrisL','PrisPrisL']
-## #colors = ['r','g',
-## for i in range(numMPPairs):
-##     pyplot.plot(inds,data[i],'-o')
-
-## pyplot.title(models[model])
-## pyplot.ylabel('Probability')
-## pyplot.xlabel('Step')
-## pyplot.legend(models)
-
-## dataArray = numpy.array(data)
-## print dataArray
-## print dataArray[5,:]
-## pyplot.show()
-'''

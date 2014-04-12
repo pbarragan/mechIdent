@@ -167,10 +167,16 @@ def get_data(fileName):
         #skip_lines(f,11+numStates+1+numMPPairs+1)
         for j in range(numMPPairs):
             data[j].append(float(f.readline()))
+
+    times = []
+    for i in range(3):
+        f.readline()
+        times.append(float(f.readline()))
+    
     f.close()
 
 
-    return data, numSteps, numMPPairs, model, statesInRbt, logProbs, poses, actions, obs, actionType, numVarTypes
+    return data, numSteps, numMPPairs, model, statesInRbt, logProbs, poses, actions, obs, actionType, numVarTypes, times
 
 '''
 fileTemp = 'data/data0Wed_Apr__9_14_41_16_2014.txt'
@@ -213,12 +219,23 @@ modelNums = [0,1,2,3,4,5,6,7,8,9]
 asTypes = ['simple','random','entropy','OG']
 #asNum = 2
 asNums = [1,2,3] # needs 1,2
-outPath = 'dataBig/'
+outPath = 'dataBigBoth/'
 inPath = outPath
 models = ['Free','Fixed','Rev','Pris','RevPrisL','PrisPrisL','Rev2','Pris2','RevPrisL2','PrisPrisL2']
 
 outputFile = outPath+'modelSelections.txt'
 fout = open(outputFile,'w')
+
+statsFile = outPath+'stats.txt'
+statsOut = open(statsFile,'w')
+
+#statsHeader = 'Real Model:\tAction Selection Type:\tFirst:\tP:\tSecond:\tP:\tThird:\tP:\n'
+statsHeader = 'M\tA\tF\tProbability\tS\tProbability\tT\tProbability\n'
+statsOut.write(statsHeader)
+
+errorCount = 0
+
+avgStepTimes = [[],[],[]]
 
 for modelNum in modelNums:
     for asNum in asNums:
@@ -229,27 +246,46 @@ for modelNum in modelNums:
 
 
         # setup
-        startData, nSteps, nMPPairs, m, sInRbt, logPs, Ps, As, Os, aType, numVTypes = get_data(startFileName)
+        startData, nSteps, nMPPairs, m, sInRbt, logPs, Ps, As, Os, aType, numVTypes, startTimes = get_data(startFileName)
         totalData = numpy.array(startData)
 
         trials = 10 #how many trials
 
+        totalStepTime=startTimes[2] # get the step time for the first experiment
+
         for i in range(1,trials):
             fileName = path+'data'+str(modelNum)+'_'+str(i)+'.txt'
-            data, numSteps, numMPPairs, model, statesInRbt, logProbs, poses, actions, obs, actionType, numVarTypes = get_data(fileName)
+            data, numSteps, numMPPairs, model, statesInRbt, logProbs, poses, actions, obs, actionType, numVarTypes, times = get_data(fileName)
             maxes=[]
             for f in range(len(data)):
                 maxes.append(data[f][-1])
 
             top3 = heapq.nlargest(3,maxes)
             infoString = 'model: '+str(modelNum)+', best: '+str(maxes.index(max(maxes)))+', AStype: '+str(asNum)+', top: '+str(maxes.index(top3[0]))+', p= '+str(top3[0])+', second: '+str(maxes.index(top3[1]))+', p= '+str(top3[1])+', third: '+str(maxes.index(top3[2]))+', p= '+str(top3[2])+'\n'
-            print infoString
+            #print infoString
             fout.write(infoString)
             dataArray = numpy.array(data)
             totalData += dataArray
+            if modelNum != maxes.index(top3[0]):
+                errorCount += 1
+            totalStepTime += times[2]
 
         avgData = totalData/trials
+        avgStepTime = totalStepTime/trials
+
+        avgStepTimes[asNum-1].append(avgStepTime)
+
         # print avgData[5,:]
+        
+
+        # write a file with averages for later
+        #print avgData
+        #print avgData[:,-1]
+        lastColumn = avgData[:,-1].tolist()
+        top3ofLC = heapq.nlargest(3,lastColumn)
+        
+        statsString = str(modelNum)+'\t'+str(asNum)+'\t'+str(lastColumn.index(top3ofLC[0]))+'\t'+'%.7f'%top3ofLC[0]+'\t'+str(lastColumn.index(top3ofLC[1]))+'\t'+'%.7f'%top3ofLC[1]+'\t'+str(lastColumn.index(top3ofLC[2]))+'\t'+'%.7f'%top3ofLC[2]+'\n'
+        statsOut.write(statsString)
 
         inds = range(nSteps+1)
         for i in range(nMPPairs):
@@ -265,6 +301,12 @@ for modelNum in modelNums:
         pyplot.savefig(outFile,bbox_inches='tight')
         pyplot.clf()
 
+statsOut.write('Total Errors: '+str(errorCount))
+
 fout.close()
+statsOut.close()
+
+for i in range(3):
+    print sum(avgStepTimes[i])/len(avgStepTimes[i])
 
 
