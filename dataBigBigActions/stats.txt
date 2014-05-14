@@ -30,3 +30,22 @@ M	A	F	Probability	S	Probability	T	Probability
 9	2	9	0.7133297	8	0.1934071	4	0.0515072
 9	3	9	0.7171339	0	0.1420807	4	0.0418347
 Total Errors: 4
+By AS Type:
+random: 1
+entropy: 3
+OG: 0
+By M Type:
+Free: 0
+Fixed: 0
+Rev: 0
+Pris: 0
+RevPrisL: 1
+PrisPrisL: 0
+Rev2: 0
+Pris2: 0
+RevPrisL2: 2
+PrisPrisL2: 1
+Time per step:
+Random: 0.28002775
+Entropy: 5.9800965
+OG: 0.27650011

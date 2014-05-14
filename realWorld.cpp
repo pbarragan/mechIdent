@@ -715,8 +715,18 @@ void RealWorld::runAction(){
     }
   }
   else if (useRobot_){
+    // change the action the robot is supposed to use to make sure it's absolute
+    std::vector<double> actionInRbt (2,0.0);
+    if (RELATIVE){
+      for(size_t i=0; i<action_.size(); i++){
+	actionInRbt[i]=poseInRbt_[i]+action_[i];
+      }
+    }
+    else{
+      actionInRbt = action_;
+    }
     // Send action to robot and wait
-    if (robotComm::sendRequest(action_)){
+    if (robotComm::sendRequest(actionInRbt)){
       std::cout << "Send action to robot." << std::endl;
       // Get response. Set pose of robot. getObs() can then be used
       if (robotComm::getResponse(poseInRbt_)){ 
@@ -872,8 +882,8 @@ void RealWorld::writeFileInitialData(){
   else if (useRobot_){
     // using robot
         //
-    outFile_ << "Real Model:\n";
-    outFile_ << "unknown" << "\n";
+    outFile_ << "Real Model (if user inputted correctly):\n";
+    outFile_ << modelNum_ << "\n";
     //
     outFile_ << "Real Params:\n";
     outFile_ << "unknown" << "\n";
@@ -999,6 +1009,16 @@ void RealWorld::writeFileStepData(){
     outFile_ << obs_[i]<< ",";
   }
   outFile_ << "\n";
+  //
+  outFile_ << "Log Probs after Transition before Observation:\n";
+  for (size_t i=0;i<filter_.logProbList_T_.size();i++){
+    outFile_ << filter_.logProbList_T_[i]<< "\n";
+  }
+  //
+  outFile_ << "Log Probs of Observation:\n";
+  for (size_t i=0;i<filter_.logProbList_O_.size();i++){
+    outFile_ << filter_.logProbList_O_[i]<< "\n";
+  }
   //
   outFile_ << "Log Probs:\n";
   for (size_t i=0;i<filter_.logProbList_.size();i++){

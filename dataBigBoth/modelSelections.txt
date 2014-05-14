@@ -1,3 +1,4 @@
+model: 0, best: 0, AStype: 1, top: 0, p= 1.0, second: 4, p= 7.78787e-27, third: 5, p= 1.11248e-31
 model: 0, best: 0, AStype: 1, top: 0, p= 1.0, second: 9, p= 8.7073e-26, third: 5, p= 1.99496e-35
 model: 0, best: 0, AStype: 1, top: 0, p= 1.0, second: 9, p= 7.45373e-11, third: 5, p= 5.95752e-36
 model: 0, best: 0, AStype: 1, top: 0, p= 1.0, second: 4, p= 4.96052e-31, third: 5, p= 1.76764e-31
@@ -7,6 +8,7 @@ model: 0, best: 0, AStype: 1, top: 0, p= 1.0, second: 9, p= 2.65689e-32, third: 
 model: 0, best: 0, AStype: 1, top: 0, p= 1.0, second: 4, p= 7.37943e-08, third: 9, p= 3.74319e-23
 model: 0, best: 0, AStype: 1, top: 0, p= 1.0, second: 4, p= 3.72315e-19, third: 5, p= 4.94848e-53
 model: 0, best: 0, AStype: 1, top: 0, p= 1.0, second: 9, p= 4.60177e-44, third: 5, p= 5.27096e-56
+model: 0, best: 0, AStype: 2, top: 0, p= 1.0, second: 5, p= 1.58716e-41, third: 9, p= 8.17274e-43
 model: 0, best: 0, AStype: 2, top: 0, p= 1.0, second: 9, p= 8.99356e-52, third: 5, p= 1.30789e-54
 model: 0, best: 0, AStype: 2, top: 0, p= 1.0, second: 5, p= 1.69019e-29, third: 4, p= 3.66991e-64
 model: 0, best: 0, AStype: 2, top: 0, p= 1.0, second: 9, p= 2.1435e-28, third: 5, p= 2.36426e-39
@@ -16,6 +18,7 @@ model: 0, best: 0, AStype: 2, top: 0, p= 1.0, second: 9, p= 1.55843e-36, third: 
 model: 0, best: 0, AStype: 2, top: 0, p= 1.0, second: 8, p= 2.28979e-38, third: 5, p= 2.80892e-41
 model: 0, best: 0, AStype: 2, top: 0, p= 1.0, second: 5, p= 9.04944e-30, third: 9, p= 6.09992e-39
 model: 0, best: 0, AStype: 2, top: 0, p= 1.0, second: 9, p= 2.89184e-30, third: 5, p= 5.55724e-39
+model: 0, best: 0, AStype: 3, top: 0, p= 1.0, second: 9, p= 2.8369e-41, third: 4, p= 3.55309e-50
 model: 0, best: 0, AStype: 3, top: 0, p= 1.0, second: 9, p= 2.61907e-38, third: 4, p= 1.40597e-49
 model: 0, best: 0, AStype: 3, top: 0, p= 1.0, second: 4, p= 2.89795e-15, third: 5, p= 6.44543e-29
 model: 0, best: 0, AStype: 3, top: 0, p= 1.0, second: 9, p= 4.29092e-32, third: 4, p= 1.81463e-36
@@ -25,6 +28,7 @@ model: 0, best: 0, AStype: 3, top: 0, p= 1.0, second: 9, p= 1.13105e-50, third: 
 model: 0, best: 0, AStype: 3, top: 0, p= 1.0, second: 4, p= 8.04822e-35, third: 9, p= 1.91213e-48
 model: 0, best: 0, AStype: 3, top: 0, p= 1.0, second: 9, p= 3.29632e-43, third: 4, p= 2.01805e-53
 model: 0, best: 0, AStype: 3, top: 0, p= 1.0, second: 4, p= 8.91415e-37, third: 9, p= 3.90812e-50
+model: 1, best: 1, AStype: 1, top: 1, p= 1.0, second: 5, p= 2.80258e-37, third: 4, p= 2.10705e-50
 model: 1, best: 1, AStype: 1, top: 1, p= 1.0, second: 5, p= 4.34459e-30, third: 8, p= 1.17613e-42
 model: 1, best: 1, AStype: 1, top: 1, p= 1.0, second: 5, p= 2.53575e-38, third: 9, p= 4.38514e-41
 model: 1, best: 1, AStype: 1, top: 1, p= 1.0, second: 9, p= 9.18643e-51, third: 5, p= 5.12477e-55
@@ -34,6 +38,7 @@ model: 1, best: 1, AStype: 1, top: 1, p= 1.0, second: 4, p= 2.22095e-36, third: 
 model: 1, best: 1, AStype: 1, top: 1, p= 1.0, second: 8, p= 5.51101e-37, third: 9, p= 1.66352e-47
 model: 1, best: 1, AStype: 1, top: 1, p= 1.0, second: 3, p= 7.76122e-40, third: 5, p= 7.68688e-61
 model: 1, best: 1, AStype: 1, top: 1, p= 1.0, second: 9, p= 2.00795e-17, third: 3, p= 3.61204e-50
+model: 1, best: 1, AStype: 2, top: 1, p= 1.0, second: 9, p= 3.95883e-45, third: 3, p= 7.09855e-50
 model: 1, best: 1, AStype: 2, top: 1, p= 1.0, second: 7, p= 3.35123e-66, third: 3, p= 6.31665e-67
 model: 1, best: 1, AStype: 2, top: 1, p= 1.0, second: 2, p= 5.17666e-57, third: 5, p= 3.56912e-58
 model: 1, best: 1, AStype: 2, top: 1, p= 1.0, second: 6, p= 7.19721e-50, third: 9, p= 3.26413e-52
@@ -43,6 +48,7 @@ model: 1, best: 1, AStype: 2, top: 1, p= 1.0, second: 3, p= 3.27389e-57, third: 
 model: 1, best: 1, AStype: 2, top: 1, p= 1.0, second: 5, p= 1.65647e-51, third: 8, p= 7.12039e-54
 model: 1, best: 1, AStype: 2, top: 1, p= 1.0, second: 5, p= 3.78167e-52, third: 6, p= 3.95996e-55
 model: 1, best: 1, AStype: 2, top: 1, p= 1.0, second: 6, p= 1.59369e-50, third: 2, p= 1.37097e-51
+model: 1, best: 1, AStype: 3, top: 1, p= 1.0, second: 9, p= 1.06642e-52, third: 3, p= 3.40263e-58
 model: 1, best: 1, AStype: 3, top: 1, p= 1.0, second: 3, p= 3.26107e-56, third: 6, p= 1.72671e-62
 model: 1, best: 1, AStype: 3, top: 1, p= 1.0, second: 5, p= 1.88376e-64, third: 3, p= 9.93294e-73
 model: 1, best: 1, AStype: 3, top: 1, p= 1.0, second: 3, p= 8.14717e-52, third: 4, p= 2.219e-56
@@ -52,6 +58,7 @@ model: 1, best: 1, AStype: 3, top: 1, p= 1.0, second: 9, p= 1.17169e-44, third: 
 model: 1, best: 1, AStype: 3, top: 1, p= 1.0, second: 4, p= 1.41752e-47, third: 9, p= 1.65847e-62
 model: 1, best: 1, AStype: 3, top: 1, p= 1.0, second: 3, p= 2.79317e-48, third: 4, p= 2.00003e-55
 model: 1, best: 1, AStype: 3, top: 1, p= 1.0, second: 3, p= 2.48867e-53, third: 4, p= 3.74582e-56
+model: 2, best: 2, AStype: 1, top: 2, p= 1.0, second: 6, p= 4.83719e-11, third: 5, p= 2.41614e-44
 model: 2, best: 2, AStype: 1, top: 2, p= 1.0, second: 6, p= 4.028e-19, third: 9, p= 4.13039e-46
 model: 2, best: 2, AStype: 1, top: 2, p= 1.0, second: 6, p= 8.46557e-17, third: 0, p= 4.25002e-30
 model: 2, best: 2, AStype: 1, top: 2, p= 1.0, second: 6, p= 2.48546e-23, third: 9, p= 2.95824e-40
@@ -61,6 +68,7 @@ model: 2, best: 2, AStype: 1, top: 2, p= 1.0, second: 6, p= 1.05845e-13, third: 
 model: 2, best: 2, AStype: 1, top: 2, p= 1.0, second: 6, p= 1.72118e-13, third: 5, p= 3.07859e-39
 model: 2, best: 2, AStype: 1, top: 2, p= 1.0, second: 6, p= 2.18771e-08, third: 4, p= 3.00089e-58
 model: 2, best: 2, AStype: 1, top: 2, p= 0.999989, second: 6, p= 1.05472e-05, third: 5, p= 1.49363e-42
+model: 2, best: 2, AStype: 2, top: 2, p= 1.0, second: 6, p= 7.96981e-20, third: 5, p= 1.05338e-44
 model: 2, best: 2, AStype: 2, top: 2, p= 1.0, second: 6, p= 5.33684e-39, third: 4, p= 3.70056e-63
 model: 2, best: 2, AStype: 2, top: 2, p= 1.0, second: 6, p= 1.48632e-26, third: 8, p= 3.44834e-42
 model: 2, best: 2, AStype: 2, top: 2, p= 1.0, second: 6, p= 1.15538e-22, third: 5, p= 1.81676e-64
@@ -70,6 +78,7 @@ model: 2, best: 2, AStype: 2, top: 2, p= 1.0, second: 6, p= 2.53442e-26, third: 
 model: 2, best: 2, AStype: 2, top: 2, p= 1.0, second: 6, p= 3.9712e-21, third: 9, p= 1.86855e-52
 model: 2, best: 2, AStype: 2, top: 2, p= 1.0, second: 6, p= 1.22401e-31, third: 5, p= 5.64406e-58
 model: 2, best: 2, AStype: 2, top: 2, p= 1.0, second: 6, p= 2.2335e-30, third: 5, p= 1.04007e-70
+model: 2, best: 2, AStype: 3, top: 2, p= 1.0, second: 6, p= 2.25675e-24, third: 5, p= 1.26572e-35
 model: 2, best: 2, AStype: 3, top: 2, p= 1.0, second: 6, p= 1.35784e-41, third: 8, p= 3.58321e-61
 model: 2, best: 2, AStype: 3, top: 2, p= 1.0, second: 6, p= 8.6672e-40, third: 4, p= 1.8796e-46
 model: 2, best: 2, AStype: 3, top: 2, p= 1.0, second: 6, p= 4.39403e-49, third: 0, p= 3.54183e-67
@@ -79,6 +88,7 @@ model: 2, best: 2, AStype: 3, top: 2, p= 1.0, second: 6, p= 2.17185e-37, third: 
 model: 2, best: 2, AStype: 3, top: 2, p= 1.0, second: 6, p= 3.16971e-44, third: 4, p= 1.72524e-66
 model: 2, best: 2, AStype: 3, top: 2, p= 1.0, second: 6, p= 7.27908e-39, third: 5, p= 9.03816e-49
 model: 2, best: 2, AStype: 3, top: 2, p= 1.0, second: 6, p= 3.37611e-46, third: 4, p= 1.53045e-57
+model: 3, best: 3, AStype: 1, top: 3, p= 1.0, second: 0, p= 3.60313e-30, third: 5, p= 8.18054e-45
 model: 3, best: 3, AStype: 1, top: 3, p= 1.0, second: 9, p= 5.26816e-59, third: 8, p= 2.6834e-66
 model: 3, best: 3, AStype: 1, top: 3, p= 1.0, second: 5, p= 6.98793e-43, third: 4, p= 1.32685e-45
 model: 3, best: 3, AStype: 1, top: 3, p= 1.0, second: 9, p= 5.9591e-40, third: 0, p= 5.70127e-42
@@ -88,6 +98,7 @@ model: 3, best: 3, AStype: 1, top: 3, p= 1.0, second: 9, p= 2.6961e-63, third: 8
 model: 3, best: 3, AStype: 1, top: 3, p= 1.0, second: 0, p= 2.42214e-57, third: 9, p= 1.22282e-77
 model: 3, best: 3, AStype: 1, top: 3, p= 1.0, second: 1, p= 5.13898e-62, third: 7, p= 2.90004e-77
 model: 3, best: 3, AStype: 1, top: 3, p= 1.0, second: 5, p= 1.13816e-37, third: 4, p= 4.27264e-44
+model: 3, best: 3, AStype: 2, top: 3, p= 1.0, second: 0, p= 7.81407e-55, third: 9, p= 2.4834e-60
 model: 3, best: 3, AStype: 2, top: 3, p= 1.0, second: 9, p= 4.02046e-58, third: 1, p= 9.26061e-60
 model: 3, best: 3, AStype: 2, top: 3, p= 1.0, second: 5, p= 5.13794e-86, third: 1, p= 1.87694e-87
 model: 3, best: 3, AStype: 2, top: 3, p= 1.0, second: 9, p= 5.27749e-46, third: 8, p= 6.81127e-47
@@ -97,6 +108,7 @@ model: 3, best: 3, AStype: 2, top: 3, p= 1.0, second: 4, p= 6.97808e-50, third: 
 model: 3, best: 3, AStype: 2, top: 3, p= 1.0, second: 5, p= 1.26862e-52, third: 9, p= 1.70953e-70
 model: 3, best: 3, AStype: 2, top: 3, p= 1.0, second: 4, p= 2.53067e-66, third: 5, p= 7.29769e-75
 model: 3, best: 3, AStype: 2, top: 3, p= 1.0, second: 9, p= 2.42372e-51, third: 5, p= 5.11844e-58
+model: 3, best: 3, AStype: 3, top: 3, p= 1.0, second: 8, p= 1.07771e-67, third: 9, p= 7.18976e-70
 model: 3, best: 3, AStype: 3, top: 3, p= 1.0, second: 9, p= 6.84829e-78, third: 5, p= 8.25365e-81
 model: 3, best: 3, AStype: 3, top: 3, p= 1.0, second: 0, p= 1.73995e-79, third: 9, p= 1.06257e-81
 model: 3, best: 3, AStype: 3, top: 3, p= 1.0, second: 8, p= 2.0103e-67, third: 9, p= 7.88981e-69
@@ -106,6 +118,7 @@ model: 3, best: 3, AStype: 3, top: 3, p= 1.0, second: 9, p= 3.10862e-82, third: 
 model: 3, best: 3, AStype: 3, top: 3, p= 1.0, second: 9, p= 1.87879e-85, third: 8, p= 3.54037e-88
 model: 3, best: 3, AStype: 3, top: 3, p= 1.0, second: 4, p= 5.19554e-76, third: 5, p= 1.46943e-82
 model: 3, best: 3, AStype: 3, top: 3, p= 1.0, second: 9, p= 1.06431e-62, third: 8, p= 3.76446e-76
+model: 4, best: 4, AStype: 1, top: 4, p= 1.0, second: 5, p= 2.76935e-31, third: 9, p= 8.48509e-57
 model: 4, best: 4, AStype: 1, top: 4, p= 1.0, second: 5, p= 3.53161e-32, third: 9, p= 2.44141e-57
 model: 4, best: 4, AStype: 1, top: 4, p= 1.0, second: 1, p= 1.57476e-29, third: 5, p= 1.90139e-45
 model: 4, best: 4, AStype: 1, top: 4, p= 1.0, second: 9, p= 8.86881e-35, third: 5, p= 3.15737e-43
@@ -115,6 +128,7 @@ model: 4, best: 4, AStype: 1, top: 4, p= 1.0, second: 5, p= 1.18073e-39, third: 
 model: 4, best: 4, AStype: 1, top: 4, p= 1.0, second: 0, p= 1.37166e-14, third: 5, p= 3.36285e-22
 model: 4, best: 4, AStype: 1, top: 4, p= 1.0, second: 9, p= 2.34758e-18, third: 5, p= 6.53505e-24
 model: 4, best: 4, AStype: 1, top: 4, p= 1.0, second: 9, p= 5.32923e-11, third: 1, p= 8.77875e-51
+model: 4, best: 4, AStype: 2, top: 4, p= 1.0, second: 9, p= 6.22769e-39, third: 5, p= 9.60258e-64
 model: 4, best: 4, AStype: 2, top: 4, p= 1.0, second: 0, p= 3.31409e-19, third: 5, p= 6.80258e-21
 model: 4, best: 4, AStype: 2, top: 4, p= 1.0, second: 9, p= 2.87912e-46, third: 5, p= 1.75533e-55
 model: 4, best: 4, AStype: 2, top: 4, p= 1.0, second: 5, p= 1.01366e-17, third: 0, p= 2.93579e-36
@@ -124,6 +138,7 @@ model: 4, best: 4, AStype: 2, top: 4, p= 1.0, second: 5, p= 1.07654e-30, third: 
 model: 4, best: 4, AStype: 2, top: 4, p= 1.0, second: 5, p= 4.62003e-34, third: 9, p= 3.64244e-35
 model: 4, best: 4, AStype: 2, top: 4, p= 1.0, second: 5, p= 4.05303e-23, third: 0, p= 9.88086e-49
 model: 4, best: 4, AStype: 2, top: 4, p= 1.0, second: 5, p= 1.99967e-31, third: 9, p= 1.22238e-42
+model: 4, best: 4, AStype: 3, top: 4, p= 1.0, second: 5, p= 2.23405e-15, third: 0, p= 1.43838e-69
 model: 4, best: 4, AStype: 3, top: 4, p= 1.0, second: 5, p= 6.09609e-13, third: 8, p= 9.51946e-60
 model: 4, best: 4, AStype: 3, top: 4, p= 1.0, second: 5, p= 3.84588e-16, third: 0, p= 8.57638e-17
 model: 4, best: 4, AStype: 3, top: 4, p= 1.0, second: 5, p= 1.11836e-21, third: 0, p= 3.08031e-38
@@ -133,24 +148,27 @@ model: 4, best: 4, AStype: 3, top: 4, p= 1.0, second: 5, p= 2.73768e-10, third: 
 model: 4, best: 4, AStype: 3, top: 4, p= 1.0, second: 5, p= 9.06163e-16, third: 0, p= 9.14756e-27
 model: 4, best: 4, AStype: 3, top: 4, p= 1.0, second: 9, p= 2.46674e-34, third: 5, p= 2.20191e-34
 model: 4, best: 4, AStype: 3, top: 4, p= 1.0, second: 9, p= 2.03549e-27, third: 0, p= 3.93143e-35
+model: 5, best: 5, AStype: 1, top: 5, p= 1.0, second: 0, p= 6.85751e-31, third: 9, p= 1.00212e-40
 model: 5, best: 5, AStype: 1, top: 5, p= 1.0, second: 8, p= 1.57607e-40, third: 1, p= 2.48593e-44
 model: 5, best: 5, AStype: 1, top: 5, p= 1.0, second: 4, p= 1.07046e-16, third: 0, p= 6.56459e-71
 model: 5, best: 5, AStype: 1, top: 5, p= 1.0, second: 1, p= 1.53424e-16, third: 4, p= 1.6277e-45
 model: 5, best: 5, AStype: 1, top: 5, p= 1.0, second: 8, p= 3.24024e-32, third: 9, p= 1.54298e-47
-model: 5, best: 8, AStype: 1, top: 8, p= 0.969115, second: 5, p= 0.0308852, third: 9, p= 1.59969e-35
+model: 5, best: 8, AStype: 1, top: 8, p= 0.969115, second: 5, p= 0.0308852, third: 9, p= 1.59969e-35 ****ERROR****
 model: 5, best: 5, AStype: 1, top: 5, p= 1.0, second: 4, p= 1.2978e-19, third: 9, p= 2.70895e-38
 model: 5, best: 5, AStype: 1, top: 5, p= 1.0, second: 8, p= 6.79058e-16, third: 9, p= 2.47917e-32
 model: 5, best: 5, AStype: 1, top: 5, p= 1.0, second: 8, p= 9.26649e-28, third: 9, p= 4.98711e-36
 model: 5, best: 5, AStype: 1, top: 5, p= 1.0, second: 1, p= 4.17501e-36, third: 4, p= 1.62187e-42
+model: 5, best: 5, AStype: 2, top: 5, p= 1.0, second: 4, p= 3.84015e-31, third: 0, p= 4.035e-35
 model: 5, best: 5, AStype: 2, top: 5, p= 1.0, second: 4, p= 4.55374e-13, third: 9, p= 1.24548e-27
 model: 5, best: 5, AStype: 2, top: 5, p= 1.0, second: 0, p= 4.43938e-39, third: 8, p= 1.94498e-50
 model: 5, best: 5, AStype: 2, top: 5, p= 1.0, second: 8, p= 1.45401e-25, third: 0, p= 9.19341e-36
 model: 5, best: 5, AStype: 2, top: 5, p= 1.0, second: 8, p= 2.57162e-28, third: 9, p= 1.40532e-60
 model: 5, best: 5, AStype: 2, top: 5, p= 1.0, second: 8, p= 4.93065e-20, third: 9, p= 1.50611e-28
 model: 5, best: 5, AStype: 2, top: 5, p= 1.0, second: 9, p= 2.76926e-29, third: 0, p= 4.85485e-45
-model: 5, best: 8, AStype: 2, top: 8, p= 0.999799, second: 9, p= 0.000201237, third: 5, p= 6.48674e-13
+model: 5, best: 8, AStype: 2, top: 8, p= 0.999799, second: 9, p= 0.000201237, third: 5, p= 6.48674e-13 ****ERROR****
 model: 5, best: 5, AStype: 2, top: 5, p= 1.0, second: 8, p= 4.60278e-30, third: 0, p= 4.05062e-32
 model: 5, best: 5, AStype: 2, top: 5, p= 1.0, second: 4, p= 2.47676e-31, third: 9, p= 1.16234e-84
+model: 5, best: 5, AStype: 3, top: 5, p= 1.0, second: 4, p= 2.12468e-20, third: 0, p= 8.05379e-27
 model: 5, best: 5, AStype: 3, top: 5, p= 1.0, second: 8, p= 8.86794e-33, third: 0, p= 3.32394e-48
 model: 5, best: 5, AStype: 3, top: 5, p= 1.0, second: 8, p= 3.40642e-20, third: 9, p= 2.2812e-29
 model: 5, best: 5, AStype: 3, top: 5, p= 1.0, second: 8, p= 8.43002e-33, third: 0, p= 4.7951e-43
@@ -160,6 +178,7 @@ model: 5, best: 5, AStype: 3, top: 5, p= 1.0, second: 0, p= 1.27919e-23, third: 
 model: 5, best: 5, AStype: 3, top: 5, p= 1.0, second: 8, p= 1.24993e-18, third: 2, p= 2.00918e-51
 model: 5, best: 5, AStype: 3, top: 5, p= 1.0, second: 8, p= 2.66781e-22, third: 9, p= 4.47408e-48
 model: 5, best: 5, AStype: 3, top: 5, p= 1.0, second: 0, p= 1.35205e-31, third: 8, p= 1.63965e-38
+model: 6, best: 6, AStype: 1, top: 6, p= 0.999793, second: 2, p= 0.000207441, third: 5, p= 1.54098e-57
 model: 6, best: 6, AStype: 1, top: 6, p= 1.0, second: 2, p= 2.19739e-08, third: 1, p= 9.17578e-68
 model: 6, best: 6, AStype: 1, top: 6, p= 1.0, second: 2, p= 2.07534e-24, third: 9, p= 1.70174e-71
 model: 6, best: 6, AStype: 1, top: 6, p= 1.0, second: 2, p= 1.87477e-17, third: 9, p= 3.89364e-46
@@ -169,6 +188,7 @@ model: 6, best: 6, AStype: 1, top: 6, p= 1.0, second: 2, p= 4.12901e-17, third: 
 model: 6, best: 6, AStype: 1, top: 6, p= 0.999957, second: 2, p= 4.32018e-05, third: 9, p= 1.65234e-40
 model: 6, best: 6, AStype: 1, top: 6, p= 1.0, second: 2, p= 7.00875e-09, third: 5, p= 3.99595e-36
 model: 6, best: 6, AStype: 1, top: 6, p= 1.0, second: 2, p= 3.78555e-28, third: 8, p= 2.68093e-32
+model: 6, best: 6, AStype: 2, top: 6, p= 1.0, second: 2, p= 4.88742e-24, third: 8, p= 5.23669e-50
 model: 6, best: 6, AStype: 2, top: 6, p= 1.0, second: 2, p= 3.78474e-25, third: 0, p= 2.18983e-52
 model: 6, best: 6, AStype: 2, top: 6, p= 1.0, second: 2, p= 4.50344e-34, third: 8, p= 1.27812e-50
 model: 6, best: 6, AStype: 2, top: 6, p= 1.0, second: 2, p= 3.72334e-31, third: 8, p= 4.31175e-47
@@ -178,6 +198,7 @@ model: 6, best: 6, AStype: 2, top: 6, p= 1.0, second: 2, p= 3.17588e-39, third: 
 model: 6, best: 6, AStype: 2, top: 6, p= 1.0, second: 2, p= 8.44129e-21, third: 8, p= 1.55674e-37
 model: 6, best: 6, AStype: 2, top: 6, p= 1.0, second: 2, p= 1.33685e-26, third: 9, p= 1.17018e-61
 model: 6, best: 6, AStype: 2, top: 6, p= 1.0, second: 2, p= 5.05921e-52, third: 4, p= 6.09449e-62
+model: 6, best: 6, AStype: 3, top: 6, p= 1.0, second: 2, p= 7.61088e-51, third: 8, p= 4.58834e-80
 model: 6, best: 6, AStype: 3, top: 6, p= 1.0, second: 2, p= 1.08847e-39, third: 8, p= 2.02659e-43
 model: 6, best: 6, AStype: 3, top: 6, p= 1.0, second: 2, p= 1.89849e-42, third: 8, p= 4.23095e-80
 model: 6, best: 6, AStype: 3, top: 6, p= 1.0, second: 2, p= 7.35703e-46, third: 8, p= 4.90931e-56
@@ -187,6 +208,7 @@ model: 6, best: 6, AStype: 3, top: 6, p= 1.0, second: 2, p= 6.63386e-49, third: 
 model: 6, best: 6, AStype: 3, top: 6, p= 1.0, second: 2, p= 2.05725e-39, third: 5, p= 2.27575e-58
 model: 6, best: 6, AStype: 3, top: 6, p= 1.0, second: 2, p= 1.97216e-36, third: 0, p= 5.0007e-67
 model: 6, best: 6, AStype: 3, top: 6, p= 1.0, second: 2, p= 3.10608e-37, third: 8, p= 8.66342e-71
+model: 7, best: 7, AStype: 1, top: 7, p= 1.0, second: 9, p= 2.14481e-70, third: 5, p= 3.12635e-82
 model: 7, best: 7, AStype: 1, top: 7, p= 1.0, second: 5, p= 5.95639e-50, third: 2, p= 1.88739e-56
 model: 7, best: 7, AStype: 1, top: 7, p= 1.0, second: 0, p= 2.42031e-68, third: 5, p= 3.82567e-69
 model: 7, best: 7, AStype: 1, top: 7, p= 1.0, second: 5, p= 6.38103e-46, third: 9, p= 1.86891e-69
@@ -196,6 +218,7 @@ model: 7, best: 7, AStype: 1, top: 7, p= 1.0, second: 5, p= 9.34656e-67, third: 
 model: 7, best: 7, AStype: 1, top: 7, p= 1.0, second: 9, p= 3.76431e-66, third: 5, p= 1.187e-69
 model: 7, best: 7, AStype: 1, top: 7, p= 1.0, second: 5, p= 1.08242e-50, third: 0, p= 6.11647e-66
 model: 7, best: 7, AStype: 1, top: 7, p= 1.0, second: 9, p= 2.33098e-75, third: 0, p= 3.20829e-79
+model: 7, best: 7, AStype: 2, top: 7, p= 1.0, second: 9, p= 7.95592e-70, third: 5, p= 1.68738e-70
 model: 7, best: 7, AStype: 2, top: 7, p= 1.0, second: 9, p= 8.62432e-65, third: 5, p= 1.72372e-87
 model: 7, best: 7, AStype: 2, top: 7, p= 1.0, second: 9, p= 1.39658e-59, third: 5, p= 7.16124e-68
 model: 7, best: 7, AStype: 2, top: 7, p= 1.0, second: 5, p= 5.16258e-63, third: 0, p= 7.19548e-65
@@ -205,6 +228,7 @@ model: 7, best: 7, AStype: 2, top: 7, p= 1.0, second: 9, p= 6.74684e-52, third: 
 model: 7, best: 7, AStype: 2, top: 7, p= 1.0, second: 0, p= 2.20772e-66, third: 8, p= 1.66346e-67
 model: 7, best: 7, AStype: 2, top: 7, p= 1.0, second: 0, p= 1.08483e-68, third: 5, p= 2.68243e-97
 model: 7, best: 7, AStype: 2, top: 7, p= 1.0, second: 5, p= 1.00243e-50, third: 2, p= 9.40529e-57
+model: 7, best: 7, AStype: 3, top: 7, p= 1.0, second: 9, p= 5.56216e-88, third: 5, p= 2.89608e-103
 model: 7, best: 7, AStype: 3, top: 7, p= 1.0, second: 5, p= 4.2485e-81, third: 2, p= 1.49972e-110
 model: 7, best: 7, AStype: 3, top: 7, p= 1.0, second: 5, p= 4.20605e-70, third: 9, p= 1.92512e-100
 model: 7, best: 7, AStype: 3, top: 7, p= 1.0, second: 5, p= 1.83159e-116, third: 9, p= 1.51279e-116
@@ -214,6 +238,7 @@ model: 7, best: 7, AStype: 3, top: 7, p= 1.0, second: 5, p= 2.43361e-81, third: 
 model: 7, best: 7, AStype: 3, top: 7, p= 1.0, second: 5, p= 8.77058e-78, third: 9, p= 8.08305e-98
 model: 7, best: 7, AStype: 3, top: 7, p= 1.0, second: 5, p= 9.93444e-102, third: 9, p= 2.22224e-124
 model: 7, best: 7, AStype: 3, top: 7, p= 1.0, second: 9, p= 1.54915e-110, third: 5, p= 2.70637e-120
+model: 8, best: 8, AStype: 1, top: 8, p= 1.0, second: 9, p= 3.24775e-19, third: 5, p= 4.88693e-38
 model: 8, best: 8, AStype: 1, top: 8, p= 1.0, second: 0, p= 1.51822e-13, third: 5, p= 3.85204e-30
 model: 8, best: 8, AStype: 1, top: 8, p= 1.0, second: 5, p= 7.83462e-29, third: 9, p= 1.17292e-45
 model: 8, best: 8, AStype: 1, top: 8, p= 1.0, second: 0, p= 5.83689e-16, third: 9, p= 1.40027e-20
@@ -223,6 +248,7 @@ model: 8, best: 8, AStype: 1, top: 8, p= 1.0, second: 0, p= 1.04563e-11, third: 
 model: 8, best: 8, AStype: 1, top: 8, p= 0.999006, second: 0, p= 0.000993646, third: 9, p= 6.0597e-20
 model: 8, best: 8, AStype: 1, top: 8, p= 1.0, second: 9, p= 9.52164e-21, third: 0, p= 6.72189e-23
 model: 8, best: 8, AStype: 1, top: 8, p= 1.0, second: 5, p= 2.96603e-38, third: 0, p= 3.12544e-42
+model: 8, best: 8, AStype: 2, top: 8, p= 1.0, second: 5, p= 4.79565e-32, third: 9, p= 5.08949e-36
 model: 8, best: 8, AStype: 2, top: 8, p= 1.0, second: 5, p= 7.17957e-41, third: 9, p= 8.80162e-52
 model: 8, best: 8, AStype: 2, top: 8, p= 1.0, second: 5, p= 1.96439e-33, third: 9, p= 4.89836e-43
 model: 8, best: 8, AStype: 2, top: 8, p= 1.0, second: 9, p= 5.50789e-31, third: 0, p= 2.47881e-71
@@ -232,6 +258,7 @@ model: 8, best: 8, AStype: 2, top: 8, p= 1.0, second: 9, p= 5.93574e-23, third: 
 model: 8, best: 8, AStype: 2, top: 8, p= 1.0, second: 9, p= 2.34943e-47, third: 5, p= 6.38586e-50
 model: 8, best: 8, AStype: 2, top: 8, p= 1.0, second: 9, p= 3.97898e-23, third: 5, p= 5.94215e-64
 model: 8, best: 8, AStype: 2, top: 8, p= 1.0, second: 9, p= 6.77352e-19, third: 5, p= 1.15164e-66
+model: 8, best: 8, AStype: 3, top: 8, p= 1.0, second: 9, p= 7.83119e-36, third: 0, p= 3.23685e-48
 model: 8, best: 8, AStype: 3, top: 8, p= 1.0, second: 9, p= 8.85444e-32, third: 0, p= 5.582e-39
 model: 8, best: 8, AStype: 3, top: 8, p= 1.0, second: 9, p= 3.57571e-34, third: 0, p= 5.03398e-43
 model: 8, best: 8, AStype: 3, top: 8, p= 1.0, second: 5, p= 1.9146e-31, third: 0, p= 3.76257e-48
@@ -241,15 +268,17 @@ model: 8, best: 8, AStype: 3, top: 8, p= 1.0, second: 5, p= 3.849e-43, third: 9,
 model: 8, best: 8, AStype: 3, top: 8, p= 1.0, second: 5, p= 7.09063e-38, third: 6, p= 1.73423e-38
 model: 8, best: 8, AStype: 3, top: 8, p= 1.0, second: 5, p= 5.89315e-42, third: 0, p= 9.48231e-63
 model: 8, best: 8, AStype: 3, top: 8, p= 1.0, second: 9, p= 1.0106e-24, third: 0, p= 8.56124e-35
+model: 9, best: 9, AStype: 1, top: 9, p= 0.999999, second: 0, p= 9.13886e-07, third: 4, p= 2.95011e-25
 model: 9, best: 9, AStype: 1, top: 9, p= 1.0, second: 8, p= 1.2984e-24, third: 5, p= 7.598e-88
 model: 9, best: 9, AStype: 1, top: 9, p= 1.0, second: 8, p= 3.94425e-32, third: 0, p= 5.20784e-39
 model: 9, best: 9, AStype: 1, top: 9, p= 1.0, second: 8, p= 8.18029e-39, third: 0, p= 4.6792e-44
 model: 9, best: 9, AStype: 1, top: 9, p= 1.0, second: 4, p= 7.12955e-58, third: 5, p= 7.6372e-62
 model: 9, best: 9, AStype: 1, top: 9, p= 1.0, second: 4, p= 1.04315e-11, third: 0, p= 3.36356e-23
 model: 9, best: 9, AStype: 1, top: 9, p= 1.0, second: 0, p= 3.02358e-23, third: 8, p= 2.30448e-39
-model: 9, best: 1, AStype: 1, top: 1, p= 0.547102, second: 9, p= 0.452898, third: 2, p= 6.7883e-34
+model: 9, best: 1, AStype: 1, top: 1, p= 0.547102, second: 9, p= 0.452898, third: 2, p= 6.7883e-34 ****ERROR****
 model: 9, best: 9, AStype: 1, top: 9, p= 1.0, second: 8, p= 1.16728e-46, third: 5, p= 3.82773e-58
 model: 9, best: 9, AStype: 1, top: 9, p= 1.0, second: 8, p= 3.34896e-20, third: 5, p= 5.79663e-57
+model: 9, best: 9, AStype: 2, top: 9, p= 1.0, second: 8, p= 4.14052e-29, third: 0, p= 4.56232e-39
 model: 9, best: 9, AStype: 2, top: 9, p= 1.0, second: 4, p= 3.78858e-42, third: 0, p= 1.33835e-43
 model: 9, best: 9, AStype: 2, top: 9, p= 1.0, second: 4, p= 3.13705e-27, third: 0, p= 8.6203e-39
 model: 9, best: 9, AStype: 2, top: 9, p= 1.0, second: 0, p= 9.07744e-46, third: 4, p= 1.83976e-54
@@ -259,6 +288,7 @@ model: 9, best: 9, AStype: 2, top: 9, p= 1.0, second: 8, p= 1.4578e-44, third: 0
 model: 9, best: 9, AStype: 2, top: 9, p= 1.0, second: 8, p= 3.04166e-33, third: 5, p= 4.25876e-38
 model: 9, best: 9, AStype: 2, top: 9, p= 1.0, second: 8, p= 1.24682e-21, third: 0, p= 2.61871e-24
 model: 9, best: 9, AStype: 2, top: 9, p= 1.0, second: 4, p= 6.58955e-32, third: 0, p= 2.61063e-36
+model: 9, best: 9, AStype: 3, top: 9, p= 1.0, second: 4, p= 2.45702e-29, third: 5, p= 1.42379e-41
 model: 9, best: 9, AStype: 3, top: 9, p= 1.0, second: 4, p= 1.16338e-43, third: 5, p= 2.90669e-46
 model: 9, best: 9, AStype: 3, top: 9, p= 1.0, second: 4, p= 1.14565e-29, third: 5, p= 3.19508e-41
 model: 9, best: 9, AStype: 3, top: 9, p= 1.0, second: 0, p= 2.16842e-32, third: 4, p= 1.78404e-32

@@ -13,6 +13,11 @@ class BayesFilter {
   std::vector<stateStruct> stateList_;
   std::vector<double> logProbList_;
 
+  // these are just used to understand the filter
+  std::vector<double> logProbList_T_;
+  std::vector<double> logProbList_O_;
+
+
   //functions
   BayesFilter();
 

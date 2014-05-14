@@ -351,8 +351,8 @@ for i in range(numSteps):
     pyplot.plot(obs[0][i],obs[1][i],'yx',markersize=mSize)
     print 'obs: '+str(obs[0][i])+','+str(obs[1][i])
     pyplot.title('step'+str(i))
-    outFile = 'dump/step'+str(i)+'.png'
-    pyplot.savefig(outFile,bbox_inches='tight')
+    #outFile = 'dump/step'+str(i)+'.png'
+    #pyplot.savefig(outFile,bbox_inches='tight')
     print 'Distribution:'
     print [d[i+1] for d in data] 
 

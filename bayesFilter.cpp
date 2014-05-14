@@ -25,7 +25,7 @@ void BayesFilter::transitionUpdateLog(std::vector<double> action, sasUtils::mapP
   transitionUpdateLog(logProbList_, action, sasList);
 }
 
-//overload this function
+//overload this function - this is the only one that works now
 void BayesFilter::transitionUpdateLog(std::vector<double>& logProbList, std::vector<double> action, sasUtils::mapPairSVS& sasList){
 	//in here, we need to for each state 
   //1) do a state transition 
@@ -66,6 +66,9 @@ void BayesFilter::transitionUpdateLog(std::vector<double>& logProbList, std::vec
 	}
 
 	logProbList = tempLogProbList;
+
+	logProbList_T_.clear();
+	logProbList_T_ = tempLogProbList; // You added this on 5/7/2014
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -131,8 +134,12 @@ void BayesFilter::observationUpdateLog(std::vector<double> obs){
 //overload this function
 void BayesFilter::observationUpdateLog(std::vector<double>& logProbList, std::vector<double> obs){
 
+  logProbList_O_.clear();
+
 	for (size_t i=0; i<stateList_.size(); i++) {
-	  logProbList[i] += filterModels::logProbObs(obs,stateList_[i]);
+	  double holdP = filterModels::logProbObs(obs,stateList_[i]);
+	  logProbList[i] += holdP;
+	  logProbList_O_.push_back(holdP); // you added this on 5/7/2014
 	}
 
 	//std::cout << "??????????????????????????????????????????? before normalization" << std::endl; // DELETE

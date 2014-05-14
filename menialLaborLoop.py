@@ -18,7 +18,7 @@ for mNum in models:
     for asType in actionSelectionTypes:
         actionSelectionType = asType
 
-        path = 'dataBigBoth/model'+str(model)+'/'+asTypes[actionSelectionType]+'/'
+        path = 'dataBigMid/model'+str(model)+'/'+asTypes[actionSelectionType]+'/'
 
         for i in range(numExperiments):
             print "experiment "+str(i)

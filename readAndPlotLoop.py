@@ -229,16 +229,30 @@ fout = open(outputFile,'w')
 statsFile = outPath+'stats.txt'
 statsOut = open(statsFile,'w')
 
+presFile = outPath+'pres.txt'
+presOut = open(presFile,'w')
+
 #statsHeader = 'Real Model:\tAction Selection Type:\tFirst:\tP:\tSecond:\tP:\tThird:\tP:\n'
 statsHeader = 'M\tA\tF\tProbability\tS\tProbability\tT\tProbability\n'
 statsOut.write(statsHeader)
 
+presHeader = 'M\tA\t5\tProbability\t10\tProbability\n'
+presOut.write(presHeader)
+
 errorCount = 0
+errorASType = [0]*len(asNums)
+errorMType = [0]*len(modelNums)
 
 avgStepTimes = [[],[],[]]
 
+
 for modelNum in modelNums:
+    avgEntsList = []
     for asNum in asNums:
+        trials = 10 #how many trials
+
+        totalEntsList = [0.0]*(trials+1)
+
         path = inPath+'model'+str(modelNum)+'/'+asTypes[asNum]+'/'
         # print path
         startFileName = path+'data'+str(modelNum)+'_0.txt'
@@ -248,8 +262,29 @@ for modelNum in modelNums:
         # setup
         startData, nSteps, nMPPairs, m, sInRbt, logPs, Ps, As, Os, aType, numVTypes, startTimes = get_data(startFileName)
         totalData = numpy.array(startData)
+        totalEnts = numpy.array(totalEntsList)
+        #print totalData[:,0]
+        #print 'Initial Entropy: '+str(-sum(totalData[:,0]*numpy.log(totalData[:,0])))
 
-        trials = 10 #how many trials
+        for j in range(nSteps):
+            totalEnts[j] += -sum(totalData[:,j]*numpy.log(totalData[:,j]))
+
+        #print totalEnts
+        
+        maxes = totalData[:,-1].tolist()
+        top3 = heapq.nlargest(3,maxes)
+
+        markError = ''
+        if modelNum != maxes.index(top3[0]):
+            errorCount += 1
+            errorASType[asNum-1] += 1
+            errorMType[modelNum] += 1
+            markError = ' ****ERROR****'
+        
+        infoString = 'model: '+str(modelNum)+', best: '+str(maxes.index(max(maxes)))+', AStype: '+str(asNum)+', top: '+str(maxes.index(top3[0]))+', p= '+str(top3[0])+', second: '+str(maxes.index(top3[1]))+', p= '+str(top3[1])+', third: '+str(maxes.index(top3[2]))+', p= '+str(top3[2])+markError+'\n'
+
+        fout.write(infoString)
+        
 
         totalStepTime=startTimes[2] # get the step time for the first experiment
 
@@ -261,15 +296,32 @@ for modelNum in modelNums:
                 maxes.append(data[f][-1])
 
             top3 = heapq.nlargest(3,maxes)
-            infoString = 'model: '+str(modelNum)+', best: '+str(maxes.index(max(maxes)))+', AStype: '+str(asNum)+', top: '+str(maxes.index(top3[0]))+', p= '+str(top3[0])+', second: '+str(maxes.index(top3[1]))+', p= '+str(top3[1])+', third: '+str(maxes.index(top3[2]))+', p= '+str(top3[2])+'\n'
+
+            markError = ''
+            if modelNum != maxes.index(top3[0]):
+                errorCount += 1
+                errorASType[asNum-1] += 1
+                errorMType[modelNum] += 1       
+                markError = ' ****ERROR****'
+
+
+            
+            infoString = 'model: '+str(modelNum)+', best: '+str(maxes.index(max(maxes)))+', AStype: '+str(asNum)+', top: '+str(maxes.index(top3[0]))+', p= '+str(top3[0])+', second: '+str(maxes.index(top3[1]))+', p= '+str(top3[1])+', third: '+str(maxes.index(top3[2]))+', p= '+str(top3[2])+markError+'\n'
             #print infoString
             fout.write(infoString)
             dataArray = numpy.array(data)
             totalData += dataArray
-            if modelNum != maxes.index(top3[0]):
-                errorCount += 1
+
             totalStepTime += times[2]
 
+            for j in range(1,numSteps+1):
+                totalEnts[j] += -sum(dataArray[:,j]*numpy.log(dataArray[:,j]))
+
+
+        avgEnts = totalEnts/trials
+
+        avgEntsList.append(avgEnts)
+        
         avgData = totalData/trials
         avgStepTime = totalStepTime/trials
 
@@ -287,6 +339,12 @@ for modelNum in modelNums:
         statsString = str(modelNum)+'\t'+str(asNum)+'\t'+str(lastColumn.index(top3ofLC[0]))+'\t'+'%.7f'%top3ofLC[0]+'\t'+str(lastColumn.index(top3ofLC[1]))+'\t'+'%.7f'%top3ofLC[1]+'\t'+str(lastColumn.index(top3ofLC[2]))+'\t'+'%.7f'%top3ofLC[2]+'\n'
         statsOut.write(statsString)
 
+        midColumn = avgData[:,5].tolist()
+        top3ofMC = heapq.nlargest(3,midColumn)
+        
+        presString = str(modelNum)+'\t'+str(asNum)+'\t'+str(midColumn.index(top3ofMC[0]))+'\t'+'%.7f'%top3ofMC[0]+'\t'+str(lastColumn.index(top3ofLC[0]))+'\t'+'%.7f'%top3ofLC[0]+'\n'
+        presOut.write(presString)
+
         inds = range(nSteps+1)
         for i in range(nMPPairs):
             pyplot.plot(inds,avgData[i,:],'-o')
@@ -301,12 +359,36 @@ for modelNum in modelNums:
         pyplot.savefig(outFile,bbox_inches='tight')
         pyplot.clf()
 
-statsOut.write('Total Errors: '+str(errorCount))
+    for b in range(3):
+        #print inds
+        #print avgEntsList[b]
+        pyplot.plot(inds,avgEntsList[b],'-o')
+
+    pyplot.ylabel('Entropy')
+    pyplot.xlabel('Step')
+    pyplot.legend(['Random','Entropy','OG'],loc=0)
+    outFile = outPath+'m'+str(model)+'_entropy.png'
+    pyplot.savefig(outFile,bbox_inches='tight')
+    pyplot.clf()
+
+statsOut.write('Total Errors: '+str(errorCount)+'\n')
+statsOut.write('By AS Type:\n')
+for i in range(len(errorASType)):
+    statsOut.write(asTypes[i+1]+': '+str(errorASType[i])+'\n')
+statsOut.write('By M Type:\n')
+for i in range(len(errorMType)):
+    statsOut.write(models[i]+': '+str(errorMType[i])+'\n')
+statsOut.write('Time per step:\n')
+timeNames = ['Random: ','Entropy: ','OG: ']
+
+for i in range(3):
+    timeAvg = sum(avgStepTimes[i])/len(avgStepTimes[i])
+    print timeAvg
+    statsOut.write(timeNames[i]+str(timeAvg)+'\n')
 
 fout.close()
 statsOut.close()
+presOut.close()
 
-for i in range(3):
-    print sum(avgStepTimes[i])/len(avgStepTimes[i])
 
 
