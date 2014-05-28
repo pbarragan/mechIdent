@@ -85,12 +85,12 @@ std::vector<stateStruct> setupUtils::setupModel2(std::vector<stateStruct>& model
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = 0.3111; // ICRA 2014 - 0.3
-  dRP[0][1] = 0.3111; // ICRA 2014 - 0.3
-  dRP[1][0] = 0.3111; // ICRA 2014 - 0.3
-  dRP[1][1] = 0.3111; // ICRA 2014 - 0.3
-  dRP[2][0] = 0.44; // ICRA 2014 - 0.3
-  dRP[2][1] = 0.44; // ICRA 2014 - 0.3
+  dRP[0][0] = 0.396; // ICRA 2014 - 0.3 - 0.3111
+  dRP[0][1] = 0.396; // ICRA 2014 - 0.3 - 0.3111
+  dRP[1][0] = 0.396; // ICRA 2014 - 0.3 - 0.3111
+  dRP[1][1] = 0.396; // ICRA 2014 - 0.3 - 0.3111
+  dRP[2][0] = 0.56; // ICRA 2014 - 0.3 - 0.44
+  dRP[2][1] = 0.56; // ICRA 2014 - 0.3 - 0.44
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 1;
@@ -119,12 +119,12 @@ std::vector<stateStruct> setupUtils::setupModel3(std::vector<stateStruct>& model
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = 0.16; // ICRA 2014 - -0.16
-  dRP[0][1] = 0.16; // ICRA 2014 - -0.16
-  dRP[1][0] = 0.16; // ICRA 2014 - -0.16
-  dRP[1][1] = 0.16; // ICRA 2014 - -0.16
-  dRP[2][0] = -2.3562; // ICRA 2014 - 0.7865 
-  dRP[2][1] = -2.3562;  // ICRA 2014 - 0.7865
+  dRP[0][0] = 0.0; // ICRA 2014 - -0.16
+  dRP[0][1] = 0.0; // ICRA 2014 - -0.16
+  dRP[1][0] = 0.226274; // ICRA 2014 - -0.16
+  dRP[1][1] = 0.226274; // ICRA 2014 - -0.16
+  dRP[2][0] = -1.570796; // ICRA 2014 - 0.7865 
+  dRP[2][1] = -1.570796;  // ICRA 2014 - 0.7865
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 1;
@@ -247,12 +247,12 @@ std::vector<stateStruct> setupUtils::setupModel6(std::vector<stateStruct>& model
 
   //Dimension Ranges for Params
   std::vector< std::vector<double> > dRP (paramNum, std::vector<double> (2,0.0));
-  dRP[0][0] = -0.3111; // ICRA 2014 - 0.3
-  dRP[0][1] = -0.3111; // ICRA 2014 - 0.3
-  dRP[1][0] = -0.3111; // ICRA 2014 - 0.3
-  dRP[1][1] = -0.3111; // ICRA 2014 - 0.3
-  dRP[2][0] = 0.44; // ICRA 2014 - 0.3
-  dRP[2][1] = 0.44; // ICRA 2014 - 0.3
+  dRP[0][0] = 0.396; // ICRA 2014 - 0.3 - 0.3111
+  dRP[0][1] = 0.396; // ICRA 2014 - 0.3 - 0.3111
+  dRP[1][0] = -0.396; // ICRA 2014 - 0.3 - -0.3111
+  dRP[1][1] = -0.396; // ICRA 2014 - 0.3 - -0.3111
+  dRP[2][0] = 0.56; // ICRA 2014 - 0.3 - 0.44
+  dRP[2][1] = 0.56; // ICRA 2014 - 0.3 - 0.44
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 1;
@@ -285,8 +285,8 @@ std::vector<stateStruct> setupUtils::setupModel7(std::vector<stateStruct>& model
   dRP[0][1] = 0.226274; // bs: 0.16 // ICRA 2014 - -0.16
   dRP[1][0] = 0.0; // ICRA 2014 - -0.16
   dRP[1][1] = 0.0; // ICRA 2014 - -0.16
-  dRP[2][0] = 0.0; // ICRA 2014 - 0.7865 
-  dRP[2][1] = 0.0;  // ICRA 2014 - 0.7865
+  dRP[2][0] = -3.14159; // ICRA 2014 - 0.7865 
+  dRP[2][1] = -3.14159;  // ICRA 2014 - 0.7865
   //Dimension Numbers for Params
   std::vector<int> dNP (paramNum, 0);
   dNP[0] = 1;
@@ -857,6 +857,9 @@ void setupUtils::setupActions(std::vector< std::vector<double> >& actionList){
       tempAction.push_back(radius*cos(i*angleDelta)); // add x component
       tempAction.push_back(radius*sin(i*angleDelta)); // add y component
       actionList.push_back(tempAction);
+    }
+    for(size_t i=0;i<actionList.size();i++){
+      std::cout << actionList[i][0] << "," << actionList[i][1] << std::endl;
     }
     
   }

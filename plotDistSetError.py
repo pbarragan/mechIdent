@@ -42,7 +42,24 @@ import readData
 #fileName = 'data/data3Tue_May_13_12_37_17_2014.txt' # past 3 again
 #fileName = 'data/data7Tue_May_13_12_40_12_2014.txt' # right on 7 mistake
 #fileName = 'data/data7Tue_May_13_12_41_10_2014.txt' # right on 7
-fileName = 'data/data7Tue_May_13_12_43_52_2014.txt' # right on 7
+#fileName = 'data/data7Tue_May_13_12_43_52_2014.txt' # right on 7
+
+# 5/14/14 back to simulation
+#fileName = 'data/data4Wed_May_14_12_10_47_2014.txt'
+
+# 5/20/14
+#fileName = 'data/data3Tue_May_20_00_20_57_2014.txt' # huge error
+#fileName = 'data/data7Tue_May_20_00_35_42_2014.txt' # correct
+#fileName = 'data/data3Tue_May_20_01_01_31_2014.txt' # correct
+#fileName = 'data/data3Tue_May_20_00_59_13_2014.txt' # correct
+#fileName = 'data/data3Tue_May_20_00_56_20_2014.txt' # error
+
+#5/25/14
+#fileName = 'data/data9Sun_May_25_10_25_56_2014.txt' # error
+#fileName = 'data/data9Sun_May_25_10_26_56_2014.txt' # error
+#fileName = 'data/data5Sun_May_25_10_27_39_2014.txt' # error
+fileName = 'data/data5Sun_May_25_10_27_57_2014.txt' # error
+
 
 folderName = fileName[:fileName.find('.txt')].replace('/','-')+'-ERROR'
 setPath = 'dump/'+folderName+'/'
@@ -127,7 +144,8 @@ for j in range(len(statesInRbt)):
             pyplot.scatter(statesInRbt[j][0],statesInRbt[j][1],c=logProbs[0][probInds[j]:probInds[j+1]],s=sSize,marker=symList[j],norm=colorNorm)
         else:
             pyplot.scatter(statesInRbt[j][0],statesInRbt[j][1],c=[math.exp(x) for x in logProbs[0][probInds[j]:probInds[j+1]]],s=sSize,marker=symList[j],norm=colorNorm)
-
+#pyplot.show()
+#raise(Exception('yup'))
 # create the list for the legend
 legendList=[]
 for i in range(len(data)):

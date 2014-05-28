@@ -241,7 +241,33 @@ stateStruct MechPris::returnStateOfWorld(){
   std::vector<double> tempVarsSim = convBtVect3ToStdVect(pose_);
   std::vector<double> tempVarsRbt = convCoordsSimToRbt(tempVarsSim);
   // there are two possible equations to solve for d. This is 1 choice.
-  endState.vars.push_back((tempVarsRbt[0]-x_a_)/cos(theta_a_));
+  //endState.vars.push_back((tempVarsRbt[0]-x_a_)/cos(theta_a_));
+
+  // the old way could divide by 0 because of the cos (or sin). This if statement avoids that.
+  if ((((theta_a_ < 3*M_PI/4) && (theta_a_ > M_PI/4)) || ((theta_a_ > -3*M_PI/4) && (theta_a_ < -M_PI/4)))){
+    endState.vars.push_back((tempVarsRbt[1]-y_a_)/sin(theta_a_)); 
+  }
+  else{
+    endState.vars.push_back((tempVarsRbt[0]-x_a_)/cos(theta_a_));
+  }
+
+  /*
+  // DELETE
+  std::cout << "inside mechPris" << std::endl;
+  std::cout << "x_a_: " << x_a_ << std::endl;
+  std::cout << "y_a_: " << y_a_ << std::endl;
+  std::cout << "theta_a_: " << theta_a_ << std::endl;
+  std::cout << "tempVarsRbt[0]: " << tempVarsRbt[0] << std::endl;
+  std::cout << "tempVarsRbt[1]: " << tempVarsRbt[1] << std::endl;
+  std::cout << "tempVarsRbt[2]: " << tempVarsRbt[2] << std::endl;
+  std::cout << "vars: " << endState.vars[0] << std::endl;
+  std::cout << "sqrt: " << sqrt((x_a_-tempVarsRbt[0])*(x_a_-tempVarsRbt[0])+(y_a_-tempVarsRbt[1])*(y_a_-tempVarsRbt[1])) << std::endl;
+  std::cout << "sin: " << (tempVarsRbt[1]-y_a_)/sin(theta_a_) << std::endl;
+  std::cout << "cos: " << (tempVarsRbt[0]-x_a_)/cos(theta_a_) << std::endl;
+  std::cout << "inside sin? " << (((theta_a_ < 3*M_PI/4) && (theta_a_ > M_PI/4)) || ((theta_a_ > -3*M_PI/4) && (theta_a_ < -M_PI/4))) << std::endl;
+  //
+  */
+
   return endState;
 }
 

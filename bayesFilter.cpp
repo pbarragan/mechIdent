@@ -44,7 +44,17 @@ void BayesFilter::transitionUpdateLog(std::vector<double>& logProbList, std::vec
 
 		// SAS: This line changed
 		stateStruct nextState = translator::stateTransition(stateList_[i], action, sasList); //this will be the mean of the guassian used to calculate the transition probability
-		
+		if (nextState.model == 3){
+		  std::cout << "Prismatic 3" << std::endl;
+		  std::cout << nextState.model << std::endl;
+		  for (size_t j=0;j<nextState.params.size();j++){
+		    std::cout << nextState.params[j] << std::endl;
+		  }
+		  for (size_t j=0;j<nextState.vars.size();j++){
+		    std::cout << nextState.vars[j] << std::endl;
+		  }
+		}
+
 		for (size_t j=0; j<stateList_.size(); j++) {
 		  //this loop is for x_k
 		  tempStateLogProbList[j] = filterModels::logProbState(stateList_[j],nextState);

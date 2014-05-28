@@ -362,7 +362,9 @@ void actionSelection::chooseActionSimpleRel(std::vector< std::vector<double> >& 
   validateRelActionList(actionList,poseInRbt,workspace,validRelActionList);
 
   action = validRelActionList[step%validRelActionList.size()]; // select action
- 
+  
+  // DELETE THIS
+  action = actionList[4];
 }
 
 // Random action selection.

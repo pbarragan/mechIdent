@@ -18,6 +18,7 @@
 #include "mechanisms/mechPrisPrisL.h"
 
 #include <iostream> // for cout
+#include <iomanip> // for setprecision
 #include <time.h> // for srand
 #include <stdlib.h> // for atoi
 #include <string>
@@ -317,9 +318,9 @@ void RealWorld::initMechRev(){
   stateStruct startState;
   startState.model = 2;
   std::vector<double> stateParams;
-  stateParams.push_back(0.3111);
-  stateParams.push_back(0.3111);
-  stateParams.push_back(0.44);
+  stateParams.push_back(0.396); // 0.3111
+  stateParams.push_back(0.396); // 0.3111
+  stateParams.push_back(0.56); // 0.44
   startState.params = stateParams;
   std::vector<double> stateVars;
   stateVars.push_back(-2.356);
@@ -349,12 +350,12 @@ void RealWorld::initMechPris(){
   stateStruct startState;
   startState.model = 3;
   std::vector<double> stateParams;
-  stateParams.push_back(0.16);
-  stateParams.push_back(0.16);
-  stateParams.push_back(-2.3562);
+  stateParams.push_back(0.0);
+  stateParams.push_back(0.226274);
+  stateParams.push_back(-1.570796);
   startState.params = stateParams;
   std::vector<double> stateVars;
-  stateVars.push_back(0.22627);
+  stateVars.push_back(0.226274);
   startState.vars = stateVars;
 
   // check if state is valid
@@ -459,12 +460,12 @@ void RealWorld::initMechRev2(){
   stateStruct startState;
   startState.model = 2;
   std::vector<double> stateParams;
-  stateParams.push_back(-0.3111);
-  stateParams.push_back(-0.3111);
-  stateParams.push_back(0.44);
+  stateParams.push_back(0.396); // 0.3111
+  stateParams.push_back(-0.396); // -0.3111
+  stateParams.push_back(0.56); // 0.44
   startState.params = stateParams;
   std::vector<double> stateVars;
-  stateVars.push_back(0.7854);
+  stateVars.push_back(2.356);
   startState.vars = stateVars;
 
   // check if state is valid
@@ -491,12 +492,12 @@ void RealWorld::initMechPris2(){
   stateStruct startState;
   startState.model = 3;
   std::vector<double> stateParams;
-  stateParams.push_back(0.16);
+  stateParams.push_back(0.226274);
   stateParams.push_back(0.0);
-  stateParams.push_back(0.0);
+  stateParams.push_back(-3.14159);
   startState.params = stateParams;
   std::vector<double> stateVars;
-  stateVars.push_back(-0.16);
+  stateVars.push_back(0.226274);
   startState.vars = stateVars;
 
   // check if state is valid
@@ -595,6 +596,17 @@ bool RealWorld::initializedNearZero(){
 }
 
 void RealWorld::updateFilter(std::vector<double> action,std::vector<double> obs){
+
+  std::cout << "Printing Log Probablity List for Prismatic 3 before:" << std::endl;
+  std::cout << std::fixed;
+  std::cout << std::setprecision(16);
+  for (size_t ii = 0; ii<filter_.logProbList_.size(); ii++) {
+    if(filter_.stateList_[ii].model==5){
+      std::cout << filter_.logProbList_[ii] <<std::endl;
+    }
+  }
+
+
   // check if you should pass the SAS list to the filter
   if (useSAS_){
     filter_.transitionUpdateLog(action,sasList_);
@@ -602,6 +614,16 @@ void RealWorld::updateFilter(std::vector<double> action,std::vector<double> obs)
   else {
     filter_.transitionUpdateLog(action);
   }
+
+  std::cout << "Printing Log Probablity List for Prismatic 3 after:" << std::endl;
+  std::cout << std::fixed;
+  std::cout << std::setprecision(16);
+  for (size_t ii = 0; ii<filter_.logProbList_.size(); ii++) {
+    if(filter_.stateList_[ii].model==5){
+    std::cout << filter_.logProbList_[ii] <<std::endl;
+    }
+  }
+
   //std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! after transition" << std::endl; // DELETE
   //filter_.printStatesAndProbs(); // DELETE
   filter_.observationUpdateLog(obs);
@@ -1118,7 +1140,45 @@ int main(int argc, char* argv[])
       RealWorld world(modelNum,steps,writeOutFile,actionSelectionType,useRobot);
       //std::cout << "didnt get here" << std::endl;
       clock_gettime(CLOCK_REALTIME, &ts2); // get time after constructor
-      
+
+      //////////
+      // DELETE - JUST FOR DEBUG
+
+      for (size_t b =0;b<world.filter_.stateList_.size();b++){
+	if (world.filter_.stateList_[b].model == 5){
+	  stateStruct tempState = translator::stateTransition(world.filter_.stateList_[b],world.actionList_[4]);
+	  std::cout << "Printing DEBUG for 3:" << std::endl;
+	  std::cout << "Before state:" << std::endl;
+	  std::cout << "Model: " << world.filter_.stateList_[b].model << std::endl;
+	  std::cout << "Params: ";
+	  for (size_t jj = 0; jj<world.filter_.stateList_[b].params.size(); jj++) {
+	    std::cout << world.filter_.stateList_[b].params[jj] << ',';
+	  }
+	  std::cout << std::endl;
+	  std::cout << "Vars: ";
+	  for (size_t jj = 0; jj<world.filter_.stateList_[b].vars.size(); jj++) {
+	    std::cout << world.filter_.stateList_[b].vars[jj] << ',';
+	  }
+	  std::cout << std::endl;
+	  std::cout << "action:" << std::endl;
+	  std::cout << world.actionList_[4][0] << "," << world.actionList_[4][0] << std::endl;
+	  std::cout << "After state:" << std::endl;
+	  std::cout << "Model: " << tempState.model << std::endl;
+	  std::cout << "Params: ";
+	  for (size_t jj = 0; jj<tempState.params.size(); jj++) {
+	    std::cout << tempState.params[jj] << ',';
+	  }
+	  std::cout << std::endl;
+	  std::cout << "Vars: ";
+	  for (size_t jj = 0; jj<tempState.vars.size(); jj++) {
+	    std::cout << tempState.vars[jj] << ',';
+	  }
+	  std::cout << std::endl;
+	}
+      }
+
+      ////////////
+
       world.runWorld(steps);
       
       clock_gettime(CLOCK_REALTIME, &ts3); // get time after running world
