@@ -1,0 +1,394 @@
+steps: 1
+0.12,0
+0.0848528,0.0848528
+7.34788e-18,0.12
+-0.0848528,0.0848528
+-0.12,1.46958e-17
+-0.0848528,-0.0848528
+-2.20436e-17,-0.12
+0.0848528,-0.0848528
+stateList_ size: 450
+Initializing a MechPris simulation in place of robot
+Simulated robot start state is valid. Great job.
+We initialized the simulate robot near zero. Heck yeah.
+poseInRbt_: 7.39452e-08,1.20737e-14
+Got the saved SAS data! Score!
+Don't worry, Son, we have a match.
+Model-param pairs and probs:
+Model: 0
+Params: 
+Prob: 0.1
+Number Var Types: 121
+Model: 1
+Params: 0,0,
+Prob: 0.1
+Number Var Types: 1
+Model: 2
+Params: 0.3111,0.3111,0.44,
+Prob: 0.1
+Number Var Types: 13
+Model: 3
+Params: 0,0.226274,-1.5708,
+Prob: 0.1
+Number Var Types: 17
+Model: 4
+Params: 0.27,0,0.17,-3.14159,0.1,
+Prob: 0.1
+Number Var Types: 78
+Model: 5
+Params: -0.1,-0.1,0,0.1,0.1,
+Prob: 0.1
+Number Var Types: 56
+Model: 2
+Params: 0.3111,-0.3111,0.44,
+Prob: 0.1
+Number Var Types: 13
+Model: 3
+Params: 0.226274,0,-3.14159,
+Prob: 0.1
+Number Var Types: 17
+Model: 4
+Params: -0.27,0,0.17,0,0.1,
+Prob: 0.1
+Number Var Types: 78
+Model: 5
+Params: 0.1,0.1,-3.14159,0.1,0.1,
+Prob: 0.1
+Number Var Types: 56
+Relative actions:
+Simple Action Selection:
+[1;31mstep: [0m0
+[1;31maction: [0m-0.12,1.46958e-17
+relative
+x: -0.12
+y: 1
+z: -1.20884e-14
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+poseInRbt_:
+before: -0.00779186
+noise: 0.0110959
+after: 0.003304
+before: 23843.5
+noise: -0.000536221
+after: 23843.5
+Printing Log Probablity List for Prismatic 3 before:
+-116.372
+-89.7054
+-66.5943
+-47.0388
+-31.0389
+-18.5945
+-9.70578
+-4.3726
+-2.595
+-4.37298
+-9.70654
+-18.5957
+-31.0404
+-47.0407
+-66.5966
+-89.7081
+-116.375
+-116.372
+-89.7054
+-66.5943
+-47.0388
+-31.0389
+-18.5945
+-9.70578
+-4.3726
+-2.595
+-4.37298
+-9.70654
+-18.5957
+-31.0404
+-47.0407
+-66.5966
+-89.7081
+-116.375
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.4
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.4
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.4
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.4
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.4
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.3
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.3
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.3
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.3
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.3
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.2
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.2
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.2
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.2
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.2
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.1
+Prismatic 3
+3
+0
+0.226274
+-1.5708
+-23843.1
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.195425
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.214281
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.233138
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.251994
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.27085
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.289706
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.308562
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.327419
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.346275
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.365131
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.383987
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.402844
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.4217
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.440556
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.459412
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.478269
+Prismatic 3
+3
+0.226274
+0
+-3.14159
+0.497125
+Printing Log Probablity List for Prismatic 3 after:
+-2.30259
+-44961.9
+-89921.6
+-134881
+-179841
+-224801
+-269761
+-314721
+-359680
+-404640
+-449600
+-494560
+-539520
+-584480
+-629441
+-674401
+-719361
+-8.1142
+-7.62481
+-7.17066
+-6.75173
+-6.36803
+-6.01956
+-5.70631
+-5.4283
+-5.18553
+-4.97798
+-4.80566
+-4.66858
+-4.56673
+-4.50012
+-4.46873
+-4.47258
+-4.51166
+Model-param pairs and probs:
+Model: 0
+Params: 
+Prob: 0
+Number Var Types: 121
+Model: 1
+Params: 0,0,
+Prob: 0
+Number Var Types: 1
+Model: 2
+Params: 0.3111,0.3111,0.44,
+Prob: 0
+Number Var Types: 13
+Model: 3
+Params: 0,0.226274,-1.5708,
+Prob: 1
+Number Var Types: 17
+Model: 4
+Params: 0.27,0,0.17,-3.14159,0.1,
+Prob: 0
+Number Var Types: 78
+Model: 5
+Params: -0.1,-0.1,0,0.1,0.1,
+Prob: 0
+Number Var Types: 56
+Model: 2
+Params: 0.3111,-0.3111,0.44,
+Prob: 0
+Number Var Types: 13
+Model: 3
+Params: 0.226274,0,-3.14159,
+Prob: 0
+Number Var Types: 17
+Model: 4
+Params: -0.27,0,0.17,0,0.1,
+Prob: 0
+Number Var Types: 78
+Model: 5
+Params: 0.1,0.1,-3.14159,0.1,0.1,
+Prob: 0
+Number Var Types: 56
+Time for constructor:
+0.993952
+Time for running world:
+0.28996
+Time per step:
+0.28996

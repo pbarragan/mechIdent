@@ -1,0 +1,40 @@
+//#include "sasUtils.h"
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <inttypes.h>
+#include <string>
+
+std::string doubleToBitString(double input){
+  std::string s = "";
+  union { double d; uint64_t i; } u;
+  u.d = input;
+  for (int i = 0; i < sizeof(double)*8; i++) {
+    if (u.i % 2) s+='1';
+    else s+='0';
+    u.i >>= 1;
+  }
+  return s;
+}
+
+double bitStringToDouble(std::string s){
+  union { double d; uint64_t i; } u;
+  u.i = 0;
+  for (int j = s.size(); j > 0; j--) {
+    u.i += int(s[j-1]) - int('0');
+    if (j > 1) u.i <<= 1;
+  }
+  return u.d;
+}
+
+int main(){
+  double a = 1000;	  
+  // sasUtils::doubleToBitString();
+  // sasUtils::bitStringToDouble();
+  std::string s = "1011111001100110000000010110100110100010101101010010111111111100";
+  s = "0001110101111000101000011101011110001010000111010111110111111101";
+  std::cout << s << std::endl;
+  std::cout << doubleToBitString(bitStringToDouble(s)) << std::endl;
+  std::cout << bitStringToDouble(s) << std::endl;
+  return 1;
+}
