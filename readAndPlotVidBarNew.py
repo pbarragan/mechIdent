@@ -6,7 +6,8 @@ import os
 
 import readData
 
-fileName = 'data/data5Sun_May_25_10_27_57_2014.txt' # error
+#fileName = 'data/data5Sun_May_25_10_27_57_2014.txt' # error
+fileName = 'data/data0Tue_May_27_13_56_45_2014.txt' # model0
 
 # parameters
 plotSet = False
